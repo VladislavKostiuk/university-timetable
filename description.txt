@@ -1,0 +1,7 @@
+If user is logged on as Teacher
+- User can see and navigate to `My Schedule` menu
+- User should see own Teacher schedule according with selected date/range filter
+
+If user is logged on as Student
+- User can see and navigate to `My Schedule` menu
+- User should see own Group schedule according with selected date/range filter
