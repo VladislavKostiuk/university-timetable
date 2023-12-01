@@ -4,15 +4,16 @@ import com.foxminded.enums.CourseName;
 import jakarta.persistence.*;
 
 @Entity
+@Table(name = "course")
 public class Course {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column
+    @Column(name = "name")
     private CourseName name;
 
-    @Column
+    @Column(name = "description")
     private String description;
 
     public Long getId() {

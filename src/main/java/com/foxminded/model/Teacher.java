@@ -5,15 +5,21 @@ import jakarta.persistence.*;
 import java.util.List;
 
 @Entity
+@Table(name = "teacher")
 public class Teacher {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column
+    @Column(name = "name")
     private String name;
 
     @ManyToMany
+    @JoinTable(
+            name = "teacher_course",
+            joinColumns = @JoinColumn(name = "teacher_id"),
+            inverseJoinColumns = @JoinColumn(name = "course_id")
+    )
     private List<Course> courses;
 
     public Long getId() {

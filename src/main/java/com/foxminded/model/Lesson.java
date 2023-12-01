@@ -5,15 +5,17 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
+@Table(name = "lesson")
 public class Lesson {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
+    @JoinColumn(name = "subject_id")
     private Subject subject;
 
-    @Column
+    @Column(name = "appointment_time")
     private LocalDateTime appointmentTime;
 
     public Long getId() {
