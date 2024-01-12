@@ -1,11 +1,9 @@
 package com.foxminded.service.impl;
 
-import com.foxminded.dto.SubjectDTO;
 import com.foxminded.dto.TeacherDTO;
 import com.foxminded.mapper.TeacherMapper;
+import com.foxminded.entity.Teacher;
 import com.foxminded.mapper.TeacherMapperImpl;
-import com.foxminded.model.Subject;
-import com.foxminded.model.Teacher;
 import com.foxminded.repository.TeacherRepository;
 import com.foxminded.service.TeacherService;
 import org.junit.jupiter.api.BeforeEach;

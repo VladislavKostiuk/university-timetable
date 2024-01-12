@@ -1,12 +1,12 @@
-package com.foxminded.model;
+package com.foxminded.entity;
 
 import jakarta.persistence.*;
 
 import java.util.List;
 
 @Entity
-@Table(name = "student")
-public class Student {
+@Table(name = "teacher")
+public class Teacher {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -14,14 +14,10 @@ public class Student {
     @Column(name = "name")
     private String name;
 
-    @ManyToOne
-    @JoinColumn(name = "group_id")
-    private Group group;
-
     @ManyToMany
     @JoinTable(
-            name = "student_course",
-            joinColumns = @JoinColumn(name = "student_id"),
+            name = "teacher_course",
+            joinColumns = @JoinColumn(name = "teacher_id"),
             inverseJoinColumns = @JoinColumn(name = "course_id")
     )
     private List<Course> courses;
@@ -40,14 +36,6 @@ public class Student {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public Group getGroup() {
-        return group;
-    }
-
-    public void setGroup(Group group) {
-        this.group = group;
     }
 
     public List<Course> getCourses() {

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h2>Subjects</h2>
+<a href="/">To main menu</a>
+<table>
+    <thead>
+    <tr>
+        <th>Id</th>
+        <th>Course</th>
+        <th>Teacher</th>
+        <th>Group</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="subject : ${allSubjects}">
+        <td th:text="${subject.id()}"></td>
+        <td th:if="${subject.courseDTO() != null}" th:text="${subject.courseDTO().name()}"></td>
+        <td th:if="${subject.teacherDTO() != null}" th:text="${subject.teacherDTO().name()}"></td>
+        <td th:if="${subject.groupDTO() != null}" th:text="${subject.groupDTO().name()}"></td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

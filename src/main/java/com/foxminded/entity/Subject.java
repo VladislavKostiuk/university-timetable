@@ -1,4 +1,4 @@
-package com.foxminded.model;
+package com.foxminded.entity;
 
 import jakarta.persistence.*;
 

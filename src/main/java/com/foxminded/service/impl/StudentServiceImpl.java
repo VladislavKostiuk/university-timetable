@@ -3,11 +3,13 @@ package com.foxminded.service.impl;
 import com.foxminded.constants.ErrorMessages;
 import com.foxminded.dto.StudentDTO;
 import com.foxminded.mapper.StudentMapper;
-import com.foxminded.model.Student;
+import com.foxminded.entity.Student;
 import com.foxminded.repository.StudentRepository;
 import com.foxminded.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class StudentServiceImpl implements StudentService {
@@ -57,5 +59,11 @@ public class StudentServiceImpl implements StudentService {
 
         Student student = studentMapper.mapToStudent(studentDTO);
         studentRepository.save(student);
+    }
+
+    @Override
+    public List<StudentDTO> getAllStudents() {
+        List<Student> allStudents = studentRepository.findAll();
+        return allStudents.stream().map(studentMapper::mapToStudentDTO).toList();
     }
 }
