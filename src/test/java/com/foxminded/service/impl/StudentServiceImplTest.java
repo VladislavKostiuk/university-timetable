@@ -1,9 +1,11 @@
 package com.foxminded.service.impl;
 
+import com.foxminded.dto.LessonDTO;
 import com.foxminded.dto.StudentDTO;
 import com.foxminded.mapper.StudentMapper;
-import com.foxminded.entity.Student;
 import com.foxminded.mapper.StudentMapperImpl;
+import com.foxminded.model.Lesson;
+import com.foxminded.model.Student;
 import com.foxminded.repository.StudentRepository;
 import com.foxminded.service.StudentService;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Optional;
 

@@ -1,6 +1,6 @@
 package com.foxminded.repository;
 
-import com.foxminded.entity.Subject;
+import com.foxminded.model.Subject;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

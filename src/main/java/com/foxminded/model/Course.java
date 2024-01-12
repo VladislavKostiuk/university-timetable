@@ -1,4 +1,4 @@
-package com.foxminded.entity;
+package com.foxminded.model;
 
 import com.foxminded.enums.CourseName;
 import jakarta.persistence.*;
@@ -11,7 +11,6 @@ public class Course {
     private Long id;
 
     @Column(name = "name")
-    @Enumerated(EnumType.STRING)
     private CourseName name;
 
     @Column(name = "description")

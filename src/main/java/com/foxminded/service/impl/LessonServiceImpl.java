@@ -3,13 +3,11 @@ package com.foxminded.service.impl;
 import com.foxminded.constants.ErrorMessages;
 import com.foxminded.dto.LessonDTO;
 import com.foxminded.mapper.LessonMapper;
-import com.foxminded.entity.Lesson;
+import com.foxminded.model.Lesson;
 import com.foxminded.repository.LessonRepository;
 import com.foxminded.service.LessonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class LessonServiceImpl implements LessonService {
@@ -59,11 +57,5 @@ public class LessonServiceImpl implements LessonService {
 
         Lesson lesson = lessonMapper.mapToLesson(lessonDTO);
         lessonRepository.save(lesson);
-    }
-
-    @Override
-    public List<LessonDTO> getAllLessons() {
-        List<Lesson> allLessons = lessonRepository.findAll();
-        return allLessons.stream().map(lessonMapper::mapToLessonDTO).toList();
     }
 }

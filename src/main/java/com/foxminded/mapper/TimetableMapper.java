@@ -1,21 +1,11 @@
 package com.foxminded.mapper;
 
 import com.foxminded.dto.TimetableDTO;
-import com.foxminded.entity.Timetable;
-import org.mapstruct.InjectionStrategy;
+import com.foxminded.model.Timetable;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 
-@Mapper(componentModel = "spring",
-        injectionStrategy = InjectionStrategy.CONSTRUCTOR,
-        uses = {LessonMapper.class})
+@Mapper(componentModel = "spring")
 public interface TimetableMapper {
-
-    @Mapping(source = "timetable.lessons", target = "lessonDTOList")
     TimetableDTO mapToTimetableDTO(Timetable timetable);
-
-    @Mapping(source = "timetableDTO.lessonDTOList", target = "lessons")
     Timetable mapToTimetable(TimetableDTO timetableDTO);
-
-
 }

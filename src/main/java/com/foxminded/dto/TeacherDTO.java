@@ -1,5 +1,7 @@
 package com.foxminded.dto;
 
+import com.foxminded.model.Course;
+
 import java.util.List;
 
 public record TeacherDTO (

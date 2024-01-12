@@ -1,15 +1,23 @@
 package com.foxminded.service.impl;
 
+import com.foxminded.dto.CourseDTO;
 import com.foxminded.dto.GroupDTO;
+import com.foxminded.enums.CourseName;
+import com.foxminded.mapper.CourseMapper;
+import com.foxminded.mapper.CourseMapperImpl;
 import com.foxminded.mapper.GroupMapper;
-import com.foxminded.entity.Group;
 import com.foxminded.mapper.GroupMapperImpl;
+import com.foxminded.model.Course;
+import com.foxminded.model.Group;
+import com.foxminded.repository.CourseRepository;
 import com.foxminded.repository.GroupRepository;
+import com.foxminded.service.CourseService;
 import com.foxminded.service.GroupService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
