@@ -1,11 +1,9 @@
 package com.foxminded.service.impl;
 
-import com.foxminded.dto.SubjectDTO;
 import com.foxminded.dto.TimetableDTO;
-import com.foxminded.mapper.TimetableMapper;
-import com.foxminded.mapper.TimetableMapperImpl;
-import com.foxminded.model.Subject;
-import com.foxminded.model.Timetable;
+import com.foxminded.enums.TimetableType;
+import com.foxminded.mapper.*;
+import com.foxminded.entity.Timetable;
 import com.foxminded.repository.TimetableRepository;
 import com.foxminded.service.TimetableService;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
@@ -27,7 +26,9 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = {
-        TimetableMapperImpl.class
+//        TimetableMapperImpl.class,
+//        LessonMapperImpl.class,
+        SubjectMapperImpl.class
 })
 class TimetableServiceImplTest {
 
@@ -35,16 +36,18 @@ class TimetableServiceImplTest {
     @Mock
     private TimetableRepository timetableRepository;
     @Autowired
+    private SubjectMapper subjectMapper;
     private TimetableMapper timetableMapper;
 
     @BeforeEach
     void init() {
+        timetableMapper = new TimetableMapperImpl(new LessonMapperImpl(subjectMapper));
         timetableService = new TimetableServiceImpl(timetableRepository, timetableMapper);
     }
 
     @Test
     void testAddTimetable_Success() {
-        TimetableDTO testTimetableDTO = new TimetableDTO(new ArrayList<>());
+        TimetableDTO testTimetableDTO = new TimetableDTO(TimetableType.STUDENT_TIMETABLE, "test group", new ArrayList<>());
         when(timetableRepository.findById(testTimetableDTO.id())).thenReturn(Optional.empty());
         timetableService.addTimetable(testTimetableDTO);
         verify(timetableRepository).save(any());
@@ -52,7 +55,7 @@ class TimetableServiceImplTest {
 
     @Test
     void testAddTimetable_TimetableAlreadyExists() {
-        TimetableDTO testTimetableDTO = new TimetableDTO(new ArrayList<>());
+        TimetableDTO testTimetableDTO = new TimetableDTO(TimetableType.STUDENT_TIMETABLE, "test group", new ArrayList<>());
         Timetable testTimetable = timetableMapper.mapToTimetable(testTimetableDTO);
         when(timetableRepository.findById(testTimetableDTO.id())).thenReturn(Optional.of(testTimetable));
         assertThrows(IllegalStateException.class, () -> timetableService.addTimetable(testTimetableDTO));
@@ -79,7 +82,7 @@ class TimetableServiceImplTest {
 
     @Test
     void testUpdateTimetable_Success() {
-        TimetableDTO testTimetableDTO = new TimetableDTO(new ArrayList<>());
+        TimetableDTO testTimetableDTO = new TimetableDTO(TimetableType.STUDENT_TIMETABLE, "test group", new ArrayList<>());
         Timetable testTimetable = timetableMapper.mapToTimetable(testTimetableDTO);
         when(timetableRepository.findById(testTimetableDTO.id())).thenReturn(Optional.of(testTimetable));
         timetableService.updateTimetable(testTimetableDTO);
@@ -88,7 +91,7 @@ class TimetableServiceImplTest {
 
     @Test
     void testUpdateTimetable_TimetableDoesNotExist() {
-        TimetableDTO testTimetableDTO = new TimetableDTO(new ArrayList<>());
+        TimetableDTO testTimetableDTO = new TimetableDTO(TimetableType.STUDENT_TIMETABLE, "test group", new ArrayList<>());
         when(timetableRepository.findById(testTimetableDTO.id())).thenReturn(Optional.empty());
         assertThrows(IllegalStateException.class, () -> timetableService.updateTimetable(testTimetableDTO));
     }
