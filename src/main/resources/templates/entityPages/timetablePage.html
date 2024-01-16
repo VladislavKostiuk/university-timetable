@@ -4,32 +4,41 @@
 <head>
   <meta charset="UTF-8">
   <title>Title</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/reset.css}">
+    <link rel="stylesheet" th:href="@{/css/entityStyles.css}">
 </head>
 <body>
-<h2>Timetables</h2>
-<a href="/">To main menu</a>
-<table>
-  <thead>
-  <tr>
-    <th>Id</th>
-    <th>Timetable type</th>
-    <th>QualifyingName</th>
-    <th>Lessons</th>
-  </tr>
-  </thead>
-  <tbody>
-  <tr th:each="timetable : ${allTimetables}">
-    <td th:text="${timetable.id()}"></td>
-    <td th:text="${timetable.timetableType()}"></td>
-    <td th:text="${timetable.qualifyingName()}"></td>
-    <td>
-      <p th:each="lesson : ${timetable.lessonDTOList()}">
-<!--        <span th:text="${lesson.subjectDTO().courseDTO().name() + ' ' + lesson.day() + ' ' + lesson.appointmentTime()}"></span>-->
-        <span th:text="${lesson.subjectDTO().courseDTO().name()} + ' ' + ${lesson.day()} + ' ' + ${lesson.appointmentTime()}"></span>
-      </p>
-    </td>
-  </tr>
-  </tbody>
-</table>
+    <div class="header_container">
+        <h2 class="header">Timetables</h2>
+        <a class="header_button" href="/">To main menu</a>
+    </div>
+    <div class="table_container">
+        <table class="content-table">
+            <thead>
+            <tr>
+              <th>Id</th>
+              <th>Timetable type</th>
+              <th>Qualifying name</th>
+              <th>Lessons</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="timetable : ${allTimetables}">
+              <td th:text="${timetable.id()}"></td>
+              <td th:text="${timetable.timetableType()}"></td>
+              <td th:text="${timetable.qualifyingName()}"></td>
+              <td>
+                <p th:each="lesson : ${timetable.lessonDTOList()}">
+          <!--        <span th:text="${lesson.subjectDTO().courseDTO().name() + ' ' + lesson.day() + ' ' + lesson.appointmentTime()}"></span>-->
+                  <span th:text="${lesson.subjectDTO().courseDTO().name()} + ' ' + ${lesson.day()} + ' ' + ${lesson.appointmentTime()}"></span>
+                </p>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+    </div>
 </body>
 </html>
