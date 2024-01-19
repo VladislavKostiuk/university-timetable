@@ -6,23 +6,18 @@ import com.foxminded.mapper.GroupMapper;
 import com.foxminded.entity.Group;
 import com.foxminded.repository.GroupRepository;
 import com.foxminded.service.GroupService;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@AllArgsConstructor
 public class GroupServiceImpl implements GroupService {
     private final String entityName = "Group";
     private final GroupRepository groupRepository;
     private final GroupMapper groupMapper;
-
-    @Autowired
-    public GroupServiceImpl(GroupRepository groupRepository,
-                            GroupMapper groupMapper) {
-        this.groupRepository = groupRepository;
-        this.groupMapper = groupMapper;
-    }
 
     @Override
     public void addGroup(GroupDTO groupDTO) {

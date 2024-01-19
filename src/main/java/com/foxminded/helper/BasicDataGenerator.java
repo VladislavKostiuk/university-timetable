@@ -4,8 +4,13 @@ import com.foxminded.constants.ErrorMessages;
 import com.foxminded.enums.CourseName;
 import com.foxminded.entity.*;
 import org.springframework.stereotype.Component;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Random;
+import java.util.Collections;
+import java.util.UUID;
 
-import java.util.*;
 
 @Component
 public class BasicDataGenerator {

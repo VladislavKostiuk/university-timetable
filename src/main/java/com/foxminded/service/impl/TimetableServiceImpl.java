@@ -6,22 +6,18 @@ import com.foxminded.mapper.TimetableMapper;
 import com.foxminded.entity.Timetable;
 import com.foxminded.repository.TimetableRepository;
 import com.foxminded.service.TimetableService;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@AllArgsConstructor
 public class TimetableServiceImpl implements TimetableService {
     private final String entityName = "Timetable";
     private final TimetableRepository timetableRepository;
     private final TimetableMapper timetableMapper;
-
-    @Autowired
-    public TimetableServiceImpl(TimetableRepository timetableRepository, TimetableMapper timetableMapper) {
-        this.timetableRepository = timetableRepository;
-        this.timetableMapper = timetableMapper;
-    }
 
     @Override
     public void addTimetable(TimetableDTO timetableDTO) {

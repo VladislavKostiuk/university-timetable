@@ -17,7 +17,6 @@ import java.util.Random;
 
 @Service
 public class DbInitServiceImpl implements DbInitService {
-
     private final StudentRepository studentRepository;
     private final CourseRepository courseRepository;
     private final GroupRepository groupRepository;
@@ -162,8 +161,6 @@ public class DbInitServiceImpl implements DbInitService {
                 }
             }
         }
-
-
     }
 
     private LocalTime getRandomAppointmentTime() {
@@ -210,5 +207,5 @@ public class DbInitServiceImpl implements DbInitService {
 
         return courses;
     }
-
 }
+

@@ -13,6 +13,7 @@ import java.util.List;
 @AllArgsConstructor
 public class GroupController {
     private final GroupService groupService;
+
     @GetMapping("/groups")
     public String showAll(Model model) {
         List<GroupDTO> allGroups = groupService.getAllGroups();

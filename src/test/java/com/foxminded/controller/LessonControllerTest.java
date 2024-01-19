@@ -1,11 +1,6 @@
 package com.foxminded.controller;
 
-import com.foxminded.dto.CourseDTO;
 import com.foxminded.dto.LessonDTO;
-import com.foxminded.dto.SubjectDTO;
-import com.foxminded.enums.CourseName;
-import com.foxminded.service.CourseService;
-import com.foxminded.service.DbInitService;
 import com.foxminded.service.LessonService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,14 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
-
 import java.time.DayOfWeek;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;

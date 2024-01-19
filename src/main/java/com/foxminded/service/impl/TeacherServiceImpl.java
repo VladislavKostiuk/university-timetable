@@ -6,22 +6,18 @@ import com.foxminded.mapper.TeacherMapper;
 import com.foxminded.entity.Teacher;
 import com.foxminded.repository.TeacherRepository;
 import com.foxminded.service.TeacherService;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@AllArgsConstructor
 public class TeacherServiceImpl implements TeacherService {
     private final String entityName = "Teacher";
     private final TeacherRepository teacherRepository;
     private final TeacherMapper teacherMapper;
-
-    @Autowired
-    public TeacherServiceImpl(TeacherRepository teacherRepository, TeacherMapper teacherMapper) {
-        this.teacherRepository = teacherRepository;
-        this.teacherMapper = teacherMapper;
-    }
 
     @Override
     public void addTeacher(TeacherDTO teacherDTO) {

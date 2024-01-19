@@ -1,13 +1,27 @@
 package com.foxminded.entity;
 
 import com.foxminded.enums.TimetableType;
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Column;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.EnumType;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Table(name = "timetable")
+@Getter
+@Setter
 public class Timetable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,38 +45,4 @@ public class Timetable {
     public Timetable() {
         lessons = new ArrayList<>();
     }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public TimetableType getTimetableType() {
-        return timetableType;
-    }
-
-    public void setTimetableType(TimetableType timetableType) {
-        this.timetableType = timetableType;
-    }
-
-    public String getQualifyingName() {
-        return qualifyingName;
-    }
-
-    public void setQualifyingName(String qualifyingName) {
-        this.qualifyingName = qualifyingName;
-    }
-
-    public List<Lesson> getLessons() {
-        return lessons;
-    }
-
-    public void setLessons(List<Lesson> lessons) {
-        this.lessons = lessons;
-    }
-
-
 }

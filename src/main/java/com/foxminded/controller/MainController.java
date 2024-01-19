@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 @AllArgsConstructor
 public class MainController {
     private final DbInitService dbInitService;
+
     @GetMapping("/")
     public String showMenu() {
         return "mainPage";
