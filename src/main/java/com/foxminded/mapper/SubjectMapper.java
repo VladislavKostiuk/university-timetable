@@ -1,6 +1,6 @@
 package com.foxminded.mapper;
 
-import com.foxminded.dto.SubjectDTO;
+import com.foxminded.dto.SubjectDto;
 import com.foxminded.entity.Subject;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -8,13 +8,13 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface SubjectMapper {
 
-    @Mapping(source = "subject.course", target = "courseDTO")
-    @Mapping(source = "subject.teacher", target = "teacherDTO")
-    @Mapping(source = "subject.group", target = "groupDTO")
-    SubjectDTO mapToSubjectDTO(Subject subject);
+    @Mapping(source = "subject.course", target = "courseDto")
+    @Mapping(source = "subject.teacher", target = "teacherDto")
+    @Mapping(source = "subject.group", target = "groupDto")
+    SubjectDto mapToSubjectDto(Subject subject);
 
-    @Mapping(source = "subjectDTO.courseDTO", target = "course")
-    @Mapping(source = "subjectDTO.teacherDTO", target = "teacher")
-    @Mapping(source = "subjectDTO.groupDTO", target = "group")
-    Subject mapToSubject(SubjectDTO subjectDTO);
+    @Mapping(source = "subjectDto.courseDto", target = "course")
+    @Mapping(source = "subjectDto.teacherDto", target = "teacher")
+    @Mapping(source = "subjectDto.groupDto", target = "group")
+    Subject mapToSubject(SubjectDto subjectDto);
 }

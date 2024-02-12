@@ -1,6 +1,6 @@
 package com.foxminded.mapper;
 
-import com.foxminded.dto.TimetableDTO;
+import com.foxminded.dto.TimetableDto;
 import com.foxminded.entity.Timetable;
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
@@ -11,11 +11,11 @@ import org.mapstruct.Mapping;
         uses = {LessonMapper.class})
 public interface TimetableMapper {
 
-    @Mapping(source = "timetable.lessons", target = "lessonDTOList")
-    TimetableDTO mapToTimetableDTO(Timetable timetable);
+    @Mapping(source = "timetable.lessons", target = "lessonDtoList")
+    TimetableDto mapToTimetableDto(Timetable timetable);
 
-    @Mapping(source = "timetableDTO.lessonDTOList", target = "lessons")
-    Timetable mapToTimetable(TimetableDTO timetableDTO);
+    @Mapping(source = "timetableDto.lessonDtoList", target = "lessons")
+    Timetable mapToTimetable(TimetableDto timetableDto);
 
 
 }

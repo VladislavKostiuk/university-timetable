@@ -1,6 +1,6 @@
 package com.foxminded.service.impl;
 
-import com.foxminded.dto.StudentDTO;
+import com.foxminded.dto.StudentDto;
 import com.foxminded.mapper.StudentMapper;
 import com.foxminded.entity.Student;
 import com.foxminded.mapper.StudentMapperImpl;
@@ -15,6 +15,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -43,18 +44,18 @@ class StudentServiceImplTest {
 
     @Test
     void testAddStudent_Success() {
-        StudentDTO testStudentDTO = new StudentDTO("name", null, new ArrayList<>());
-        when(studentRepository.findById(testStudentDTO.id())).thenReturn(Optional.empty());
-        studentService.addStudent(testStudentDTO);
+        StudentDto testStudentDto = new StudentDto(0L, "name", "pass", new HashSet<>(), null, new ArrayList<>());
+        when(studentRepository.findById(testStudentDto.id())).thenReturn(Optional.empty());
+        studentService.addStudent(testStudentDto);
         verify(studentRepository).save(any());
     }
 
     @Test
     void testAddStudent_StudentAlreadyExists() {
-        StudentDTO testStudentDTO = new StudentDTO("name", null, new ArrayList<>());
-        Student testStudent = studentMapper.mapToStudent(testStudentDTO);
-        when(studentRepository.findById(testStudentDTO.id())).thenReturn(Optional.of(testStudent));
-        assertThrows(IllegalStateException.class, () -> studentService.addStudent(testStudentDTO));
+        StudentDto testStudentDto = new StudentDto(0L, "name", "pass", new HashSet<>(), null, new ArrayList<>());
+        Student testStudent = studentMapper.mapToStudent(testStudentDto);
+        when(studentRepository.findById(testStudentDto.id())).thenReturn(Optional.of(testStudent));
+        assertThrows(IllegalStateException.class, () -> studentService.addStudent(testStudentDto));
     }
 
     @Test
@@ -65,9 +66,9 @@ class StudentServiceImplTest {
         student.setName("name");
 
         when(studentRepository.findById(id)).thenReturn(Optional.of(student));
-        StudentDTO expectedStudentDTO = studentMapper.mapToStudentDTO(student);
-        StudentDTO actualStudentDTO = studentService.getStudentById(id);
-        assertEquals(expectedStudentDTO, actualStudentDTO);
+        StudentDto expectedStudentDto = studentMapper.mapToStudentDto(student);
+        StudentDto actualStudentDto = studentService.getStudentById(id);
+        assertEquals(expectedStudentDto, actualStudentDto);
         verify(studentRepository).findById(id);
     }
 
@@ -78,18 +79,33 @@ class StudentServiceImplTest {
     }
 
     @Test
+    void testGetStudentByName_Success() {
+        StudentDto testStudentDto = new StudentDto(0L, "name", "pass", new HashSet<>(), null, new ArrayList<>());
+        Student testStudent = studentMapper.mapToStudent(testStudentDto);
+        when(studentRepository.findByName("name")).thenReturn(Optional.of(testStudent));
+        assertEquals(testStudentDto, studentService.getStudentByName("name"));
+    }
+
+    @Test
+    void testGetStudentByName_StudentWithThatNameWasNotFound() {
+        when(studentRepository.findByName("name")).thenReturn(Optional.empty());
+        assertThrows(IllegalArgumentException.class, () -> studentService.getStudentByName("name"));
+    }
+
+    @Test
     void testUpdateStudent_Success() {
-        StudentDTO testStudentDTO = new StudentDTO("name", null, new ArrayList<>());
-        Student testStudent = studentMapper.mapToStudent(testStudentDTO);
-        when(studentRepository.findById(testStudentDTO.id())).thenReturn(Optional.of(testStudent));
-        studentService.updateStudent(testStudentDTO);
+        StudentDto testStudentDto = new StudentDto(0L, "name", "pass", new HashSet<>(), null, new ArrayList<>());
+        Student testStudent = studentMapper.mapToStudent(testStudentDto);
+        when(studentRepository.findById(testStudentDto.id())).thenReturn(Optional.of(testStudent));
+        studentService.updateStudent(testStudentDto);
         verify(studentRepository).save(any());
     }
 
     @Test
     void testUpdateStudent_StudentDoesNotExist() {
-        StudentDTO testStudentDTO = new StudentDTO("name", null, new ArrayList<>());
-        when(studentRepository.findById(testStudentDTO.id())).thenReturn(Optional.empty());
-        assertThrows(IllegalStateException.class, () -> studentService.updateStudent(testStudentDTO));
+        StudentDto testStudentDto = new StudentDto(0L, "name", "pass", new HashSet<>(), null, new ArrayList<>());
+        when(studentRepository.findById(testStudentDto.id())).thenReturn(Optional.empty());
+        assertThrows(IllegalStateException.class, () -> studentService.updateStudent(testStudentDto));
     }
 }
+

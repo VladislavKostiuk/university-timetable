@@ -2,12 +2,13 @@ package com.foxminded.controller;
 
 import com.foxminded.service.DbInitService;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class MainController {
     private final DbInitService dbInitService;
 
@@ -22,3 +23,4 @@ public class MainController {
         return "redirect:/";
     }
 }
+

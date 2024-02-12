@@ -1,43 +1,52 @@
 package com.foxminded.service.impl;
 
 import com.foxminded.constants.ErrorMessages;
-import com.foxminded.dto.TeacherDTO;
+import com.foxminded.dto.TeacherDto;
 import com.foxminded.mapper.TeacherMapper;
 import com.foxminded.entity.Teacher;
 import com.foxminded.repository.TeacherRepository;
 import com.foxminded.service.TeacherService;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class TeacherServiceImpl implements TeacherService {
     private final String entityName = "Teacher";
     private final TeacherRepository teacherRepository;
     private final TeacherMapper teacherMapper;
 
     @Override
-    public void addTeacher(TeacherDTO teacherDTO) {
-        if (teacherRepository.findById(teacherDTO.id()).isPresent()) {
+    public void addTeacher(TeacherDto teacherDto) {
+        if (teacherRepository.findById(teacherDto.id()).isPresent()) {
             throw new IllegalStateException(String.format(
                     ErrorMessages.ENTITY_CAN_NOT_BE_ADDED, entityName
             ));
         }
 
-        Teacher teacher = teacherMapper.mapToTeacher(teacherDTO);
+        Teacher teacher = teacherMapper.mapToTeacher(teacherDto);
         teacherRepository.save(teacher);
     }
 
     @Override
-    public TeacherDTO getTeacherById(Long id) {
+    public TeacherDto getTeacherById(Long id) {
         Teacher teacher = teacherRepository.findById(id).orElseThrow(() ->
                 new IllegalArgumentException(String.format(
-                        ErrorMessages.ENTITY_WAS_NOT_FOUND, entityName, id
+                        ErrorMessages.ENTITY_WAS_NOT_FOUND_BY_ID, entityName, id
                 )));
-        return teacherMapper.mapToTeacherDTO(teacher);
+        return teacherMapper.mapToTeacherDto(teacher);
+    }
+
+    @Override
+    public TeacherDto getTeacherByName(String name) {
+        Teacher teacher = teacherRepository.findByName(name).orElseThrow(() ->
+                new IllegalArgumentException(String.format(
+                        ErrorMessages.TEACHER_WAS_NOT_FOUND_BY_NAME, name
+                )));
+        return teacherMapper.mapToTeacherDto(teacher);
     }
 
     @Override
@@ -46,20 +55,20 @@ public class TeacherServiceImpl implements TeacherService {
     }
 
     @Override
-    public void updateTeacher(TeacherDTO teacherDTO) {
-        if (teacherRepository.findById(teacherDTO.id()).isEmpty()) {
+    public void updateTeacher(TeacherDto teacherDto) {
+        if (teacherRepository.findById(teacherDto.id()).isEmpty()) {
             throw new IllegalStateException(String.format(
                     ErrorMessages.ENTITY_CAN_NOT_BE_UPDATED, entityName
             ));
         }
 
-        Teacher teacher = teacherMapper.mapToTeacher(teacherDTO);
+        Teacher teacher = teacherMapper.mapToTeacher(teacherDto);
         teacherRepository.save(teacher);
     }
 
     @Override
-    public List<TeacherDTO> getAllTeachers() {
+    public List<TeacherDto> getAllTeachers() {
         List<Teacher> allTeachers = teacherRepository.findAll();
-        return allTeachers.stream().map(teacherMapper::mapToTeacherDTO).toList();
+        return allTeachers.stream().map(teacherMapper::mapToTeacherDto).toList();
     }
 }

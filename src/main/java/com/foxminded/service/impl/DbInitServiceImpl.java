@@ -1,5 +1,6 @@
 package com.foxminded.service.impl;
 
+import com.foxminded.enums.Role;
 import com.foxminded.enums.TimetableType;
 import com.foxminded.helper.BasicDataGenerator;
 import com.foxminded.entity.*;
@@ -7,13 +8,12 @@ import com.foxminded.repository.*;
 import com.foxminded.service.DbInitService;
 import com.foxminded.service.TimetableService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.DayOfWeek;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 @Service
 public class DbInitServiceImpl implements DbInitService {
@@ -25,6 +25,7 @@ public class DbInitServiceImpl implements DbInitService {
     private final SubjectRepository subjectRepository;
     private final LessonRepository lessonRepository;
     private final TimetableRepository timetableRepository;
+    private final PasswordEncoder passwordEncoder;
     private final Random random;
 
     @Autowired
@@ -35,7 +36,8 @@ public class DbInitServiceImpl implements DbInitService {
                              TeacherRepository teacherRepository,
                              SubjectRepository subjectRepository,
                              LessonRepository lessonRepository,
-                             TimetableRepository timetableRepository) {
+                             TimetableRepository timetableRepository,
+                             PasswordEncoder passwordEncoder) {
         this.studentRepository = studentRepository;
         this.courseRepository = courseRepository;
         this.groupRepository = groupRepository;
@@ -44,6 +46,7 @@ public class DbInitServiceImpl implements DbInitService {
         this.subjectRepository = subjectRepository;
         this.lessonRepository = lessonRepository;
         this.timetableRepository = timetableRepository;
+        this.passwordEncoder = passwordEncoder;
         random = new Random();
     }
 
@@ -93,11 +96,20 @@ public class DbInitServiceImpl implements DbInitService {
     }
 
     private void initStudents(List<Student> allStudents, List<Group> allGroups, List<Course> allCourses) {
-        for (var student : allStudents) {
+        for (int i = 0; i < allStudents.size(); i++) {
             Group group = getRandomGroup(allGroups);
             List<Course> courses = getRandomCourseList(allCourses);
+            String password = passwordEncoder.encode(UUID.randomUUID().toString());
+            Student student = allStudents.get(i);
             student.setGroup(group);
             student.setCourses(courses);
+            student.setPassword(password);
+            student.setRoles(Set.of(Role.STUDENT));
+
+            if (i == 0) {
+                student.setPassword(passwordEncoder.encode("12345"));
+                student.setRoles(Set.of(Role.STUDENT, Role.ADMIN));
+            }
         }
     }
 
@@ -105,6 +117,8 @@ public class DbInitServiceImpl implements DbInitService {
         for (var teacher : allTeachers) {
             List<Course> courses = getRandomCourseList(allCourses);
             teacher.setCourses(courses);
+            teacher.setPassword(passwordEncoder.encode(UUID.randomUUID().toString()));
+            teacher.setRoles(Set.of(Role.TEACHER));
         }
     }
 

@@ -1,13 +1,13 @@
 package com.foxminded.service;
 
-import com.foxminded.dto.TimetableDTO;
+import com.foxminded.dto.TimetableDto;
 
 import java.util.List;
 
 public interface TimetableService {
-    void addTimetable(TimetableDTO timetableDTO);
-    TimetableDTO getTimetableById(Long id);
+    void addTimetable(TimetableDto timetableDto);
+    TimetableDto getTimetableById(Long id);
     void deleteTimetableById(Long id);
-    void updateTimetable(TimetableDTO timetableDTO);
-    List<TimetableDTO> getAllTimetables();
+    void updateTimetable(TimetableDto timetableDto);
+    List<TimetableDto> getAllTimetables();
 }

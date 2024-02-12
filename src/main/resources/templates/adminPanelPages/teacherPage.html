@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin panel</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/reset.css}">
+    <link rel="stylesheet" th:href="@{/css/headerStyles.css}"> 
+    <link rel="stylesheet" th:href="@{/css/adminStyles.css}"> 
+<!--     <link rel="stylesheet" href="../../static/css/reset.css">
+    <link rel="stylesheet" href="../../static/css/adminStyles.css"> -->
+</head>
+<body>
+    <header th:replace="~{fragments/header.html :: header}"></header>
+    <div class="entity_options">
+        <a th:href="@{/adminPanel/students}">Students panel</a>
+        <a th:href="@{/adminPanel/teachers}">Teachers panel</a>
+    </div>
+    <div class="search_section">
+        <form th:action="@{/adminPanel/searchTeacher}" th:method="POST">
+            <input name="searchText" class="search_input" type="text" placeholder="Enter teacher name">
+            <input class="search_submit" type="submit">
+        </form>
+    </div>
+    <div class="teacher_section">
+        <h2 class="title">Teachers</h2>
+        <div class="table_container">
+            <table class="content-table">
+                <thead>
+                <tr>
+                    <th>Username</th>
+                    <th>Roles</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="teacher : ${teachers}">
+                    <td th:text="${teacher.name()}"></td>
+                    <td>
+                        <form class="role_form" th:method="POST" th:action="@{/adminPanel/{teacherId}/updateTeacherRoles(teacherId = ${teacher.id()})}">
+                            <div>
+                                <label th:each="role : ${allRoles}">
+                                    <input name="selected" type="checkbox" th:checked="${#lists.contains(teacher.roles(), role)}" th:value="${role}">
+                                    <span th:text="${role}"></span>
+                                    <br/>
+                                </label>
+                            </div>
+                            <input class="role_form_submit" type="submit" value="Update">
+                        </form>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

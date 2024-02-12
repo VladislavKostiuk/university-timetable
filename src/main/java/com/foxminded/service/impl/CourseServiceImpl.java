@@ -1,44 +1,44 @@
 package com.foxminded.service.impl;
 
 import com.foxminded.constants.ErrorMessages;
-import com.foxminded.dto.CourseDTO;
+import com.foxminded.dto.CourseDto;
 import com.foxminded.mapper.CourseMapper;
 import com.foxminded.entity.Course;
 import com.foxminded.repository.CourseRepository;
 import com.foxminded.service.CourseService;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class CourseServiceImpl implements CourseService {
     private final String entityName = "Course";
     private final CourseRepository courseRepository;
     private final CourseMapper courseMapper;
 
     @Override
-    public void addCourse(CourseDTO courseDTO) {
+    public void addCourse(CourseDto courseDto) {
 
-        if (courseRepository.findById(courseDTO.id()).isPresent()) {
+        if (courseRepository.findById(courseDto.id()).isPresent()) {
             throw new IllegalStateException(String.format(
                     ErrorMessages.ENTITY_CAN_NOT_BE_ADDED, entityName
             ));
         }
 
-        Course course = courseMapper.mapToCourse(courseDTO);
+        Course course = courseMapper.mapToCourse(courseDto);
         courseRepository.save(course);
     }
 
     @Override
-    public CourseDTO getCourseById(Long id) {
+    public CourseDto getCourseById(Long id) {
         Course course = courseRepository.findById(id).orElseThrow(() ->
                 new IllegalArgumentException(String.format(
-                        ErrorMessages.ENTITY_WAS_NOT_FOUND, entityName, id
+                        ErrorMessages.ENTITY_WAS_NOT_FOUND_BY_ID, entityName, id
                 )));
-        return courseMapper.mapToCourseDTO(course);
+        return courseMapper.mapToCourseDto(course);
     }
 
     @Override
@@ -47,20 +47,20 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public void updateCourse(CourseDTO courseDTO) {
-        if (courseRepository.findById(courseDTO.id()).isEmpty()) {
+    public void updateCourse(CourseDto courseDto) {
+        if (courseRepository.findById(courseDto.id()).isEmpty()) {
             throw new IllegalStateException(String.format(
                     ErrorMessages.ENTITY_CAN_NOT_BE_UPDATED, entityName
             ));
         }
 
-        Course course = courseMapper.mapToCourse(courseDTO);
+        Course course = courseMapper.mapToCourse(courseDto);
         courseRepository.save(course);
     }
 
     @Override
-    public List<CourseDTO> getAllCourses() {
+    public List<CourseDto> getAllCourses() {
         List<Course> allCourses = courseRepository.findAll();
-        return allCourses.stream().map(courseMapper::mapToCourseDTO).toList();
+        return allCourses.stream().map(courseMapper::mapToCourseDto).toList();
     }
 }

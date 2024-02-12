@@ -8,13 +8,17 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
     <link rel="stylesheet" th:href="@{/css/reset.css}">
-    <link rel="stylesheet" th:href="@{/css/mainStyles.css}">
+    <link rel="stylesheet" th:href="@{/css/headerStyles.css}"> 
+    <link rel="stylesheet" th:href="@{/css/mainStyles.css}"> 
+<!--     <link rel="stylesheet" href="../static/css/reset.css">
+    <link rel="stylesheet" href="../static/css/mainStyles.css"> -->
 </head>
 <body>
-    <div class="header_container">
-        <h2 class="header">Main Page</h2>
+    <header th:replace="~{fragments/header.html :: header}"></header>
+    <div class="title_container">
+        <h2 class="title">Main Page</h2>
         <form th:method="POST" th:action="@{/init}">
-            <input class="header_button" type="submit" value="Init db with basic data">
+            <input class="title_button" type="submit" value="Init db with basic data">
         </form>
     </div>
     <div class="menu_container">

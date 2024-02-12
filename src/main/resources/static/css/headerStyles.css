@@ -1,0 +1,42 @@
+.header {
+    background-color: #575567;
+    padding: 28px 40px;
+}
+
+.logo {
+    font-size: 30px;
+    color: white;
+    margin-right: 42px;
+    text-decoration: none;
+}
+
+.nav_bar, .nav_bar ul {
+    display: flex;
+    align-items: center;
+}
+
+.nav_bar_item, .auth_info_button {
+    font-size: 19px;
+    color: white;
+    text-decoration: none;
+    margin-right: 18px;
+    background: transparent;
+    border: none;
+}
+
+.nav_bar_item:hover, .auth_info_button:hover {
+    text-decoration: underline;
+}
+
+.person_name:hover {
+    text-decoration: none;
+}
+
+.login_block, .logout_block, .admin_block {
+    margin-left: auto;
+}
+
+.logout_block {
+    display: flex;
+    align-items: center;
+}

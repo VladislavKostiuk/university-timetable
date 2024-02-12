@@ -1,6 +1,7 @@
 package com.foxminded.controller;
 
-import com.foxminded.dto.TeacherDTO;
+import com.foxminded.dto.TeacherDto;
+import com.foxminded.enums.Role;
 import com.foxminded.service.TeacherService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -9,15 +10,19 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(controllers = TeacherController.class)
 @ExtendWith(MockitoExtension.class)
+@WithMockUser
 class TeacherControllerTest {
 
     @Autowired
@@ -26,20 +31,22 @@ class TeacherControllerTest {
     @MockBean
     private TeacherService teacherService;
 
-    private TeacherDTO testTeacherDTO;
+    private TeacherDto testTeacherDto;
 
     @BeforeEach
     void setup() {
-        testTeacherDTO = new TeacherDTO(
-                1L,
+        testTeacherDto = new TeacherDto(
+                0L,
                 "test teacher",
-                null
+                "some pass",
+                Set.of(Role.TEACHER),
+                new ArrayList<>()
         );
     }
 
     @Test
     void testShowAll_Success() throws Exception{
-        List<TeacherDTO> expectedTeachers = new ArrayList<>(List.of(testTeacherDTO));
+        List<TeacherDto> expectedTeachers = new ArrayList<>(List.of(testTeacherDto));
         given(teacherService.getAllTeachers()).willReturn(expectedTeachers);
 
         mockMvc.perform(get("/teachers"))
@@ -48,3 +55,4 @@ class TeacherControllerTest {
                 .andExpect(model().attribute("allTeachers", expectedTeachers));
     }
 }
+

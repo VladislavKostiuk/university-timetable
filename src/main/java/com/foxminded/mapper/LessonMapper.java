@@ -1,6 +1,6 @@
 package com.foxminded.mapper;
 
-import com.foxminded.dto.LessonDTO;
+import com.foxminded.dto.LessonDto;
 import com.foxminded.entity.Lesson;
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
@@ -11,9 +11,9 @@ import org.mapstruct.Mapping;
         uses = {SubjectMapper.class})
 public interface LessonMapper {
 
-    @Mapping(source = "lesson.subject", target = "subjectDTO")
-    LessonDTO mapToLessonDTO(Lesson lesson);
+    @Mapping(source = "lesson.subject", target = "subjectDto")
+    LessonDto mapToLessonDto(Lesson lesson);
 
-    @Mapping(source = "lessonDTO.subjectDTO", target = "subject")
-    Lesson mapToLesson(LessonDTO lessonDTO);
+    @Mapping(source = "lessonDto.subjectDto", target = "subject")
+    Lesson mapToLesson(LessonDto lessonDto);
 }

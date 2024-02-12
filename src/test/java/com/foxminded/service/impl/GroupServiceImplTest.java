@@ -1,6 +1,6 @@
 package com.foxminded.service.impl;
 
-import com.foxminded.dto.GroupDTO;
+import com.foxminded.dto.GroupDto;
 import com.foxminded.mapper.GroupMapper;
 import com.foxminded.entity.Group;
 import com.foxminded.mapper.GroupMapperImpl;
@@ -42,18 +42,18 @@ class GroupServiceImplTest {
 
     @Test
     void testAddGroup_Success() {
-        GroupDTO testGroupDTO = new GroupDTO("group1");
-        when(groupRepository.findById(testGroupDTO.id())).thenReturn(Optional.empty());
-        groupService.addGroup(testGroupDTO);
+        GroupDto testGroupDto = new GroupDto(0L, "group1");
+        when(groupRepository.findById(testGroupDto.id())).thenReturn(Optional.empty());
+        groupService.addGroup(testGroupDto);
         verify(groupRepository).save(any());
     }
 
     @Test
     void testAddGroup_GroupAlreadyExists() {
-        GroupDTO testGroupDTO = new GroupDTO("group1");
-        Group testGroup = groupMapper.mapToGroup(testGroupDTO);
-        when(groupRepository.findById(testGroupDTO.id())).thenReturn(Optional.of(testGroup));
-        assertThrows(IllegalStateException.class, () -> groupService.addGroup(testGroupDTO));
+        GroupDto testGroupDto = new GroupDto(0L, "group1");
+        Group testGroup = groupMapper.mapToGroup(testGroupDto);
+        when(groupRepository.findById(testGroupDto.id())).thenReturn(Optional.of(testGroup));
+        assertThrows(IllegalStateException.class, () -> groupService.addGroup(testGroupDto));
     }
 
     @Test
@@ -64,9 +64,9 @@ class GroupServiceImplTest {
         group.setName("group1");
 
         when(groupRepository.findById(id)).thenReturn(Optional.of(group));
-        GroupDTO expectedGroupDTO = groupMapper.mapToGroupDTO(group);
-        GroupDTO actualGroupDTO = groupService.getGroupById(id);
-        assertEquals(expectedGroupDTO, actualGroupDTO);
+        GroupDto expectedGroupDto = groupMapper.mapToGroupDto(group);
+        GroupDto actualGroupDto = groupService.getGroupById(id);
+        assertEquals(expectedGroupDto, actualGroupDto);
         verify(groupRepository).findById(id);
     }
 
@@ -78,17 +78,18 @@ class GroupServiceImplTest {
 
     @Test
     void testUpdateGroup_Success() {
-        GroupDTO testGroupDTO = new GroupDTO("group1");
-        Group testGroup = groupMapper.mapToGroup(testGroupDTO);
-        when(groupRepository.findById(testGroupDTO.id())).thenReturn(Optional.of(testGroup));
-        groupService.updateGroup(testGroupDTO);
+        GroupDto testGroupDto = new GroupDto(0L, "group1");
+        Group testGroup = groupMapper.mapToGroup(testGroupDto);
+        when(groupRepository.findById(testGroupDto.id())).thenReturn(Optional.of(testGroup));
+        groupService.updateGroup(testGroupDto);
         verify(groupRepository).save(any());
     }
 
     @Test
     void testUpdateGroup_GroupDoesNotExist() {
-        GroupDTO testGroupDTO = new GroupDTO("group1");
-        when(groupRepository.findById(testGroupDTO.id())).thenReturn(Optional.empty());
-        assertThrows(IllegalStateException.class, () -> groupService.updateGroup(testGroupDTO));
+        GroupDto testGroupDto = new GroupDto(0L, "group1");
+        when(groupRepository.findById(testGroupDto.id())).thenReturn(Optional.empty());
+        assertThrows(IllegalStateException.class, () -> groupService.updateGroup(testGroupDto));
     }
 }
+

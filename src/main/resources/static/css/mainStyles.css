@@ -2,20 +2,20 @@ body {
     font-family: 'Montserrat', sans-serif;
 }
 
-.header_container, .menu_container {
+.title_container, .menu_container {
     display: flex;
     flex-direction: column;
     align-items:center;
     margin: 0 auto;
 }
 
-.header {
+.title {
     font-size: 50px;
-    margin-top: 20px;
+    margin-top: 30px;
     margin-bottom: 35px;
 }
 
-.header_button {
+.title_button {
     cursor: pointer;
     text-decoration: none;
     background-color: #405cf5;

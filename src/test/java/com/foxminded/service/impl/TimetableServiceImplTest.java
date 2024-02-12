@@ -1,6 +1,6 @@
 package com.foxminded.service.impl;
 
-import com.foxminded.dto.TimetableDTO;
+import com.foxminded.dto.TimetableDto;
 import com.foxminded.enums.TimetableType;
 import com.foxminded.entity.Timetable;
 import com.foxminded.mapper.*;
@@ -43,18 +43,18 @@ class TimetableServiceImplTest {
 
     @Test
     void testAddTimetable_Success() {
-        TimetableDTO testTimetableDTO = new TimetableDTO(TimetableType.STUDENT_TIMETABLE, "test group", new ArrayList<>());
-        when(timetableRepository.findById(testTimetableDTO.id())).thenReturn(Optional.empty());
-        timetableService.addTimetable(testTimetableDTO);
+        TimetableDto testTimetableDto = new TimetableDto(0L, TimetableType.STUDENT_TIMETABLE, "test group", new ArrayList<>());
+        when(timetableRepository.findById(testTimetableDto.id())).thenReturn(Optional.empty());
+        timetableService.addTimetable(testTimetableDto);
         verify(timetableRepository).save(any());
     }
 
     @Test
     void testAddTimetable_TimetableAlreadyExists() {
-        TimetableDTO testTimetableDTO = new TimetableDTO(TimetableType.STUDENT_TIMETABLE, "test group", new ArrayList<>());
-        Timetable testTimetable = timetableMapper.mapToTimetable(testTimetableDTO);
-        when(timetableRepository.findById(testTimetableDTO.id())).thenReturn(Optional.of(testTimetable));
-        assertThrows(IllegalStateException.class, () -> timetableService.addTimetable(testTimetableDTO));
+        TimetableDto testTimetableDto = new TimetableDto(0L, TimetableType.STUDENT_TIMETABLE, "test group", new ArrayList<>());
+        Timetable testTimetable = timetableMapper.mapToTimetable(testTimetableDto);
+        when(timetableRepository.findById(testTimetableDto.id())).thenReturn(Optional.of(testTimetable));
+        assertThrows(IllegalStateException.class, () -> timetableService.addTimetable(testTimetableDto));
     }
 
     @Test
@@ -64,9 +64,9 @@ class TimetableServiceImplTest {
         timetable.setId(id);
 
         when(timetableRepository.findById(id)).thenReturn(Optional.of(timetable));
-        TimetableDTO expectedTimetableDTO = timetableMapper.mapToTimetableDTO(timetable);
-        TimetableDTO actualTimetableDTO = timetableService.getTimetableById(id);
-        assertEquals(expectedTimetableDTO, actualTimetableDTO);
+        TimetableDto expectedTimetableDto = timetableMapper.mapToTimetableDto(timetable);
+        TimetableDto actualTimetableDto = timetableService.getTimetableById(id);
+        assertEquals(expectedTimetableDto, actualTimetableDto);
         verify(timetableRepository).findById(id);
     }
 
@@ -78,17 +78,18 @@ class TimetableServiceImplTest {
 
     @Test
     void testUpdateTimetable_Success() {
-        TimetableDTO testTimetableDTO = new TimetableDTO(TimetableType.STUDENT_TIMETABLE, "test group", new ArrayList<>());
-        Timetable testTimetable = timetableMapper.mapToTimetable(testTimetableDTO);
-        when(timetableRepository.findById(testTimetableDTO.id())).thenReturn(Optional.of(testTimetable));
-        timetableService.updateTimetable(testTimetableDTO);
+        TimetableDto testTimetableDto = new TimetableDto(0L, TimetableType.STUDENT_TIMETABLE, "test group", new ArrayList<>());
+        Timetable testTimetable = timetableMapper.mapToTimetable(testTimetableDto);
+        when(timetableRepository.findById(testTimetableDto.id())).thenReturn(Optional.of(testTimetable));
+        timetableService.updateTimetable(testTimetableDto);
         verify(timetableRepository).save(any());
     }
 
     @Test
     void testUpdateTimetable_TimetableDoesNotExist() {
-        TimetableDTO testTimetableDTO = new TimetableDTO(TimetableType.STUDENT_TIMETABLE, "test group", new ArrayList<>());
-        when(timetableRepository.findById(testTimetableDTO.id())).thenReturn(Optional.empty());
-        assertThrows(IllegalStateException.class, () -> timetableService.updateTimetable(testTimetableDTO));
+        TimetableDto testTimetableDto = new TimetableDto(0L, TimetableType.STUDENT_TIMETABLE, "test group", new ArrayList<>());
+        when(timetableRepository.findById(testTimetableDto.id())).thenReturn(Optional.empty());
+        assertThrows(IllegalStateException.class, () -> timetableService.updateTimetable(testTimetableDto));
     }
 }
+

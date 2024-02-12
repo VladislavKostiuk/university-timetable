@@ -1,9 +1,9 @@
 package com.foxminded.controller;
 
-import com.foxminded.dto.TimetableDTO;
-import com.foxminded.entity.Timetable;
+import com.foxminded.dto.TimetableDto;
 import com.foxminded.service.TimetableService;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,14 +11,15 @@ import org.springframework.web.bind.annotation.GetMapping;
 import java.util.List;
 
 @Controller
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class TimetableController {
-    private TimetableService timetableService;
+    private final TimetableService timetableService;
 
     @GetMapping("/timetables")
     public String showAll(Model model) {
-        List<TimetableDTO> allTimetables = timetableService.getAllTimetables();
+        List<TimetableDto> allTimetables = timetableService.getAllTimetables();
         model.addAttribute("allTimetables", allTimetables);
         return "entityPages/timetablePage";
     }
 }
+

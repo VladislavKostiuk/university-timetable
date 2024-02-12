@@ -1,6 +1,6 @@
 package com.foxminded.service.impl;
 
-import com.foxminded.dto.SubjectDTO;
+import com.foxminded.dto.SubjectDto;
 import com.foxminded.mapper.SubjectMapper;
 import com.foxminded.entity.Subject;
 import com.foxminded.mapper.SubjectMapperImpl;
@@ -40,18 +40,18 @@ class SubjectServiceImplTest {
 
     @Test
     void testAddSubject_Success() {
-        SubjectDTO testSubjectDTO = new SubjectDTO(null, null, null);
-        when(subjectRepository.findById(testSubjectDTO.id())).thenReturn(Optional.empty());
-        subjectService.addSubject(testSubjectDTO);
+        SubjectDto testSubjectDto = new SubjectDto(0L, null, null, null);
+        when(subjectRepository.findById(testSubjectDto.id())).thenReturn(Optional.empty());
+        subjectService.addSubject(testSubjectDto);
         verify(subjectRepository).save(any());
     }
 
     @Test
     void testAddSubject_SubjectAlreadyExists() {
-        SubjectDTO testSubjectDTO = new SubjectDTO(null, null, null);
-        Subject testSubject = subjectMapper.mapToSubject(testSubjectDTO);
-        when(subjectRepository.findById(testSubjectDTO.id())).thenReturn(Optional.of(testSubject));
-        assertThrows(IllegalStateException.class, () -> subjectService.addSubject(testSubjectDTO));
+        SubjectDto testSubjectDto = new SubjectDto(0L, null, null, null);
+        Subject testSubject = subjectMapper.mapToSubject(testSubjectDto);
+        when(subjectRepository.findById(testSubjectDto.id())).thenReturn(Optional.of(testSubject));
+        assertThrows(IllegalStateException.class, () -> subjectService.addSubject(testSubjectDto));
     }
 
     @Test
@@ -61,9 +61,9 @@ class SubjectServiceImplTest {
         subject.setId(id);
 
         when(subjectRepository.findById(id)).thenReturn(Optional.of(subject));
-        SubjectDTO expectedSubjectDTO = subjectMapper.mapToSubjectDTO(subject);
-        SubjectDTO actualSubjectDTO = subjectService.getSubjectById(id);
-        assertEquals(expectedSubjectDTO, actualSubjectDTO);
+        SubjectDto expectedSubjectDto = subjectMapper.mapToSubjectDto(subject);
+        SubjectDto actualSubjectDto = subjectService.getSubjectById(id);
+        assertEquals(expectedSubjectDto, actualSubjectDto);
         verify(subjectRepository).findById(id);
     }
 
@@ -75,17 +75,18 @@ class SubjectServiceImplTest {
 
     @Test
     void testUpdateSubject_Success() {
-        SubjectDTO testSubjectDTO = new SubjectDTO(null, null, null);
-        Subject testSubject = subjectMapper.mapToSubject(testSubjectDTO);
-        when(subjectRepository.findById(testSubjectDTO.id())).thenReturn(Optional.of(testSubject));
-        subjectService.updateSubject(testSubjectDTO);
+        SubjectDto testSubjectDto = new SubjectDto(0L, null, null, null);
+        Subject testSubject = subjectMapper.mapToSubject(testSubjectDto);
+        when(subjectRepository.findById(testSubjectDto.id())).thenReturn(Optional.of(testSubject));
+        subjectService.updateSubject(testSubjectDto);
         verify(subjectRepository).save(any());
     }
 
     @Test
     void testUpdateSubject_SubjectDoesNotExist() {
-        SubjectDTO testSubjectDTO = new SubjectDTO(null, null, null);
-        when(subjectRepository.findById(testSubjectDTO.id())).thenReturn(Optional.empty());
-        assertThrows(IllegalStateException.class, () -> subjectService.updateSubject(testSubjectDTO));
+        SubjectDto testSubjectDto = new SubjectDto(0L, null, null, null);
+        when(subjectRepository.findById(testSubjectDto.id())).thenReturn(Optional.empty());
+        assertThrows(IllegalStateException.class, () -> subjectService.updateSubject(testSubjectDto));
     }
 }
+
