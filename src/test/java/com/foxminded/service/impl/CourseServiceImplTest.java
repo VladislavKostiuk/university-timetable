@@ -3,22 +3,21 @@ package com.foxminded.service.impl;
 import com.foxminded.dto.CourseDTO;
 import com.foxminded.enums.CourseName;
 import com.foxminded.mapper.CourseMapper;
+import com.foxminded.entity.Course;
 import com.foxminded.mapper.CourseMapperImpl;
-import com.foxminded.model.Course;
 import com.foxminded.repository.CourseRepository;
 import com.foxminded.service.CourseService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -36,7 +35,7 @@ class CourseServiceImplTest {
 
     @BeforeEach
     void init() {
-        courseService = new CourseServiceImpl(courseMapper, courseRepository);
+        courseService = new CourseServiceImpl(courseRepository, courseMapper);
     }
 
     @Test

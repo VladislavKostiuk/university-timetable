@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Main Page</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/reset.css}">
+    <link rel="stylesheet" th:href="@{/css/mainStyles.css}">
+</head>
+<body>
+    <div class="header_container">
+        <h2 class="header">Main Page</h2>
+        <form th:method="POST" th:action="@{/init}">
+            <input class="header_button" type="submit" value="Init db with basic data">
+        </form>
+    </div>
+    <div class="menu_container">
+        <ul>
+            <li><a class="menu_item" href="/courses">Course page</a></li>
+            <li><a class="menu_item" href="/groups">Group page</a></li>
+            <li><a class="menu_item" href="/lessons">Lesson page</a></li>
+            <li><a class="menu_item" href="/students">Student page</a></li>
+            <li><a class="menu_item" href="/subjects">Subject page</a></li>
+            <li><a class="menu_item" href="/teachers">Teacher page</a></li>
+            <li><a class="menu_item" href="/timetables">Timetable page</a></li>
+        </ul>
+    </div>
+</body>
+</html>

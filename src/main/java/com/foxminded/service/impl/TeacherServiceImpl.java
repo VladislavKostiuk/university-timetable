@@ -3,23 +3,21 @@ package com.foxminded.service.impl;
 import com.foxminded.constants.ErrorMessages;
 import com.foxminded.dto.TeacherDTO;
 import com.foxminded.mapper.TeacherMapper;
-import com.foxminded.model.Teacher;
+import com.foxminded.entity.Teacher;
 import com.foxminded.repository.TeacherRepository;
 import com.foxminded.service.TeacherService;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
+@AllArgsConstructor
 public class TeacherServiceImpl implements TeacherService {
     private final String entityName = "Teacher";
     private final TeacherRepository teacherRepository;
     private final TeacherMapper teacherMapper;
-
-    @Autowired
-    public TeacherServiceImpl(TeacherRepository teacherRepository, TeacherMapper teacherMapper) {
-        this.teacherRepository = teacherRepository;
-        this.teacherMapper = teacherMapper;
-    }
 
     @Override
     public void addTeacher(TeacherDTO teacherDTO) {
@@ -57,5 +55,11 @@ public class TeacherServiceImpl implements TeacherService {
 
         Teacher teacher = teacherMapper.mapToTeacher(teacherDTO);
         teacherRepository.save(teacher);
+    }
+
+    @Override
+    public List<TeacherDTO> getAllTeachers() {
+        List<Teacher> allTeachers = teacherRepository.findAll();
+        return allTeachers.stream().map(teacherMapper::mapToTeacherDTO).toList();
     }
 }

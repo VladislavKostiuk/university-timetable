@@ -3,23 +3,21 @@ package com.foxminded.service.impl;
 import com.foxminded.constants.ErrorMessages;
 import com.foxminded.dto.SubjectDTO;
 import com.foxminded.mapper.SubjectMapper;
-import com.foxminded.model.Subject;
+import com.foxminded.entity.Subject;
 import com.foxminded.repository.SubjectRepository;
 import com.foxminded.service.SubjectService;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
+@AllArgsConstructor
 public class SubjectServiceImpl implements SubjectService {
     private final String entityName = "Subject";
     private final SubjectRepository subjectRepository;
     private final SubjectMapper subjectMapper;
-
-    @Autowired
-    public SubjectServiceImpl(SubjectRepository subjectRepository, SubjectMapper subjectMapper) {
-        this.subjectRepository = subjectRepository;
-        this.subjectMapper = subjectMapper;
-    }
 
     @Override
     public void addSubject(SubjectDTO subjectDTO) {
@@ -57,5 +55,11 @@ public class SubjectServiceImpl implements SubjectService {
 
         Subject subject = subjectMapper.mapToSubject(subjectDTO);
         subjectRepository.save(subject);
+    }
+
+    @Override
+    public List<SubjectDTO> getAllSubjects() {
+        List<Subject> allSubjects = subjectRepository.findAll();
+        return allSubjects.stream().map(subjectMapper::mapToSubjectDTO).toList();
     }
 }

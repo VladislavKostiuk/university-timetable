@@ -3,24 +3,21 @@ package com.foxminded.service.impl;
 import com.foxminded.constants.ErrorMessages;
 import com.foxminded.dto.GroupDTO;
 import com.foxminded.mapper.GroupMapper;
-import com.foxminded.model.Group;
+import com.foxminded.entity.Group;
 import com.foxminded.repository.GroupRepository;
 import com.foxminded.service.GroupService;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
+@AllArgsConstructor
 public class GroupServiceImpl implements GroupService {
     private final String entityName = "Group";
     private final GroupRepository groupRepository;
     private final GroupMapper groupMapper;
-
-    @Autowired
-    public GroupServiceImpl(GroupRepository groupRepository,
-                            GroupMapper groupMapper) {
-        this.groupRepository = groupRepository;
-        this.groupMapper = groupMapper;
-    }
 
     @Override
     public void addGroup(GroupDTO groupDTO) {
@@ -58,5 +55,11 @@ public class GroupServiceImpl implements GroupService {
 
         Group group = groupMapper.mapToGroup(groupDTO);
         groupRepository.save(group);
+    }
+
+    @Override
+    public List<GroupDTO> getAllGroups() {
+        List<Group> allGroups = groupRepository.findAll();
+        return allGroups.stream().map(groupMapper::mapToGroupDTO).toList();
     }
 }

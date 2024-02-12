@@ -3,26 +3,21 @@ package com.foxminded.service.impl;
 import com.foxminded.constants.ErrorMessages;
 import com.foxminded.dto.CourseDTO;
 import com.foxminded.mapper.CourseMapper;
-import com.foxminded.model.Course;
+import com.foxminded.entity.Course;
 import com.foxminded.repository.CourseRepository;
 import com.foxminded.service.CourseService;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
+import java.util.List;
 
 @Service
+@AllArgsConstructor
 public class CourseServiceImpl implements CourseService {
     private final String entityName = "Course";
     private final CourseRepository courseRepository;
     private final CourseMapper courseMapper;
-
-    @Autowired
-    public CourseServiceImpl (CourseMapper courseMapper,
-                              CourseRepository courseRepository) {
-        this.courseMapper = courseMapper;
-        this.courseRepository = courseRepository;
-    }
 
     @Override
     public void addCourse(CourseDTO courseDTO) {
@@ -61,5 +56,11 @@ public class CourseServiceImpl implements CourseService {
 
         Course course = courseMapper.mapToCourse(courseDTO);
         courseRepository.save(course);
+    }
+
+    @Override
+    public List<CourseDTO> getAllCourses() {
+        List<Course> allCourses = courseRepository.findAll();
+        return allCourses.stream().map(courseMapper::mapToCourseDTO).toList();
     }
 }
