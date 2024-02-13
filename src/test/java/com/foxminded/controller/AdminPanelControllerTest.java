@@ -91,7 +91,7 @@ class AdminPanelControllerTest {
     void testUpdateStudentRoles_Success() throws Exception{
         given(studentService.getStudentById(1L)).willReturn(testStudentDto);
 
-        mockMvc.perform(post("/adminPanel/1/updateStudentRoles").param("selected", "STUDENT,ADMIN"))
+        mockMvc.perform(post("/adminPanel/1/updateStudentRoles").param("selectedRoles", "STUDENT,ADMIN"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/adminPanel/students"));
 
@@ -102,7 +102,7 @@ class AdminPanelControllerTest {
     void testUpdateTeacherRoles_Success() throws Exception{
         given(teacherService.getTeacherById(1L)).willReturn(testTeacherDto);
 
-        mockMvc.perform(post("/adminPanel/1/updateTeacherRoles").param("selected", "TEACHER,ADMIN"))
+        mockMvc.perform(post("/adminPanel/1/updateTeacherRoles").param("selectedRoles", "TEACHER,ADMIN"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/adminPanel/teachers"));
 
@@ -111,7 +111,7 @@ class AdminPanelControllerTest {
 
     @Test
     void testSearchStudentByName() throws Exception {
-        String viewName = "redirect:/adminPanel/students?search=123";
+        String viewName = "redirect:/adminPanel/students?searchText=123";
         mockMvc.perform(post("/adminPanel/searchStudent").param("searchText", "123"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name(viewName));
@@ -119,7 +119,7 @@ class AdminPanelControllerTest {
 
     @Test
     void testSearchTeacherByName() throws Exception {
-        String viewName = "redirect:/adminPanel/teachers?search=123";
+        String viewName = "redirect:/adminPanel/teachers?searchText=123";
         mockMvc.perform(post("/adminPanel/searchTeacher").param("searchText", "123"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name(viewName));

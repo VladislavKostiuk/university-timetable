@@ -41,7 +41,7 @@
                         <form class="role_form" th:method="POST" th:action="@{/adminPanel/{studentId}/updateStudentRoles(studentId = ${student.id()})}">
                             <div>
                                 <label th:each="role : ${allRoles}">
-                                    <input name="selected" type="checkbox" th:checked="${#lists.contains(student.roles(), role)}" th:value="${role}">
+                                    <input name="selectedRoles" type="checkbox" th:checked="${#lists.contains(student.roles(), role)}" th:value="${role}">
                                     <span th:text="${role}"></span>
                                     <br/>
                                 </label>

@@ -6,13 +6,14 @@ import com.foxminded.mapper.GroupMapper;
 import com.foxminded.entity.Group;
 import com.foxminded.repository.GroupRepository;
 import com.foxminded.service.GroupService;
-import lombok.AllArgsConstructor;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class GroupServiceImpl implements GroupService {
     private final String entityName = "Group";

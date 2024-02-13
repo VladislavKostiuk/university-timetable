@@ -6,13 +6,14 @@ import com.foxminded.mapper.SubjectMapper;
 import com.foxminded.entity.Subject;
 import com.foxminded.repository.SubjectRepository;
 import com.foxminded.service.SubjectService;
-import lombok.AllArgsConstructor;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class SubjectServiceImpl implements SubjectService {
     private final String entityName = "Subject";

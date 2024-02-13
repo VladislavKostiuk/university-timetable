@@ -6,13 +6,14 @@ import com.foxminded.mapper.TimetableMapper;
 import com.foxminded.entity.Timetable;
 import com.foxminded.repository.TimetableRepository;
 import com.foxminded.service.TimetableService;
-import lombok.AllArgsConstructor;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class TimetableServiceImpl implements TimetableService {
     private final String entityName = "Timetable";

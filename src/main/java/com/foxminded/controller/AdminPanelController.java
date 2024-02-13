@@ -11,23 +11,27 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Controller
 @RequiredArgsConstructor
+@RequestMapping("/adminPanel")
 public class AdminPanelController {
     private final StudentService studentService;
     private final TeacherService teacherService;
 
-    @GetMapping("/adminPanel/students")
-    public String showStudentPanel(Model model, String search) {
+    @GetMapping("/students")
+    public String showStudentPanel(Model model, String searchText) {
         List<StudentDto> students = studentService.getAllStudents();
 
-        if (search != null) {
+        if (searchText != null) {
             students = students.stream()
-                    .filter((student -> student.name().startsWith(search)))
+                    .filter((student -> student.name().startsWith(searchText)))
                     .toList();
         }
 
@@ -36,13 +40,13 @@ public class AdminPanelController {
         return "adminPanelPages/studentPage";
     }
 
-    @GetMapping("/adminPanel/teachers")
-    public String showTeacherPanel(Model model, String search) {
+    @GetMapping("/teachers")
+    public String showTeacherPanel(Model model, String searchText) {
         List<TeacherDto> teachers = teacherService.getAllTeachers();
 
-        if (search != null) {
+        if (searchText != null) {
             teachers = teachers.stream()
-                    .filter((teacher -> teacher.name().startsWith(search)))
+                    .filter((teacher -> teacher.name().startsWith(searchText)))
                     .toList();
         }
 
@@ -51,11 +55,11 @@ public class AdminPanelController {
         return "adminPanelPages/teacherPage";
     }
 
-    @PostMapping("/adminPanel/{studentId}/updateStudentRoles")
-    public String updateStudentRoles(@PathVariable("studentId") Long studentId, @RequestParam("selected") String selected) {
-        List<String> selectedRoles = Arrays.asList(selected.split(","));
+    @PostMapping("/{studentId}/updateStudentRoles")
+    public String updateStudentRoles(@PathVariable("studentId") Long studentId, @RequestParam("selectedRoles") String selectedRoles) {
+        List<String> selectedRolesList = Arrays.asList(selectedRoles.split(","));
         Set<Role> updatedRoles = new HashSet<>();
-        selectedRoles.forEach(role -> updatedRoles.add(Role.valueOf(role)));
+        selectedRolesList.forEach(role -> updatedRoles.add(Role.valueOf(role)));
 
         StudentDto student = studentService.getStudentById(studentId);
         StudentDto updatedStudent = new StudentDto(
@@ -71,11 +75,11 @@ public class AdminPanelController {
         return "redirect:/adminPanel/students";
     }
 
-    @PostMapping("/adminPanel/{teacherId}/updateTeacherRoles")
-    public String updateTeacherRoles(@PathVariable("teacherId") Long teacherId, @RequestParam("selected") String selected) {
-        List<String> selectedRoles = Arrays.asList(selected.split(","));
+    @PostMapping("/{teacherId}/updateTeacherRoles")
+    public String updateTeacherRoles(@PathVariable("teacherId") Long teacherId, @RequestParam("selectedRoles") String selectedRoles) {
+        List<String> selectedRolesList = Arrays.asList(selectedRoles.split(","));
         Set<Role> updatedRoles = new HashSet<>();
-        selectedRoles.forEach(role -> updatedRoles.add(Role.valueOf(role)));
+        selectedRolesList.stream().forEach(role -> updatedRoles.add(Role.valueOf(role)));
 
         TeacherDto teacher = teacherService.getTeacherById(teacherId);
         TeacherDto updatedTeacher = new TeacherDto(
@@ -90,14 +94,14 @@ public class AdminPanelController {
         return "redirect:/adminPanel/teachers";
     }
 
-    @PostMapping("/adminPanel/searchStudent")
+    @PostMapping("/searchStudent")
     public String searchStudentByName(@RequestParam("searchText") String searchText) {
-        return "redirect:/adminPanel/students?search=" + searchText;
+        return "redirect:/adminPanel/students?searchText=" + searchText;
     }
 
-    @PostMapping("/adminPanel/searchTeacher")
+    @PostMapping("/searchTeacher")
     public String searchTeacherByName(@RequestParam("searchText") String searchText) {
-        return "redirect:/adminPanel/teachers?search=" + searchText;
+        return "redirect:/adminPanel/teachers?searchText=" + searchText;
     }
 }
 

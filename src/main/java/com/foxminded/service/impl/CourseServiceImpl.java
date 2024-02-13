@@ -6,13 +6,14 @@ import com.foxminded.mapper.CourseMapper;
 import com.foxminded.entity.Course;
 import com.foxminded.repository.CourseRepository;
 import com.foxminded.service.CourseService;
-import lombok.AllArgsConstructor;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class CourseServiceImpl implements CourseService {
     private final String entityName = "Course";

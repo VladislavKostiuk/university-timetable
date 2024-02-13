@@ -40,22 +40,23 @@ public class AuthController {
                                @RequestParam("radio_option") String radio_option) {
         StudentDto student;
         TeacherDto teacher;
+
         try {
             student = studentService.getStudentByName(username);
             return "redirect:/register?error=true";
-        } catch (IllegalArgumentException e) {}
-
-        try {
-            teacher = teacherService.getTeacherByName(username);
-            return "redirect:/register?error=true";
-        } catch (IllegalArgumentException e) {}
-
-        if (radio_option.equals("student")) {
-            student = createStudent(username, password);
-            studentService.addStudent(student);
-        } else if (radio_option.equals("teacher")) {
-            teacher = createTeacher(username, password);
-            teacherService.addTeacher(teacher);
+        } catch (IllegalArgumentException ex1) {
+            try {
+                teacher = teacherService.getTeacherByName(username);
+                return "redirect:/register?error=true";
+            } catch (IllegalArgumentException ex2) {
+                if (radio_option.equals("student")) {
+                    student = createStudent(username, password);
+                    studentService.addStudent(student);
+                } else if (radio_option.equals("teacher")) {
+                    teacher = createTeacher(username, password);
+                    teacherService.addTeacher(teacher);
+                }
+            }
         }
 
         return "redirect:/";

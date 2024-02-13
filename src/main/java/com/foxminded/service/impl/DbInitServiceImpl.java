@@ -3,19 +3,24 @@ package com.foxminded.service.impl;
 import com.foxminded.enums.Role;
 import com.foxminded.enums.TimetableType;
 import com.foxminded.helper.BasicDataGenerator;
-import com.foxminded.entity.*;
 import com.foxminded.repository.*;
+import com.foxminded.entity.*;
 import com.foxminded.service.DbInitService;
-import com.foxminded.service.TimetableService;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
 import java.time.DayOfWeek;
 import java.time.LocalTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+import java.util.Set;
+import java.util.UUID;
+
 
 @Service
+@Transactional
 public class DbInitServiceImpl implements DbInitService {
     private final StudentRepository studentRepository;
     private final CourseRepository courseRepository;
