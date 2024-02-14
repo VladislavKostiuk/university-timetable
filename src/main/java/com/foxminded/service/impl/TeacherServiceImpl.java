@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -42,12 +43,15 @@ public class TeacherServiceImpl implements TeacherService {
     }
 
     @Override
-    public TeacherDto getTeacherByName(String name) {
-        Teacher teacher = teacherRepository.findByName(name).orElseThrow(() ->
-                new IllegalArgumentException(String.format(
-                        ErrorMessages.TEACHER_WAS_NOT_FOUND_BY_NAME, name
-                )));
-        return teacherMapper.mapToTeacherDto(teacher);
+    public Optional<TeacherDto> getTeacherByName(String name) {
+        Optional<TeacherDto> teacherDto = Optional.empty();
+        Optional<Teacher> teacher = teacherRepository.findByName(name);
+
+        if (teacher.isPresent()) {
+            teacherDto = Optional.of(teacherMapper.mapToTeacherDto(teacher.get()));
+        }
+
+        return teacherDto;
     }
 
     @Override

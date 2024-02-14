@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 @Controller
@@ -37,26 +38,20 @@ public class AuthController {
     @PostMapping("/register")
     public String registerUser(@RequestParam("username") String username,
                                @RequestParam("password") String password,
-                               @RequestParam("radio_option") String radio_option) {
-        StudentDto student;
-        TeacherDto teacher;
+                               @RequestParam("user_type") String userType) {
+        Optional<StudentDto> existingStudent = studentService.getStudentByName(username);
+        Optional<TeacherDto> existingTeacher = teacherService.getTeacherByName(username);
 
-        try {
-            student = studentService.getStudentByName(username);
+        if (existingStudent.isPresent() || existingTeacher.isPresent()) {
             return "redirect:/register?error=true";
-        } catch (IllegalArgumentException ex1) {
-            try {
-                teacher = teacherService.getTeacherByName(username);
-                return "redirect:/register?error=true";
-            } catch (IllegalArgumentException ex2) {
-                if (radio_option.equals("student")) {
-                    student = createStudent(username, password);
-                    studentService.addStudent(student);
-                } else if (radio_option.equals("teacher")) {
-                    teacher = createTeacher(username, password);
-                    teacherService.addTeacher(teacher);
-                }
-            }
+        }
+
+        if (userType.equals("student")) {
+            StudentDto student = createStudent(username, password);
+            studentService.addStudent(student);
+        } else if (userType.equals("teacher")) {
+            TeacherDto teacher = createTeacher(username, password);
+            teacherService.addTeacher(teacher);
         }
 
         return "redirect:/";

@@ -83,13 +83,13 @@ class TeacherServiceImplTest {
         TeacherDto testTeacherDto = new TeacherDto(0L, "name", "pass", new HashSet<>(), new ArrayList<>());
         Teacher testTeacher = teacherMapper.mapToTeacher(testTeacherDto);
         when(teacherRepository.findByName("name")).thenReturn(Optional.of(testTeacher));
-        assertEquals(testTeacherDto, teacherService.getTeacherByName("name"));
+        assertEquals(Optional.of(testTeacherDto), teacherService.getTeacherByName("name"));
     }
 
     @Test
     void testGetTeacherByName_TeacherWithThisNameWasNotFound() {
         when(teacherRepository.findByName("name")).thenReturn(Optional.empty());
-        assertThrows(IllegalArgumentException.class, () -> teacherService.getTeacherByName("name"));
+        assertEquals(Optional.empty(), teacherService.getTeacherByName("name"));
     }
 
     @Test
