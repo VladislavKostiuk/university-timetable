@@ -39,7 +39,8 @@ class LessonControllerTest {
                 0L,
                 null,
                 DayOfWeek.MONDAY,
-                LocalTime.now()
+                LocalTime.now(),
+                new ArrayList<>()
         );
     }
 

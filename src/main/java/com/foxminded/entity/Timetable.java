@@ -14,6 +14,8 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.EnumType;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,12 +36,7 @@ public class Timetable {
     @Column(name = "qualifying_name")
     private String qualifyingName;
 
-    @ManyToMany
-    @JoinTable(
-            name = "timetable_lesson",
-            joinColumns = @JoinColumn(name = "timetable_id"),
-            inverseJoinColumns = @JoinColumn(name = "lesson_id")
-    )
+    @ManyToMany(mappedBy = "timetables")
     private List<Lesson> lessons;
 
     public Timetable() {

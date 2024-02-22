@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org">
+      xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
@@ -9,12 +9,16 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
     <link rel="stylesheet" th:href="@{/css/reset.css}">
     <link rel="stylesheet" th:href="@{/css/headerStyles.css}"> 
-    <link rel="stylesheet" th:href="@{/css/entityStyles.css}">
+    <link rel="stylesheet" th:href="@{/css/entityStyles.css}"> 
+    <!-- <link rel="stylesheet" href="../../static/css/reset.css">
+    <link rel="stylesheet" href="../../static/css/headerStyles.css">
+    <link rel="stylesheet" href="../../static/css/entityStyles.css"> -->
 </head>
 <body>
     <header th:replace="~{fragments/header.html :: header}"></header>
     <div class="title_container">
         <h2 class="title">Subjects</h2>
+        <a class="title_button" href="/createSubject">Create subject</a>
         <a class="title_button" href="/">To main menu</a>
     </div>
     <div class="table_container">
@@ -25,6 +29,7 @@
                 <th>Course</th>
                 <th>Teacher</th>
                 <th>Group</th>
+                <th calss="option_header"></th>
             </tr>
             </thead>
             <tbody>
@@ -33,6 +38,14 @@
                 <td th:if="${subject.courseDto() != null}" th:text="${subject.courseDto().name()}"></td>
                 <td th:if="${subject.teacherDto() != null}" th:text="${subject.teacherDto().name()}"></td>
                 <td th:if="${subject.groupDto() != null}" th:text="${subject.groupDto().name()}"></td>
+                <td sec:authorize="hasAuthority('ADMIN')" class="update_button_container">
+                    <form class="role_form" th:method="GET" th:action="@{/updateSubject/{subjectId}(subjectId = ${subject.id()})}">
+                    <input class="update_button_submit" type="submit" value="Update">
+                </form>
+                <form class="role_form" th:method="POST" th:action="@{/deleteSubject/{subjectId}(subjectId = ${subject.id()})}">
+                    <input class="delete_button_submit" type="submit" value="Delete">
+                </form>
+                </td>
             </tr>
             </tbody>
         </table>

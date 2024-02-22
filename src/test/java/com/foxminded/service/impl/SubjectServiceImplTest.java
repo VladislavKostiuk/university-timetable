@@ -13,6 +13,8 @@ import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+
+import java.util.List;
 import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -87,6 +89,16 @@ class SubjectServiceImplTest {
         SubjectDto testSubjectDto = new SubjectDto(0L, null, null, null);
         when(subjectRepository.findById(testSubjectDto.id())).thenReturn(Optional.empty());
         assertThrows(IllegalStateException.class, () -> subjectService.updateSubject(testSubjectDto));
+    }
+
+    @Test
+    void testGetAllSubjects() {
+        SubjectDto testSubjectDto = new SubjectDto(0L, null, null, null);
+        Subject testSubject = subjectMapper.mapToSubject(testSubjectDto);
+        when(subjectRepository.findAll()).thenReturn(List.of(testSubject));
+        List<SubjectDto> expectedAllSubjects = List.of(testSubjectDto);
+        List<SubjectDto> actualAllSubjects = subjectService.getAllSubjects();
+        assertEquals(expectedAllSubjects, actualAllSubjects);
     }
 }
 

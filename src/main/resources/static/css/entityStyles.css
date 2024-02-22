@@ -70,3 +70,27 @@ body {
 .content-table tbody tr:last-of-type {
     border-bottom: 2px solid #028CEB;
 }
+
+.update_button_container {
+    display: flex;
+}
+
+.option_header, .update_button_container {
+    max-width: 70px;
+}
+
+.update_button_submit, .delete_button_submit {
+    cursor: pointer;
+    text-decoration: none;
+    background-color: #028CEB;
+    border-radius: 6px;
+    border-width: 0;
+    color: #fff;
+    font-size: 80%;
+    padding: 10px 20px;
+    transition: all .2s;
+}
+
+.delete_button_submit {
+    margin-left: 28px;
+}

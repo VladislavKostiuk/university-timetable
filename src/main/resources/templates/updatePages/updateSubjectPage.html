@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Update subject</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/reset.css}">
+    <link rel="stylesheet" th:href="@{/css/headerStyles.css}"> 
+    <link rel="stylesheet" th:href="@{/css/createStyles.css}">
+    <!-- <link rel="stylesheet" href="../../static/css/reset.css">
+    <link rel="stylesheet" href="../../static/css/headerStyles.css">
+    <link rel="stylesheet" href="../../static/css/createStyles.css"> -->
+</head>
+<body>
+    <header th:replace="~{fragments/header.html :: header}"></header>
+    <div class="title_container">
+        <h2 class="title">Update subject</h2>
+        <a class="title_button" href="/">To main menu</a>
+    </div>
+    <div class="form_container">
+        <div th:if="${param.error}">
+            <p class="error_text">Subject with these options already exists</p>
+        </div>
+        <form class="form" th:action="@{/updateSubject}" th:method='POST'>
+            <input type="hidden" th:value="${subject.id()}" name="subjectId">
+            <label>Course</label>
+            <select class="form_select" name="course">
+              <option th:each="course : ${allCourses}" th:selected="${subject.courseDto().name().equals(course.name())}" th:value="${course.id()}" th:text="${course.name()}"></option>
+            </select>
+            <label>Teacher</label>
+            <select class="form_select" name="teacher">
+                <option th:each="teacher : ${allTeachers}" th:selected="${subject.teacherDto().name().equals(teacher.name())}" th:value="${teacher.id()}" th:text="${teacher.name()}"></option>
+            </select>
+            <label>Group</label>
+            <select class="form_select" name="group">
+                <option th:each="group : ${allGroups}" th:selected="${subject.groupDto().name().equals(group.name())}" th:value="${group.id()}" th:text="${group.name()}"></option>
+            </select>
+            <input class="submit_button" name="submit" type="submit" value="Update" />
+        </form>
+    </div>
+</body>
+</html>

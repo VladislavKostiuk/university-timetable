@@ -11,10 +11,12 @@ public interface SubjectMapper {
     @Mapping(source = "subject.course", target = "courseDto")
     @Mapping(source = "subject.teacher", target = "teacherDto")
     @Mapping(source = "subject.group", target = "groupDto")
+    @Mapping(source = "subject.teacher.courses", target = "teacherDto.courseDtoList")
     SubjectDto mapToSubjectDto(Subject subject);
 
     @Mapping(source = "subjectDto.courseDto", target = "course")
     @Mapping(source = "subjectDto.teacherDto", target = "teacher")
     @Mapping(source = "subjectDto.groupDto", target = "group")
+    @Mapping(source = "subjectDto.teacherDto.courseDtoList", target = "teacher.courses")
     Subject mapToSubject(SubjectDto subjectDto);
 }

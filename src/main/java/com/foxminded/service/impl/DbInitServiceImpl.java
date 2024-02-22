@@ -98,6 +98,9 @@ public class DbInitServiceImpl implements DbInitService {
         if (timetableRepository.count() == 0) {
             timetableRepository.saveAll(timetables);
         }
+
+        setTimetablesToLessons(timetables, lessons);
+        lessonRepository.saveAll(lessons);
     }
 
     private void initStudents(List<Student> allStudents, List<Group> allGroups, List<Course> allCourses) {
@@ -177,6 +180,16 @@ public class DbInitServiceImpl implements DbInitService {
                 String groupName = lesson.getSubject().getGroup().getName();
                 if (groupName.equals(group.getName())) {
                     timetable.getLessons().add(lesson);
+                }
+            }
+        }
+    }
+
+    private void setTimetablesToLessons(List<Timetable> allTimetables, List<Lesson> allLessons) {
+        for (var lesson : allLessons) {
+            for (var timetable : allTimetables) {
+                if (timetable.getLessons().contains(lesson)) {
+                    lesson.getTimetables().add(timetable);
                 }
             }
         }
