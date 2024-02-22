@@ -1,15 +1,14 @@
 package com.foxminded.service;
 
 
-import com.foxminded.dto.CourseDTO;
-import com.foxminded.dto.GroupDTO;
+import com.foxminded.dto.GroupDto;
 
 import java.util.List;
 
 public interface GroupService {
-    void addGroup(GroupDTO groupDTO);
-    GroupDTO getGroupById(Long id);
+    void addGroup(GroupDto groupDto);
+    GroupDto getGroupById(Long id);
     void deleteGroupById(Long id);
-    void updateGroup(GroupDTO groupDTO);
-    List<GroupDTO> getAllGroups();
+    void updateGroup(GroupDto groupDto);
+    List<GroupDto> getAllGroups();
 }

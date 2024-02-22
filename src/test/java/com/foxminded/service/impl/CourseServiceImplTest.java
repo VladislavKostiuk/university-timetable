@@ -1,6 +1,6 @@
 package com.foxminded.service.impl;
 
-import com.foxminded.dto.CourseDTO;
+import com.foxminded.dto.CourseDto;
 import com.foxminded.enums.CourseName;
 import com.foxminded.mapper.CourseMapper;
 import com.foxminded.entity.Course;
@@ -40,18 +40,18 @@ class CourseServiceImplTest {
 
     @Test
     void testAddCourse_Success() {
-        CourseDTO testCourseDTO = new CourseDTO(CourseName.ARCHITECTURE, "desc");
-        when(courseRepository.findById(testCourseDTO.id())).thenReturn(Optional.empty());
-        courseService.addCourse(testCourseDTO);
+        CourseDto testCourseDto = new CourseDto(0L, CourseName.ARCHITECTURE, "desc");
+        when(courseRepository.findById(testCourseDto.id())).thenReturn(Optional.empty());
+        courseService.addCourse(testCourseDto);
         verify(courseRepository).save(any());
     }
 
     @Test
     void testAddCourse_CourseAlreadyExists() {
-        CourseDTO testCourseDTO = new CourseDTO(CourseName.ARCHITECTURE, "desc");
-        Course testCourse = courseMapper.mapToCourse(testCourseDTO);
-        when(courseRepository.findById(testCourseDTO.id())).thenReturn(Optional.of(testCourse));
-        assertThrows(IllegalStateException.class, () -> courseService.addCourse(testCourseDTO));
+        CourseDto testCourseDto = new CourseDto(0L, CourseName.ARCHITECTURE, "desc");
+        Course testCourse = courseMapper.mapToCourse(testCourseDto);
+        when(courseRepository.findById(testCourseDto.id())).thenReturn(Optional.of(testCourse));
+        assertThrows(IllegalStateException.class, () -> courseService.addCourse(testCourseDto));
     }
 
     @Test
@@ -62,9 +62,9 @@ class CourseServiceImplTest {
         course.setName(CourseName.ARCHITECTURE);
 
         when(courseRepository.findById(id)).thenReturn(Optional.of(course));
-        CourseDTO expectedCourseDTO = courseMapper.mapToCourseDTO(course);
-        CourseDTO actualCourseDTO = courseService.getCourseById(id);
-        assertEquals(expectedCourseDTO, actualCourseDTO);
+        CourseDto expectedCourseDto = courseMapper.mapToCourseDto(course);
+        CourseDto actualCourseDto = courseService.getCourseById(id);
+        assertEquals(expectedCourseDto, actualCourseDto);
         verify(courseRepository).findById(id);
     }
 
@@ -76,17 +76,18 @@ class CourseServiceImplTest {
 
     @Test
     void testUpdateCourse_Success() {
-        CourseDTO testCourseDTO = new CourseDTO(CourseName.ARCHITECTURE, "desc");
-        Course testCourse = courseMapper.mapToCourse(testCourseDTO);
-        when(courseRepository.findById(testCourseDTO.id())).thenReturn(Optional.of(testCourse));
-        courseService.updateCourse(testCourseDTO);
+        CourseDto testCourseDto = new CourseDto(0L, CourseName.ARCHITECTURE, "desc");
+        Course testCourse = courseMapper.mapToCourse(testCourseDto);
+        when(courseRepository.findById(testCourseDto.id())).thenReturn(Optional.of(testCourse));
+        courseService.updateCourse(testCourseDto);
         verify(courseRepository).save(any());
     }
 
     @Test
     void testUpdateCourse_CourseDoesNotExist() {
-        CourseDTO testCourseDTO = new CourseDTO(CourseName.ARCHITECTURE, "desc");
-        when(courseRepository.findById(testCourseDTO.id())).thenReturn(Optional.empty());
-        assertThrows(IllegalStateException.class, () -> courseService.updateCourse(testCourseDTO));
+        CourseDto testCourseDto = new CourseDto(0L, CourseName.ARCHITECTURE, "desc");
+        when(courseRepository.findById(testCourseDto.id())).thenReturn(Optional.empty());
+        assertThrows(IllegalStateException.class, () -> courseService.updateCourse(testCourseDto));
     }
 }
+

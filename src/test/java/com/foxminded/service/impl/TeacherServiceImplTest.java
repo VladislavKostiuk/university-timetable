@@ -1,6 +1,6 @@
 package com.foxminded.service.impl;
 
-import com.foxminded.dto.TeacherDTO;
+import com.foxminded.dto.TeacherDto;
 import com.foxminded.mapper.TeacherMapper;
 import com.foxminded.entity.Teacher;
 import com.foxminded.mapper.TeacherMapperImpl;
@@ -15,6 +15,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -43,18 +44,18 @@ class TeacherServiceImplTest {
 
     @Test
     void testAddTeacher_Success() {
-        TeacherDTO testTeacherDTO = new TeacherDTO("name", new ArrayList<>());
-        when(teacherRepository.findById(testTeacherDTO.id())).thenReturn(Optional.empty());
-        teacherService.addTeacher(testTeacherDTO);
+        TeacherDto testTeacherDto = new TeacherDto(0L, "name", "pass", new HashSet<>(), new ArrayList<>());
+        when(teacherRepository.findById(testTeacherDto.id())).thenReturn(Optional.empty());
+        teacherService.addTeacher(testTeacherDto);
         verify(teacherRepository).save(any());
     }
 
     @Test
     void testAddTeacher_TeacherAlreadyExists() {
-        TeacherDTO testTeacherDTO = new TeacherDTO("name", new ArrayList<>());
-        Teacher testTeacher = teacherMapper.mapToTeacher(testTeacherDTO);
-        when(teacherRepository.findById(testTeacherDTO.id())).thenReturn(Optional.of(testTeacher));
-        assertThrows(IllegalStateException.class, () -> teacherService.addTeacher(testTeacherDTO));
+        TeacherDto testTeacherDto = new TeacherDto(0L, "name", "pass", new HashSet<>(), new ArrayList<>());
+        Teacher testTeacher = teacherMapper.mapToTeacher(testTeacherDto);
+        when(teacherRepository.findById(testTeacherDto.id())).thenReturn(Optional.of(testTeacher));
+        assertThrows(IllegalStateException.class, () -> teacherService.addTeacher(testTeacherDto));
     }
 
     @Test
@@ -65,9 +66,9 @@ class TeacherServiceImplTest {
         teacher.setName("name");
 
         when(teacherRepository.findById(id)).thenReturn(Optional.of(teacher));
-        TeacherDTO expectedTeacherDTO = teacherMapper.mapToTeacherDTO(teacher);
-        TeacherDTO actualTeacherDTO = teacherService.getTeacherById(id);
-        assertEquals(expectedTeacherDTO, actualTeacherDTO);
+        TeacherDto expectedTeacherDto = teacherMapper.mapToTeacherDto(teacher);
+        TeacherDto actualTeacherDto = teacherService.getTeacherById(id);
+        assertEquals(expectedTeacherDto, actualTeacherDto);
         verify(teacherRepository).findById(id);
     }
 
@@ -78,18 +79,33 @@ class TeacherServiceImplTest {
     }
 
     @Test
+    void testGetTeacherByName_Success() {
+        TeacherDto testTeacherDto = new TeacherDto(0L, "name", "pass", new HashSet<>(), new ArrayList<>());
+        Teacher testTeacher = teacherMapper.mapToTeacher(testTeacherDto);
+        when(teacherRepository.findByName("name")).thenReturn(Optional.of(testTeacher));
+        assertEquals(Optional.of(testTeacherDto), teacherService.getTeacherByName("name"));
+    }
+
+    @Test
+    void testGetTeacherByName_TeacherWithThisNameWasNotFound() {
+        when(teacherRepository.findByName("name")).thenReturn(Optional.empty());
+        assertEquals(Optional.empty(), teacherService.getTeacherByName("name"));
+    }
+
+    @Test
     void testUpdateTeacher_Success() {
-        TeacherDTO testTeacherDTO = new TeacherDTO("name", new ArrayList<>());
-        Teacher testTeacher = teacherMapper.mapToTeacher(testTeacherDTO);
-        when(teacherRepository.findById(testTeacherDTO.id())).thenReturn(Optional.of(testTeacher));
-        teacherService.updateTeacher(testTeacherDTO);
+        TeacherDto testTeacherDto = new TeacherDto(0L, "name", "pass", new HashSet<>(), new ArrayList<>());
+        Teacher testTeacher = teacherMapper.mapToTeacher(testTeacherDto);
+        when(teacherRepository.findById(testTeacherDto.id())).thenReturn(Optional.of(testTeacher));
+        teacherService.updateTeacher(testTeacherDto);
         verify(teacherRepository).save(any());
     }
 
     @Test
     void testUpdateTeacher_TeacherDoesNotExist() {
-        TeacherDTO testTeacherDTO = new TeacherDTO("name", new ArrayList<>());
-        when(teacherRepository.findById(testTeacherDTO.id())).thenReturn(Optional.empty());
-        assertThrows(IllegalStateException.class, () -> teacherService.updateTeacher(testTeacherDTO));
+        TeacherDto testTeacherDto = new TeacherDto(0L, "name", "pass", new HashSet<>(), new ArrayList<>());
+        when(teacherRepository.findById(testTeacherDto.id())).thenReturn(Optional.empty());
+        assertThrows(IllegalStateException.class, () -> teacherService.updateTeacher(testTeacherDto));
     }
 }
+

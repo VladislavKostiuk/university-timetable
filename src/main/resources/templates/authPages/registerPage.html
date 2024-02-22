@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/reset.css}">
+    <link rel="stylesheet" th:href="@{/css/headerStyles.css}"> 
+    <link rel="stylesheet" th:href="@{/css/authFormStyles.css}">
+<!--     <link rel="stylesheet" href="../../static/css/reset.css">
+    <link rel="stylesheet" href="../../static/css/headerStyles.css">
+    <link rel="stylesheet" href="../../static/css/authFormStyles.css"> -->
+</head>
+<body>
+    <header th:replace="~{fragments/header.html :: header}"></header>
+    <div class="form_container">
+        <h1 class="title">Registration</h1>
+        <div th:if="${param.error}">
+            <p class="error_text">This name is already taken</p>
+        </div>
+        <form class="form" th:action="@{/register}" th:method='POST'>
+            <label>Name</label>
+            <input required class="form_input" type='text' name='username' value=''>
+            <label>Password</label>
+            <input required class="form_input" type='password' name='password' />
+            <div class="toggle-radio">
+              <input required type="radio" value="student" name="user_type" id="student_radio" checked>
+              <input required type="radio" value="teacher" name="user_type" id="teacher_radio">
+              <div class="switch">
+                <label for="student_radio">Student</label>
+                <label for="teacher_radio">Teacher</label>
+              </div>
+            </div>
+            <input class="submit_button" name="submit" type="submit" value="Submit" />
+        </form>
+    </div>
+</body>
+</html>

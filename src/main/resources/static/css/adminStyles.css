@@ -1,0 +1,114 @@
+body {
+    font-family: 'Montserrat', sans-serif;
+}
+
+.entity_options {
+    margin-top: 36px;
+    text-align: center;
+}
+
+.entity_options a{
+    font-size: 22px;
+    color: black;
+    text-decoration: none;
+    margin-right: 25px;
+}
+
+.entity_options a:hover{
+    text-decoration: underline;
+}
+
+.search_section {
+    margin-top: 35px;
+}
+
+.search_section form {
+    text-align: center;
+    padding: 0 30px;
+    width: 500px;
+    margin: 0 auto;
+}
+
+.search_input {
+    border-width: 0px;
+    border-bottom: 1px solid #cccccc;
+    width: 100%;
+    background: #ffffff;
+    outline: none;
+    color: #000;
+    font-size: 18px;
+    text-align: center;
+}
+
+.search_submit {
+    display: none;
+}
+
+.title {
+    font-size: 50px;
+    margin-top: 30px;
+    margin-bottom: 35px;
+    text-align: center;
+}
+
+.table_container {
+    padding: 0px 45px;
+    margin: 30px 0;
+}
+
+.content-table {
+    border-collapse: collapse;
+    font-size: 0.9em;
+    min-width: 400px;
+    border-radius: 5px 5px 0 0;
+    overflow: hidden;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+    width: 60%;
+    margin: 0 auto;
+}
+
+.content-table thead tr {
+    background-color: #028CEB;
+    color: #ffffff;
+    text-align: left;
+    font-weight: bold;
+}
+
+.content-table th,
+.content-table td {
+    padding: 12px 15px;
+}
+
+.content-table tbody tr {
+    border-bottom: 1px solid #dddddd;
+}
+
+.content-table tbody tr:nth-of-type(even) {
+    background-color: #f3f3f3;
+}
+
+.content-table tbody tr:last-of-type {
+    border-bottom: 2px solid #028CEB;
+}
+
+.role_form {
+    display: flex;
+    align-items: center;
+}
+
+.role_form_submit {
+    margin-left: 42px;
+    cursor: pointer;
+    text-decoration: none;
+    background-color: #028CEB;
+    border-radius: 6px;
+    border-width: 0;
+    color: #fff;
+    font-size: 80%;
+    padding: 10px 20px;
+    transition: all .2s;
+}
+
+.role_form_submit:hover {
+    background-color: #0388E3;
+}

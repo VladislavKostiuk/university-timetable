@@ -1,14 +1,16 @@
 package com.foxminded.service;
 
-import com.foxminded.dto.SubjectDTO;
-import com.foxminded.dto.TeacherDTO;
+import com.foxminded.dto.TeacherDto;
+import org.springframework.security.core.userdetails.UserDetailsService;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface TeacherService {
-    void addTeacher(TeacherDTO teacherDTO);
-    TeacherDTO getTeacherById(Long id);
+    void addTeacher(TeacherDto teacherDto);
+    TeacherDto getTeacherById(Long id);
+    Optional<TeacherDto> getTeacherByName(String name);
     void deleteTeacherById(Long id);
-    void updateTeacher(TeacherDTO teacherDTO);
-    List<TeacherDTO> getAllTeachers();
+    void updateTeacher(TeacherDto teacherDto);
+    List<TeacherDto> getAllTeachers();
 }

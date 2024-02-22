@@ -14,15 +14,13 @@ import java.util.UUID;
 
 @Component
 public class BasicDataGenerator {
-    private final List<String> firstNames;
-    private final List<String> lastNames;
+    private final List<String> fullNames;
     private final List<CourseName> courseNames;
     private final Random random;
 
     public BasicDataGenerator() {
         random = new Random();
-        firstNames = new ArrayList<>();
-        lastNames = new ArrayList<>();
+        fullNames = new ArrayList<>();
         initStudentNames();
         courseNames = new ArrayList<>(Arrays.asList(CourseName.values()));
         Collections.shuffle(courseNames);
@@ -58,7 +56,7 @@ public class BasicDataGenerator {
         for (int i = 0; i < amount; i++) {
             Student student = new Student();
             student.setId(i + 1L);
-            student.setName(generateFullName());
+            student.setName(getFullName());
             students.add(student);
         }
 
@@ -70,7 +68,7 @@ public class BasicDataGenerator {
         for (int i = 0; i < amount; i++) {
             Teacher teacher = new Teacher();
             teacher.setId(i + 1L);
-            teacher.setName(generateFullName());
+            teacher.setName(getFullName());
             teachers.add(teacher);
         }
 
@@ -117,10 +115,10 @@ public class BasicDataGenerator {
                 random.nextInt(10);
     }
 
-    private String generateFullName() {
-        String firstName = firstNames.get(random.nextInt(firstNames.size()));
-        String lastName = lastNames.get(random.nextInt(lastNames.size()));
-        return firstName + " " + lastName;
+    private String getFullName() {
+        String fullName = fullNames.get(random.nextInt(fullNames.size()));
+        fullNames.remove(fullName);
+        return fullName;
     }
 
     private CourseName generateCourseName() {
@@ -142,7 +140,10 @@ public class BasicDataGenerator {
                 "Addison", "Ainsley", "Arley", "Avery", "Parker",
                 "Rawley", "Collins", "Eston", "Hadley", "Kensley"};
 
-        firstNames.addAll(Arrays.asList(firstNamesArr));
-        lastNames.addAll(Arrays.asList(lastNamesArr));
+        for (int i = 0; i < firstNamesArr.length; i++) {
+            for (int j = 0; j < lastNamesArr.length; j++) {
+                fullNames.add(firstNamesArr[i] + " " + lastNamesArr[j]);
+            }
+        }
     }
 }

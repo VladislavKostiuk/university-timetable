@@ -8,12 +8,14 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
     <link rel="stylesheet" th:href="@{/css/reset.css}">
+    <link rel="stylesheet" th:href="@{/css/headerStyles.css}"> 
     <link rel="stylesheet" th:href="@{/css/entityStyles.css}">
 </head>
 <body>
-    <div class="header_container">
-        <h2 class="header">Lessons</h2>
-        <a class="header_button" href="/">To main menu</a>
+    <header th:replace="~{fragments/header.html :: header}"></header>
+    <div class="title_container">
+        <h2 class="title">Lessons</h2>
+        <a class="title_button" href="/">To main menu</a>
     </div>
     <div class="table_container">
         <table class="content-table">
@@ -30,9 +32,9 @@
             <tbody>
             <tr th:each="lesson : ${allLessons}">
                 <td th:text="${lesson.id()}"></td>
-                <td th:if="${lesson.subjectDTO() != null}" th:text="${lesson.subjectDTO().courseDTO().name()}"></td>
-                <td th:if="${lesson.subjectDTO() != null}" th:text="${lesson.subjectDTO().groupDTO().name()}"></td>
-                <td th:if="${lesson.subjectDTO() != null}" th:text="${lesson.subjectDTO().teacherDTO().name()}"></td>
+                <td th:if="${lesson.subjectDto() != null}" th:text="${lesson.subjectDto().courseDto().name()}"></td>
+                <td th:if="${lesson.subjectDto() != null}" th:text="${lesson.subjectDto().groupDto().name()}"></td>
+                <td th:if="${lesson.subjectDto() != null}" th:text="${lesson.subjectDto().teacherDto().name()}"></td>
                 <td th:text="${lesson.day()}"></td>
                 <td th:text="${lesson.appointmentTime()}"></td>
             </tr>

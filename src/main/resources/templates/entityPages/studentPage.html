@@ -8,12 +8,14 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
     <link rel="stylesheet" th:href="@{/css/reset.css}">
+    <link rel="stylesheet" th:href="@{/css/headerStyles.css}"> 
     <link rel="stylesheet" th:href="@{/css/entityStyles.css}">
 </head>
 <body>
-    <div class="header_container">
-        <h2 class="header">Students</h2>
-        <a class="header_button" href="/">To main menu</a>
+    <header th:replace="~{fragments/header.html :: header}"></header>
+    <div class="title_container">
+        <h2 class="title">Students</h2>
+        <a class="title_button" href="/">To main menu</a>
     </div>
     <div class="table_container">
         <table class="content-table">
@@ -29,9 +31,9 @@
             <tr th:each="student : ${allStudents}">
                 <td th:text="${student.id()}"></td>
                 <td th:text="${student.name()}"></td>
-                <td th:if="${student.groupDTO() != null}" th:text="${student.groupDTO().name()}"></td>
+                <td th:if="${student.groupDto() != null}" th:text="${student.groupDto().name()}"></td>
                 <td>
-                    <p th:each="course : ${student.courseDTOList()}">
+                    <p th:each="course : ${student.courseDtoList()}">
                         <span th:text="${course.name()}"></span>
                     </p>
                 </td>
