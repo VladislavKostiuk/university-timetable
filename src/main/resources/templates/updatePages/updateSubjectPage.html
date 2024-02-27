@@ -24,7 +24,7 @@
         <div th:if="${param.error}">
             <p class="error_text">Subject with these options already exists</p>
         </div>
-        <form class="form" th:action="@{/updateSubject}" th:method='POST'>
+        <form class="form" th:action="@{/subjects/subject-update}" th:method='POST'>
             <input type="hidden" th:value="${subject.id()}" name="subjectId">
             <label>Course</label>
             <select class="form_select" name="course">

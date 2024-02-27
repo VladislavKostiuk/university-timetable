@@ -55,7 +55,7 @@ public class Teacher implements UserDetails {
             joinColumns = @JoinColumn(name = "teacher_id"),
             inverseJoinColumns = @JoinColumn(name = "course_id")
     )
-    private List<Course> courses;
+    private List<Course> teacherCourses;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

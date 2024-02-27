@@ -2,51 +2,47 @@ package com.foxminded.controller;
 
 import com.foxminded.dto.CourseDto;
 import com.foxminded.dto.GroupDto;
-import com.foxminded.dto.LessonDto;
 import com.foxminded.dto.SubjectDto;
 import com.foxminded.dto.TeacherDto;
-import com.foxminded.entity.Lesson;
 import com.foxminded.service.CourseService;
 import com.foxminded.service.GroupService;
-import com.foxminded.service.LessonService;
 import com.foxminded.service.SubjectService;
 import com.foxminded.service.TeacherService;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
+@RequestMapping("/subjects")
 public class SubjectController {
     private final SubjectService subjectService;
     private final CourseService courseService;
     private final TeacherService teacherService;
-    private final LessonService lessonService;
     private final GroupService groupService;
 
-    @GetMapping("/subjects")
+    @GetMapping
     public String showAll(Model model) {
         List<SubjectDto> allSubjects = subjectService.getAllSubjects();
         model.addAttribute("allSubjects", allSubjects);
         return "entityPages/subjectPage";
     }
 
-    @GetMapping("/createSubject")
+    @GetMapping("/subject-creation")
     public String showCreatePage(Model model) {
         initModel(model);
         return "createPages/createSubjectPage";
     }
 
-    @GetMapping("/updateSubject/{subjectId}")
+    @GetMapping("/subject-update/{subjectId}")
     public String showUpdatePage(@PathVariable("subjectId") Long subjectId, Model model) {
         SubjectDto subject = subjectService.getSubjectById(subjectId);
         model.addAttribute("subject", subject);
@@ -54,7 +50,7 @@ public class SubjectController {
         return "updatePages/updateSubjectPage";
     }
 
-    @PostMapping("/createSubject")
+    @PostMapping("/subject-creation")
     public String createSubject(@RequestParam("course") Long courseId,
                                 @RequestParam("teacher") Long teacherId,
                                 @RequestParam("group") Long groupId) {
@@ -62,10 +58,10 @@ public class SubjectController {
         TeacherDto teacher = teacherService.getTeacherById(teacherId);
         GroupDto group = groupService.getGroupById(groupId);
 
-        SubjectDto newSubject = new SubjectDto(0L, course, teacher, group);
+        SubjectDto newSubject = new SubjectDto(0L, course, teacher, group, new ArrayList<>());
 
         if (checkIfSubjectExists(newSubject)) {
-            return "redirect:/createSubject?error=true";
+            return "redirect:/subjects/subject-creation?error=true";
         }
 
         subjectService.addSubject(newSubject);
@@ -73,19 +69,13 @@ public class SubjectController {
         return "redirect:/subjects";
     }
 
-    @PostMapping("/deleteSubject/{subjectId}")
+    @PostMapping("/subject-deletion/{subjectId}")
     public String deleteSubject(@PathVariable("subjectId") Long subjectId) {
-        SubjectDto subject = subjectService.getSubjectById(subjectId);
-        for (var lesson : lessonService.getAllLessons()) {
-            if (lesson.subjectDto().equals(subject)) {
-                lessonService.deleteLessonById(lesson.id());
-            }
-        }
         subjectService.deleteSubjectById(subjectId);
         return "redirect:/subjects";
     }
 
-    @PostMapping("/updateSubject")
+    @PostMapping("/subject-update")
     public String updateSubject(@RequestParam("subjectId") Long subjectId,
                                 @RequestParam("course") Long courseId,
                                 @RequestParam("teacher") Long teacherId,
@@ -93,11 +83,12 @@ public class SubjectController {
         CourseDto course = courseService.getCourseById(courseId);
         TeacherDto teacher = teacherService.getTeacherById(teacherId);
         GroupDto group = groupService.getGroupById(groupId);
+        SubjectDto oldSubject = subjectService.getSubjectById(subjectId);
 
-        SubjectDto updatedSubject = new SubjectDto(subjectId, course, teacher, group);
+        SubjectDto updatedSubject = new SubjectDto(subjectId, course, teacher, group, oldSubject.lessonDtoList());
 
         if (checkIfSubjectExists(updatedSubject)) {
-            return "redirect:/updateSubject/" + subjectId + "?error=true";
+            return "redirect:/subjects/subject-update/" + subjectId + "?error=true";
         }
 
         subjectService.updateSubject(updatedSubject);

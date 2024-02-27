@@ -3,14 +3,14 @@
       xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Create subject</title>
+    <title>Create course</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
     <link rel="stylesheet" th:href="@{/css/reset.css}">
     <link rel="stylesheet" th:href="@{/css/headerStyles.css}"> 
     <link rel="stylesheet" th:href="@{/css/createStyles.css}">
-    <!-- <link rel="stylesheet" href="../../static/css/reset.css">
+<!--     <link rel="stylesheet" href="../../static/css/reset.css">
     <link rel="stylesheet" href="../../static/css/headerStyles.css">
     <link rel="stylesheet" href="../../static/css/createStyles.css"> -->
 </head>
@@ -22,21 +22,13 @@
     </div>
     <div class="form_container">
         <div th:if="${param.error}">
-            <p class="error_text">Subject with these options already exists</p>
+            <p class="error_text">Course with these options already exists</p>
         </div>
-        <form class="form" th:action="@{/subjects/subject-creation}" th:method='POST'>
-            <label>Course</label>
-            <select class="form_select" name="course">
-              <option th:each="course : ${allCourses}" th:value="${course.id()}" th:text="${course.name()}"></option>
-            </select>
-            <label>Teacher</label>
-            <select class="form_select" name="teacher">
-                <option th:each="teacher : ${allTeachers}" th:value="${teacher.id()}" th:text="${teacher.name()}"></option>
-            </select>
-            <label>Group</label>
-            <select class="form_select" name="group">
-                <option th:each="group : ${allGroups}" th:value="${group.id()}" th:text="${group.name()}"></option>
-            </select>
+        <form class="form" th:action="@{/courses/course-creation}" th:method='POST'>
+            <label>Name</label>
+            <input class="form_input" type='text' name='name'>
+            <label>Description</label>
+            <input class="form_input" type='text' name='description'/>
             <input class="submit_button" name="submit" type="submit" value="Create" />
         </form>
     </div>

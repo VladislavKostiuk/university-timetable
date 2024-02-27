@@ -4,7 +4,6 @@ import com.foxminded.dto.CourseDto;
 import com.foxminded.dto.GroupDto;
 import com.foxminded.dto.SubjectDto;
 import com.foxminded.dto.TeacherDto;
-import com.foxminded.enums.CourseName;
 import com.foxminded.enums.Role;
 import com.foxminded.service.CourseService;
 import com.foxminded.service.GroupService;
@@ -30,7 +29,6 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoInteractions;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -63,7 +61,8 @@ class SubjectControllerTest {
                 1L,
                 null,
                 null,
-                null
+                null,
+                new ArrayList<>()
         );
     }
 
@@ -81,7 +80,7 @@ class SubjectControllerTest {
     @Test
     void testShowCreatePage_Success() throws Exception {
 
-        mockMvc.perform(get("/createSubject"))
+        mockMvc.perform(get("/subjects/subject-creation"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("createPages/createSubjectPage"))
                 .andExpect(model().attributeExists("allCourses", "allTeachers", "allGroups"));
@@ -90,7 +89,7 @@ class SubjectControllerTest {
     @Test
     void testShowUpdatePage_Success() throws Exception {
         given(subjectService.getSubjectById(1L)).willReturn(testSubjectDto);
-        mockMvc.perform(get("/updateSubject/1"))
+        mockMvc.perform(get("/subjects/subject-update/1"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("updatePages/updateSubjectPage"))
                 .andExpect(model().attributeExists("allCourses", "allTeachers", "allGroups", "subject"))
@@ -99,7 +98,7 @@ class SubjectControllerTest {
 
     @Test
     void testCreateSubject_Success() throws Exception {
-        mockMvc.perform(post("/createSubject")
+        mockMvc.perform(post("/subjects/subject-creation")
                         .param("course", "1")
                         .param("teacher", "1")
                         .param("group", "1"))
@@ -110,29 +109,29 @@ class SubjectControllerTest {
 
     @Test
     void testCreateSubject_SubjectWithTheseParamsAlreadyExists() throws Exception {
-        CourseDto course = new CourseDto(0L, CourseName.MEDICINE, "desc");
+        CourseDto course = new CourseDto(0L, "medicine", "desc");
         TeacherDto teacher = new TeacherDto(0L, "test teacher", "some pass",
                 Set.of(Role.TEACHER), new ArrayList<>());
         GroupDto group = new GroupDto(0L, "test group");
-        SubjectDto subject = new SubjectDto(0L, course, teacher, group);
+        SubjectDto subject = new SubjectDto(0L, course, teacher, group, new ArrayList<>());
 
         given(courseService.getCourseById(1L)).willReturn(course);
         given(teacherService.getTeacherById(1L)).willReturn(teacher);
         given(groupService.getGroupById(1L)).willReturn(group);
         given(subjectService.getAllSubjects()).willReturn(List.of(subject));
 
-        mockMvc.perform(post("/createSubject")
+        mockMvc.perform(post("/subjects/subject-creation")
                         .param("course", "1")
                         .param("teacher", "1")
                         .param("group", "1"))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(view().name("redirect:/createSubject?error=true"));
+                .andExpect(view().name("redirect:/subjects/subject-creation?error=true"));
         verify(subjectService, times(0)).addSubject(any(SubjectDto.class));
     }
 
     @Test
     void testDeleteSubject_Success() throws Exception {
-        mockMvc.perform(post("/deleteSubject/1"))
+        mockMvc.perform(post("/subjects/subject-deletion/1"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/subjects"));
         verify(subjectService, times(1)).deleteSubjectById(1L);
@@ -140,7 +139,8 @@ class SubjectControllerTest {
 
     @Test
     void testUpdateSubject_Success() throws Exception {
-        mockMvc.perform(post("/updateSubject")
+        given(subjectService.getSubjectById(1L)).willReturn(testSubjectDto);
+        mockMvc.perform(post("/subjects/subject-update")
                         .param("subjectId", "1")
                         .param("course", "1")
                         .param("teacher", "1")
@@ -152,24 +152,25 @@ class SubjectControllerTest {
 
     @Test
     void testUpdateSubject_SubjectWithTheseParamsAlreadyExists() throws Exception {
-        CourseDto course = new CourseDto(0L, CourseName.MEDICINE, "desc");
+        CourseDto course = new CourseDto(0L, "medicine", "desc");
         TeacherDto teacher = new TeacherDto(0L, "test teacher", "some pass",
                 Set.of(Role.TEACHER), new ArrayList<>());
         GroupDto group = new GroupDto(0L, "test group");
-        SubjectDto subject = new SubjectDto(0L, course, teacher, group);
+        SubjectDto subject = new SubjectDto(0L, course, teacher, group, new ArrayList<>());
 
         given(courseService.getCourseById(1L)).willReturn(course);
         given(teacherService.getTeacherById(1L)).willReturn(teacher);
         given(groupService.getGroupById(1L)).willReturn(group);
         given(subjectService.getAllSubjects()).willReturn(List.of(subject));
+        given(subjectService.getSubjectById(1L)).willReturn(testSubjectDto);
 
-        mockMvc.perform(post("/updateSubject")
+        mockMvc.perform(post("/subjects/subject-update")
                         .param("subjectId", "1")
                         .param("course", "1")
                         .param("teacher", "1")
                         .param("group", "1"))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(view().name("redirect:/updateSubject/1?error=true"));
+                .andExpect(view().name("redirect:/subjects/subject-update/1?error=true"));
         verify(subjectService, times(0)).updateSubject(any(SubjectDto.class));
     }
 }

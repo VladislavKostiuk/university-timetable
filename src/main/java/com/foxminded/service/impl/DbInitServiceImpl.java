@@ -110,7 +110,7 @@ public class DbInitServiceImpl implements DbInitService {
             String password = passwordEncoder.encode(UUID.randomUUID().toString());
             Student student = allStudents.get(i);
             student.setGroup(group);
-            student.setCourses(courses);
+            student.setStudentCourses(courses);
             student.setPassword(password);
             student.setRoles(Set.of(Role.STUDENT));
 
@@ -124,7 +124,7 @@ public class DbInitServiceImpl implements DbInitService {
     private void initTeachers(List<Teacher> allTeachers, List<Course> allCourses) {
         for (var teacher : allTeachers) {
             List<Course> courses = getRandomCourseList(allCourses);
-            teacher.setCourses(courses);
+            teacher.setTeacherCourses(courses);
             teacher.setPassword(passwordEncoder.encode(UUID.randomUUID().toString()));
             teacher.setRoles(Set.of(Role.TEACHER));
         }
@@ -134,7 +134,7 @@ public class DbInitServiceImpl implements DbInitService {
         for (var subject : allSubject) {
             Group group = getRandomGroup(allGroups);
             Teacher teacher = getRandomTeacher(allTeachers);
-            Course course = getRandomCourse(teacher.getCourses());
+            Course course = getRandomCourse(teacher.getTeacherCourses());
             subject.setGroup(group);
             subject.setCourse(course);
             subject.setTeacher(teacher);

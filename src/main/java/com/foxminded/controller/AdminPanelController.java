@@ -56,7 +56,7 @@ public class AdminPanelController {
         return "adminPanelPages/teacherPage";
     }
 
-    @PostMapping("/{studentId}/updateStudentRoles")
+    @PostMapping("/student-roles-update/{studentId}")
     public String updateStudentRoles(@PathVariable("studentId") Long studentId, @RequestParam("selectedRoles") String selectedRoles) {
         List<String> selectedRolesList = Arrays.asList(selectedRoles.split(","));
         Set<Role> updatedRoles = new HashSet<>();
@@ -76,11 +76,11 @@ public class AdminPanelController {
         return "redirect:/adminPanel/students";
     }
 
-    @PostMapping("/{teacherId}/updateTeacherRoles")
+    @PostMapping("/teacher-roles-update/{teacherId}")
     public String updateTeacherRoles(@PathVariable("teacherId") Long teacherId, @RequestParam("selectedRoles") String selectedRoles) {
         List<String> selectedRolesList = Arrays.asList(selectedRoles.split(","));
         Set<Role> updatedRoles = new HashSet<>();
-        selectedRolesList.stream().forEach(role -> updatedRoles.add(Role.valueOf(role)));
+        selectedRolesList.forEach(role -> updatedRoles.add(Role.valueOf(role)));
 
         TeacherDto teacher = teacherService.getTeacherById(teacherId);
         TeacherDto updatedTeacher = new TeacherDto(

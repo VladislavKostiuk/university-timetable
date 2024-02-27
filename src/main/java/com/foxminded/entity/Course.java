@@ -1,16 +1,18 @@
 package com.foxminded.entity;
 
-import com.foxminded.enums.CourseName;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Column;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.EnumType;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.List;
 
 
 @Entity
@@ -23,9 +25,17 @@ public class Course {
     private Long id;
 
     @Column(name = "name")
-    @Enumerated(EnumType.STRING)
-    private CourseName name;
+    private String name;
 
     @Column(name = "description")
     private String description;
+
+    @OneToMany(mappedBy = "course", cascade = CascadeType.REMOVE)
+    private List<Subject> subjects;
+
+    @ManyToMany(mappedBy = "studentCourses")
+    private List<Student> students;
+
+    @ManyToMany(mappedBy = "teacherCourses")
+    private List<Teacher> teachers;
 }

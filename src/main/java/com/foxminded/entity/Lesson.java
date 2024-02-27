@@ -1,6 +1,5 @@
 package com.foxminded.entity;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -15,8 +14,6 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.JoinColumn;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 import java.time.DayOfWeek;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -33,7 +30,6 @@ public class Lesson {
 
     @ManyToOne
     @JoinColumn(name = "subject_id")
-    @OnDelete(action = OnDeleteAction.CASCADE)
     private Subject subject;
 
     @Column(name = "day")

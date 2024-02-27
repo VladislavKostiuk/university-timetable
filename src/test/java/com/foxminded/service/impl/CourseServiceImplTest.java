@@ -1,7 +1,6 @@
 package com.foxminded.service.impl;
 
 import com.foxminded.dto.CourseDto;
-import com.foxminded.enums.CourseName;
 import com.foxminded.mapper.CourseMapper;
 import com.foxminded.entity.Course;
 import com.foxminded.mapper.CourseMapperImpl;
@@ -40,7 +39,7 @@ class CourseServiceImplTest {
 
     @Test
     void testAddCourse_Success() {
-        CourseDto testCourseDto = new CourseDto(0L, CourseName.ARCHITECTURE, "desc");
+        CourseDto testCourseDto = new CourseDto(0L, "architecture", "desc");
         when(courseRepository.findById(testCourseDto.id())).thenReturn(Optional.empty());
         courseService.addCourse(testCourseDto);
         verify(courseRepository).save(any());
@@ -48,7 +47,7 @@ class CourseServiceImplTest {
 
     @Test
     void testAddCourse_CourseAlreadyExists() {
-        CourseDto testCourseDto = new CourseDto(0L, CourseName.ARCHITECTURE, "desc");
+        CourseDto testCourseDto = new CourseDto(0L, "architecture", "desc");
         Course testCourse = courseMapper.mapToCourse(testCourseDto);
         when(courseRepository.findById(testCourseDto.id())).thenReturn(Optional.of(testCourse));
         assertThrows(IllegalStateException.class, () -> courseService.addCourse(testCourseDto));
@@ -59,7 +58,7 @@ class CourseServiceImplTest {
         Long id = 1L;
         Course course = new Course();
         course.setId(id);
-        course.setName(CourseName.ARCHITECTURE);
+        course.setName("architecture");
 
         when(courseRepository.findById(id)).thenReturn(Optional.of(course));
         CourseDto expectedCourseDto = courseMapper.mapToCourseDto(course);
@@ -76,7 +75,7 @@ class CourseServiceImplTest {
 
     @Test
     void testUpdateCourse_Success() {
-        CourseDto testCourseDto = new CourseDto(0L, CourseName.ARCHITECTURE, "desc");
+        CourseDto testCourseDto = new CourseDto(0L, "architecture", "desc");
         Course testCourse = courseMapper.mapToCourse(testCourseDto);
         when(courseRepository.findById(testCourseDto.id())).thenReturn(Optional.of(testCourse));
         courseService.updateCourse(testCourseDto);
@@ -85,7 +84,7 @@ class CourseServiceImplTest {
 
     @Test
     void testUpdateCourse_CourseDoesNotExist() {
-        CourseDto testCourseDto = new CourseDto(0L, CourseName.ARCHITECTURE, "desc");
+        CourseDto testCourseDto = new CourseDto(0L, "architecture", "desc");
         when(courseRepository.findById(testCourseDto.id())).thenReturn(Optional.empty());
         assertThrows(IllegalStateException.class, () -> courseService.updateCourse(testCourseDto));
     }

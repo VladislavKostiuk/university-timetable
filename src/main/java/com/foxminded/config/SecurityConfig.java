@@ -16,7 +16,8 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
         http.authorizeHttpRequests(requests -> requests
                         .requestMatchers("/adminPanel/**", "/updateSubject/*",
-                                "/createSubject", "/deleteSubject/*").hasAuthority("ADMIN")
+                                "/createSubject", "/deleteSubject/*", "/updateCourse/*",
+                                "/createCourse", "/deleteCourse/*").hasAuthority("ADMIN")
                         .requestMatchers("/**").permitAll()
                         .anyRequest().authenticated()
         )

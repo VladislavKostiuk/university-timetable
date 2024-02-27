@@ -1,7 +1,5 @@
 package com.foxminded.helper;
 
-import com.foxminded.constants.ErrorMessages;
-import com.foxminded.enums.CourseName;
 import com.foxminded.entity.*;
 import org.springframework.stereotype.Component;
 import java.util.ArrayList;
@@ -11,18 +9,18 @@ import java.util.Random;
 import java.util.Collections;
 import java.util.UUID;
 
-
 @Component
 public class BasicDataGenerator {
     private final List<String> fullNames;
-    private final List<CourseName> courseNames;
+    private final List<String> courseNames;
     private final Random random;
 
     public BasicDataGenerator() {
         random = new Random();
         fullNames = new ArrayList<>();
         initStudentNames();
-        courseNames = new ArrayList<>(Arrays.asList(CourseName.values()));
+        courseNames = new ArrayList<>();
+        initCourseNames();
         Collections.shuffle(courseNames);
     }
 
@@ -43,7 +41,7 @@ public class BasicDataGenerator {
         for (int i = 0; i < amount; i++) {
             Course course = new Course();
             course.setId(i + 1L);
-            course.setName(generateCourseName());
+            course.setName(getCourseName());
             course.setDescription(UUID.randomUUID().toString());
             courses.add(course);
         }
@@ -121,13 +119,16 @@ public class BasicDataGenerator {
         return fullName;
     }
 
-    private CourseName generateCourseName() {
-        if (courseNames.isEmpty()) {
-            throw new IllegalArgumentException(ErrorMessages.NO_MORE_AVAILABLE_NAMES_FOR_COURSES);
-        }
-        CourseName courseName = courseNames.get(0);
+    private String getCourseName() {
+        String courseName = courseNames.get(random.nextInt(courseNames.size()));
         courseNames.remove(courseName);
-        return courseName;
+        return  courseName;
+    }
+
+    private void initCourseNames() {
+        String[] courseNamesArr = new String[] {"MATH", "BIOLOGY", "FINANCE", "ART",
+                "ARCHITECTURE", "ENGINEERING", "SCIENCE", "MANAGEMENT", "ECONOMICS", "MEDICINE"};
+        courseNames.addAll(Arrays.asList(courseNamesArr));
     }
 
     private void initStudentNames() {
@@ -140,9 +141,9 @@ public class BasicDataGenerator {
                 "Addison", "Ainsley", "Arley", "Avery", "Parker",
                 "Rawley", "Collins", "Eston", "Hadley", "Kensley"};
 
-        for (int i = 0; i < firstNamesArr.length; i++) {
-            for (int j = 0; j < lastNamesArr.length; j++) {
-                fullNames.add(firstNamesArr[i] + " " + lastNamesArr[j]);
+        for (String firstName : firstNamesArr) {
+            for (String lastName : lastNamesArr) {
+                fullNames.add(firstName + " " + lastName);
             }
         }
     }

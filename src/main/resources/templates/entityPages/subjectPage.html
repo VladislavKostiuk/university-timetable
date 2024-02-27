@@ -18,7 +18,7 @@
     <header th:replace="~{fragments/header.html :: header}"></header>
     <div class="title_container">
         <h2 class="title">Subjects</h2>
-        <a sec:authorize="hasAuthority('ADMIN')" class="title_button" href="/createSubject">Create subject</a>
+        <a sec:authorize="hasAuthority('ADMIN')" class="title_button" href="/subjects/subject-creation">Create subject</a>
         <a class="title_button" href="/">To main menu</a>
     </div>
     <div class="table_container">
@@ -39,10 +39,10 @@
                 <td th:if="${subject.teacherDto() != null}" th:text="${subject.teacherDto().name()}"></td>
                 <td th:if="${subject.groupDto() != null}" th:text="${subject.groupDto().name()}"></td>
                 <td class="update_button_container">
-                    <form sec:authorize="hasAuthority('ADMIN')" class="role_form" th:method="GET" th:action="@{/updateSubject/{subjectId}(subjectId = ${subject.id()})}">
+                    <form sec:authorize="hasAuthority('ADMIN')" class="role_form" th:method="GET" th:action="@{/subjects/subject-update/{subjectId}(subjectId = ${subject.id()})}">
                     <input class="update_button_submit" type="submit" value="Update">
                 </form>
-                <form sec:authorize="hasAuthority('ADMIN')" class="role_form" th:method="POST" th:action="@{/deleteSubject/{subjectId}(subjectId = ${subject.id()})}">
+                <form sec:authorize="hasAuthority('ADMIN')" class="role_form" th:method="POST" th:action="@{/subjects/subject-deletion/{subjectId}(subjectId = ${subject.id()})}">
                     <input class="delete_button_submit" type="submit" value="Delete">
                 </form>
                 </td>

@@ -44,6 +44,19 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public void deleteCourseById(Long id) {
+        Course course = courseRepository.findById(id).orElseThrow(() ->
+                new IllegalArgumentException(String.format(
+                        ErrorMessages.ENTITY_WAS_NOT_FOUND_BY_ID, entityName, id
+                )));
+
+        for (var student : course.getStudents()) {
+            student.getStudentCourses().remove(course);
+        }
+
+        for (var teacher : course.getTeachers()) {
+            teacher.getTeacherCourses().remove(course);
+        }
+
         courseRepository.deleteById(id);
     }
 
