@@ -50,11 +50,11 @@ public class CourseServiceImpl implements CourseService {
                 )));
 
         for (var student : course.getStudents()) {
-            student.getStudentCourses().remove(course);
+            student.getCourses().remove(course);
         }
 
         for (var teacher : course.getTeachers()) {
-            teacher.getTeacherCourses().remove(course);
+            teacher.getCourses().remove(course);
         }
 
         courseRepository.deleteById(id);

@@ -30,8 +30,12 @@
             <tbody>
             <tr th:each="student : ${allStudents}">
                 <td th:text="${student.id()}"></td>
-                <td th:text="${student.name()}"></td>
-                <td th:if="${student.groupDto() != null}" th:text="${student.groupDto().name()}"></td>
+                <td>
+                    <p th:text="${student.name()}"></p>
+                </td>
+                <td>
+                    <p th:if="${student.groupDto() != null}" th:text="${student.groupDto().name()}"></p>
+                </td>
                 <td>
                     <p th:each="course : ${student.courseDtoList()}">
                         <span th:text="${course.name()}"></span>

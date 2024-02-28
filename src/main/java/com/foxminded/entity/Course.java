@@ -33,9 +33,9 @@ public class Course {
     @OneToMany(mappedBy = "course", cascade = CascadeType.REMOVE)
     private List<Subject> subjects;
 
-    @ManyToMany(mappedBy = "studentCourses")
+    @ManyToMany(mappedBy = "courses")
     private List<Student> students;
 
-    @ManyToMany(mappedBy = "teacherCourses")
+    @ManyToMany(mappedBy = "courses")
     private List<Teacher> teachers;
 }
