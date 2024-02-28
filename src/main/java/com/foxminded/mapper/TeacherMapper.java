@@ -8,9 +8,9 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface TeacherMapper {
 
-    @Mapping(source = "teacher.courses", target = "courseDtoList")
+    @Mapping(source = "teacher.teacherCourses", target = "courseDtoList")
     TeacherDto mapToTeacherDto(Teacher teacher);
 
-    @Mapping(source = "teacherDto.courseDtoList", target = "courses")
+    @Mapping(source = "teacherDto.courseDtoList", target = "teacherCourses")
     Teacher mapToTeacher(TeacherDto teacherDto);
 }

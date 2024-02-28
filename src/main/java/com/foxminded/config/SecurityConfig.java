@@ -15,7 +15,9 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
         http.authorizeHttpRequests(requests -> requests
-                        .requestMatchers("/adminPanel/**").hasAuthority("ADMIN")
+                        .requestMatchers("/adminPanel/**", "/updateSubject/*",
+                                "/createSubject", "/deleteSubject/*", "/updateCourse/*",
+                                "/createCourse", "/deleteCourse/*").hasAuthority("ADMIN")
                         .requestMatchers("/**").permitAll()
                         .anyRequest().authenticated()
         )
