@@ -15,6 +15,33 @@ body {
     margin-bottom: 35px;
 }
 
+.search_section {
+    margin-top: 10px;
+    margin-bottom: 45px;
+}
+
+.search_section form {
+    text-align: center;
+    padding: 0 30px;
+    width: 400px;
+    margin: 0 auto;
+}
+
+.search_input {
+    border-width: 0px;
+    border-bottom: 1px solid #cccccc;
+    width: 100%;
+    background: #ffffff;
+    outline: none;
+    color: #000;
+    font-size: 18px;
+    text-align: center;
+}
+
+.search_submit {
+    display: none;
+}
+
 .title_button {
     cursor: pointer;
     text-decoration: none;

@@ -61,13 +61,12 @@ public class AuthController {
         String encryptedPass = passwordEncoder.encode(password);
         Set<Role> roles = new HashSet<>();
         roles.add(Role.STUDENT);
-        GroupDto group = new GroupDto(1L, "");
         StudentDto student = new StudentDto(
                 0L,
                 username,
                 encryptedPass,
                 roles,
-                group,
+                null,
                 new ArrayList<>()
         );
         return student;
