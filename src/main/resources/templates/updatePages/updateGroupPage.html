@@ -3,7 +3,7 @@
       xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Create course</title>
+    <title>Update group</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
@@ -17,19 +17,17 @@
 <body>
     <header th:replace="~{fragments/header.html :: header}"></header>
     <div class="title_container">
-        <h2 class="title">Update course</h2>
+        <h2 class="title">Update group</h2>
         <a class="title_button" href="/">To main menu</a>
     </div>
     <div class="form_container">
         <div th:if="${param.error}">
-            <p class="error_text">Course with these options already exists</p>
+            <p class="error_text">Group with this name already exists</p>
         </div>
-        <form class="form" th:action="@{/courses/course-update}" th:method='POST'>
-            <input type="hidden" th:value="${course.id()}" name="courseId">
+        <form class="form" th:action="@{/groups/group-update}" th:method='POST'>
+            <input type="hidden" th:value="${group.id()}" name="groupId">
             <label>Name</label>
-            <input required class="form_input" type='text' name='name' th:value='${course.name()}'>
-            <label>Description</label>
-            <input class="form_input" type='text' name='description' th:value='${course.description()}'/>
+            <input required class="form_input" type='text' name='name' th:value='${group.name()}'>
             <input class="submit_button" name="submit" type="submit" value="Update" />
         </form>
     </div>

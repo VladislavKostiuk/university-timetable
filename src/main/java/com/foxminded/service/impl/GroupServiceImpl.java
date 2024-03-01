@@ -43,6 +43,13 @@ public class GroupServiceImpl implements GroupService {
 
     @Override
     public void deleteGroupById(Long id) {
+        Group group = groupRepository.findById(id).orElseThrow(() ->
+                new IllegalArgumentException(String.format(
+                        ErrorMessages.ENTITY_WAS_NOT_FOUND_BY_ID, entityName, id
+                )));
+        for (var student : group.getStudents()) {
+            student.setGroup(null);
+        }
         groupRepository.deleteById(id);
     }
 

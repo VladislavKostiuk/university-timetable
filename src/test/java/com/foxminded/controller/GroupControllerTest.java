@@ -1,31 +1,43 @@
 package com.foxminded.controller;
 
+import com.foxminded.dto.CourseDto;
 import com.foxminded.dto.GroupDto;
 import com.foxminded.service.GroupService;
+import com.foxminded.service.TimetableService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.mockito.BDDMockito.given;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(controllers = GroupController.class)
 @ExtendWith(MockitoExtension.class)
-@WithMockUser
+@WithMockUser(authorities = {"ADMIN"})
+@AutoConfigureMockMvc(addFilters = false)
 class GroupControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
     @MockBean
     private GroupService groupService;
+
+    @MockBean
+    private TimetableService timetableService;
 
     private GroupDto testGroupDto;
 
@@ -46,6 +58,75 @@ class GroupControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(view().name("entityPages/groupPage"))
                 .andExpect(model().attribute("allGroups", expectedGroups));
+    }
+
+    @Test
+    void testShowCreatePage_Success() throws Exception {
+
+        mockMvc.perform(get("/groups/group-creation"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("createPages/createGroupPage"));
+    }
+
+    @Test
+    void testShowUpdatePage_Success() throws Exception {
+        given(groupService.getGroupById(1L)).willReturn(testGroupDto);
+        mockMvc.perform(get("/groups/group-update/1"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("updatePages/updateGroupPage"))
+                .andExpect(model().attribute("group", testGroupDto));
+    }
+
+    @Test
+    void testCreateGroup_Success() throws Exception {
+        given(groupService.getAllGroups()).willReturn(List.of(testGroupDto));
+        mockMvc.perform(post("/groups/group-creation")
+                        .param("name", "name"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(view().name("redirect:/groups"));
+        verify(groupService, times(1)).addGroup(any(GroupDto.class));
+    }
+
+    @Test
+    void testCreateGroup_CourseWithTheseParamsAlreadyExists() throws Exception {
+        given(groupService.getAllGroups()).willReturn(List.of(testGroupDto));
+        mockMvc.perform(post("/groups/group-creation")
+                        .param("name", "test group"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(view().name("redirect:/groups/group-creation?error=true"));
+        verify(groupService, times(0)).addGroup(any(GroupDto.class));
+    }
+
+    @Test
+    void testDeleteGroup_Success() throws Exception {
+        mockMvc.perform(post("/groups/group-deletion/1"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(view().name("redirect:/groups"));
+        verify(groupService, times(1)).deleteGroupById(1L);
+    }
+
+    @Test
+    void testUpdateGroup_Success() throws Exception {
+        given(groupService.getAllGroups()).willReturn(List.of(testGroupDto));
+        given(groupService.getGroupById(1L)).willReturn(testGroupDto);
+        mockMvc.perform(post("/groups/group-update")
+                        .param("groupId", "1")
+                        .param("name", "name"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(view().name("redirect:/groups"));
+        verify(groupService, times(1)).updateGroup(any(GroupDto.class));
+    }
+
+    @Test
+    void testUpdateCourse_CourseWithTheseParamsAlreadyExists() throws Exception {
+        given(groupService.getAllGroups()).willReturn(List.of(testGroupDto));
+        given(groupService.getGroupById(1L)).willReturn(testGroupDto);
+        mockMvc.perform(post("/groups/group-update")
+                        .param("groupId", "1")
+                        .param("name", "test group"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(view().name("redirect:/groups/group-update/1?error=true"));
+        verify(groupService, times(0)).updateGroup(any(GroupDto.class));
     }
 }
 

@@ -9,10 +9,10 @@ import org.mapstruct.Mapping;
 public interface StudentMapper {
 
     @Mapping(source = "student.group", target = "groupDto")
-    @Mapping(source = "student.studentCourses", target = "courseDtoList")
+    @Mapping(source = "student.courses", target = "courseDtoList")
     StudentDto mapToStudentDto(Student student);
 
     @Mapping(source = "studentDto.groupDto", target = "group")
-    @Mapping(source = "studentDto.courseDtoList", target = "studentCourses")
+    @Mapping(source = "studentDto.courseDtoList", target = "courses")
     Student mapToStudent(StudentDto studentDto);
 }
