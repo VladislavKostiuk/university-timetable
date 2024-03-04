@@ -57,8 +57,7 @@ public class GroupController {
     @PostMapping("/group-update")
     public String updateGroup(@RequestParam("groupId") Long groupId,
                                @RequestParam("name") String name) {
-        GroupDto oldGroup = groupService.getGroupById(groupId);
-        GroupDto updatedGroup = new GroupDto(groupId, name, oldGroup.subjectDtoList(), oldGroup.studentDtoList());
+        GroupDto updatedGroup = new GroupDto(groupId, name);
 
         if (checkIfGroupExists(updatedGroup)) {
             return "redirect:/groups/group-update/" + groupId + "?error=true";

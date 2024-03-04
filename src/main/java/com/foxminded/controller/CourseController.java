@@ -54,9 +54,7 @@ public class CourseController {
     public String updateCourse(@RequestParam("courseId") Long courseId,
                                @RequestParam("name") String name,
                                 @RequestParam("description") String description) {
-        CourseDto oldCourse = courseService.getCourseById(courseId);
-        CourseDto updatedCourse = new CourseDto(courseId, name, description, oldCourse.subjectDtoList(),
-                oldCourse.studentDtoList(), oldCourse.teacherDtoList());
+        CourseDto updatedCourse = new CourseDto(courseId, name, description);
 
         if (checkIfCourseExists(updatedCourse)) {
             return "redirect:/courses/course-update/" + courseId + "?error=true";

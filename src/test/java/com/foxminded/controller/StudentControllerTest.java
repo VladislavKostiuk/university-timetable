@@ -1,9 +1,9 @@
 package com.foxminded.controller;
 
 import com.foxminded.dto.StudentDto;
-import com.foxminded.dto.SubjectDto;
 import com.foxminded.enums.Role;
 import com.foxminded.service.CourseService;
+import com.foxminded.service.CustomUserDetailsService;
 import com.foxminded.service.GroupService;
 import com.foxminded.service.StudentService;
 import com.foxminded.service.TeacherService;
@@ -20,7 +20,6 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -50,6 +49,8 @@ class StudentControllerTest {
     private TeacherService teacherService;
     @MockBean
     private PasswordEncoder passwordEncoder;
+    @MockBean
+    private CustomUserDetailsService userDetailsService;
     private StudentDto testStudentDto;
 
     @BeforeEach
@@ -94,7 +95,7 @@ class StudentControllerTest {
     }
 
     @Test
-    void testDeleteSubject_Success() throws Exception {
+    void testDeleteStudent_Success() throws Exception {
         mockMvc.perform(post("/students/student-deletion/1"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/students"));
@@ -102,8 +103,9 @@ class StudentControllerTest {
     }
 
     @Test
-    void testUpdateSubject_Success() throws Exception {
+    void testUpdateStudent_Success() throws Exception {
         given(studentService.getStudentById(1L)).willReturn(testStudentDto);
+        given(userDetailsService.isNameAvailable("some name", "test student")).willReturn(true);
         mockMvc.perform(post("/students/student-update")
                         .param("studentId", "1")
                         .param("name", "some name")
@@ -116,9 +118,9 @@ class StudentControllerTest {
     }
 
     @Test
-    void testUpdateSubject_ThisNameIsAlreadyTaken() throws Exception {
+    void testUpdateStudent_ThisNameIsAlreadyTaken() throws Exception {
         given(studentService.getStudentById(1L)).willReturn(testStudentDto);
-        given(studentService.getStudentByName("some already existing name")).willReturn(Optional.of(testStudentDto));
+        given(userDetailsService.isNameAvailable("some name", "test student")).willReturn(false);
         mockMvc.perform(post("/students/student-update")
                         .param("studentId", "1")
                         .param("name", "some already existing name")

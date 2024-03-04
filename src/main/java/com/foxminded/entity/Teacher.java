@@ -2,9 +2,11 @@ package com.foxminded.entity;
 
 import com.foxminded.enums.Role;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Column;
@@ -56,6 +58,9 @@ public class Teacher implements UserDetails {
             inverseJoinColumns = @JoinColumn(name = "course_id")
     )
     private List<Course> courses;
+
+    @OneToMany(mappedBy = "teacher", cascade = CascadeType.REMOVE)
+    private List<Subject> subjects;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

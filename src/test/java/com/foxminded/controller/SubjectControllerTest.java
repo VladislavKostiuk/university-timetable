@@ -61,8 +61,7 @@ class SubjectControllerTest {
                 1L,
                 null,
                 null,
-                null,
-                new ArrayList<>()
+                null
         );
     }
 
@@ -113,7 +112,7 @@ class SubjectControllerTest {
         TeacherDto teacher = new TeacherDto(0L, "test teacher", "some pass",
                 Set.of(Role.TEACHER), new ArrayList<>());
         GroupDto group = new GroupDto(0L, "test group");
-        SubjectDto subject = new SubjectDto(0L, course, teacher, group, new ArrayList<>());
+        SubjectDto subject = new SubjectDto(0L, course, teacher, group);
 
         given(courseService.getCourseById(1L)).willReturn(course);
         given(teacherService.getTeacherById(1L)).willReturn(teacher);
@@ -156,7 +155,7 @@ class SubjectControllerTest {
         TeacherDto teacher = new TeacherDto(0L, "test teacher", "some pass",
                 Set.of(Role.TEACHER), new ArrayList<>());
         GroupDto group = new GroupDto(0L, "test group");
-        SubjectDto subject = new SubjectDto(0L, course, teacher, group, new ArrayList<>());
+        SubjectDto subject = new SubjectDto(0L, course, teacher, group);
 
         given(courseService.getCourseById(1L)).willReturn(course);
         given(teacherService.getTeacherById(1L)).willReturn(teacher);
