@@ -80,9 +80,22 @@ form {
     padding-left: 15px;
 }
 
-/*.form :nth-child(5) {
-    margin-bottom: 40px;
-}*/
+.checkbox_container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-content: center;
+    margin-top: 15px;
+    margin-bottom: 25px;
+}
+
+.checkbox_container_item {
+    margin-bottom: 8px;
+}
+
+.checkbox_container_item input {
+    margin-right: 15px;
+}
 
 .submit_button {
     cursor: pointer;

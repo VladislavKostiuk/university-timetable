@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -27,7 +28,7 @@ public class AdminPanelController {
     private final TeacherService teacherService;
 
     @GetMapping("/students")
-    public String showStudentPanel(Model model, String searchText) {
+    public String showStudentPanel(Model model, @RequestParam(value = "searchText", required = false) String searchText) {
         List<StudentDto> students = studentService.getAllStudents();
 
         if (searchText != null) {
@@ -42,7 +43,7 @@ public class AdminPanelController {
     }
 
     @GetMapping("/teachers")
-    public String showTeacherPanel(Model model, String searchText) {
+    public String showTeacherPanel(Model model, @RequestParam(value = "searchText", required = false) String searchText) {
         List<TeacherDto> teachers = teacherService.getAllTeachers();
 
         if (searchText != null) {
@@ -57,10 +58,9 @@ public class AdminPanelController {
     }
 
     @PostMapping("/student-roles-update/{studentId}")
-    public String updateStudentRoles(@PathVariable("studentId") Long studentId, @RequestParam("selectedRoles") String selectedRoles) {
-        List<String> selectedRolesList = Arrays.asList(selectedRoles.split(","));
-        Set<Role> updatedRoles = new HashSet<>();
-        selectedRolesList.forEach(role -> updatedRoles.add(Role.valueOf(role)));
+    public String updateStudentRoles(@PathVariable("studentId") Long studentId,
+                                     @RequestParam(value = "selectedRoles", required = false) String selectedRoles) {
+        Set<Role> updatedRoles = selectedRolesToSet(selectedRoles);
 
         StudentDto student = studentService.getStudentById(studentId);
         StudentDto updatedStudent = new StudentDto(
@@ -77,10 +77,9 @@ public class AdminPanelController {
     }
 
     @PostMapping("/teacher-roles-update/{teacherId}")
-    public String updateTeacherRoles(@PathVariable("teacherId") Long teacherId, @RequestParam("selectedRoles") String selectedRoles) {
-        List<String> selectedRolesList = Arrays.asList(selectedRoles.split(","));
-        Set<Role> updatedRoles = new HashSet<>();
-        selectedRolesList.forEach(role -> updatedRoles.add(Role.valueOf(role)));
+    public String updateTeacherRoles(@PathVariable("teacherId") Long teacherId,
+                                     @RequestParam(value = "selectedRoles", required = false) String selectedRoles) {
+        Set<Role> updatedRoles = selectedRolesToSet(selectedRoles);
 
         TeacherDto teacher = teacherService.getTeacherById(teacherId);
         TeacherDto updatedTeacher = new TeacherDto(
@@ -103,6 +102,13 @@ public class AdminPanelController {
     @PostMapping("/searchTeacher")
     public String searchTeacherByName(@RequestParam("searchText") String searchText) {
         return "redirect:/adminPanel/teachers?searchText=" + searchText;
+    }
+
+    private Set<Role> selectedRolesToSet(String selectedRoles) {
+        List<String> selectedRolesList = selectedRoles != null ? Arrays.asList(selectedRoles.split(",")) : new ArrayList<>();
+        Set<Role> updatedRoles = new HashSet<>();
+        selectedRolesList.forEach(role -> updatedRoles.add(Role.valueOf(role)));
+        return updatedRoles;
     }
 }
 

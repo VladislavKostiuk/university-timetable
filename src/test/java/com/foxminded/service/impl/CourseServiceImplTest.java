@@ -68,6 +68,20 @@ class CourseServiceImplTest {
     }
 
     @Test
+    void testGetCourseByName_Success() {
+        Long id = 1L;
+        Course course = new Course();
+        course.setId(id);
+        course.setName("architecture");
+
+        when(courseRepository.findByName("architecture")).thenReturn(Optional.of(course));
+        CourseDto expectedCourseDto = courseMapper.mapToCourseDto(course);
+        CourseDto actualCourseDto = courseService.getCourseByName("architecture");
+        assertEquals(expectedCourseDto, actualCourseDto);
+        verify(courseRepository).findByName("architecture");
+    }
+
+    @Test
     void testGetCourseById_CourseWasNotFound() {
         when(courseRepository.findById(anyLong())).thenReturn(Optional.empty());
         assertThrows(IllegalArgumentException.class, () -> courseService.getCourseById(anyLong()));

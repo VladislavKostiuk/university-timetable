@@ -43,6 +43,15 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
+    public CourseDto getCourseByName(String name) {
+        Course course = courseRepository.findByName(name).orElseThrow(() ->
+                new IllegalArgumentException(String.format(
+                        ErrorMessages.ENTITY_WAS_NOT_FOUND_BY_NAME, entityName, name
+                )));
+        return courseMapper.mapToCourseDto(course);
+    }
+
+    @Override
     public void deleteCourseById(Long id) {
         Course course = courseRepository.findById(id).orElseThrow(() ->
                 new IllegalArgumentException(String.format(
