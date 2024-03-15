@@ -5,6 +5,7 @@ import com.foxminded.dto.TeacherDto;
 import com.foxminded.enums.Role;
 import com.foxminded.service.StudentService;
 import com.foxminded.service.TeacherService;
+import com.foxminded.service.TimetableService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -41,6 +42,8 @@ class AuthControllerTest {
     private TeacherService teacherService;
     @MockBean
     private PasswordEncoder passwordEncoder;
+    @MockBean
+    private TimetableService timetableService;
     private StudentDto testStudentDto;
     private TeacherDto testTeacherDto;
 

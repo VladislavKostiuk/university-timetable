@@ -49,7 +49,7 @@ class LessonServiceImplTest {
 
     @Test
     void testAddLesson_Success() {
-        LessonDto testLessonDto = new LessonDto(0L, null, DayOfWeek.MONDAY, LocalTime.now(), new ArrayList<>());
+        LessonDto testLessonDto = new LessonDto(0L, null, DayOfWeek.MONDAY, LocalTime.now());
         when(lessonRepository.findById(testLessonDto.id())).thenReturn(Optional.empty());
         lessonService.addLesson(testLessonDto);
         verify(lessonRepository).save(any());
@@ -57,7 +57,7 @@ class LessonServiceImplTest {
 
     @Test
     void testAddLesson_LessonAlreadyExists() {
-        LessonDto testLessonDto = new LessonDto(0L, null, DayOfWeek.MONDAY, LocalTime.now(), new ArrayList<>());
+        LessonDto testLessonDto = new LessonDto(0L, null, DayOfWeek.MONDAY, LocalTime.now());
         Lesson testLesson = lessonMapper.mapToLesson(testLessonDto);
         when(lessonRepository.findById(testLessonDto.id())).thenReturn(Optional.of(testLesson));
         assertThrows(IllegalStateException.class, () -> lessonService.addLesson(testLessonDto));
@@ -85,7 +85,7 @@ class LessonServiceImplTest {
 
     @Test
     void testUpdateLesson_Success() {
-        LessonDto testLessonDto = new LessonDto(0L, null, DayOfWeek.MONDAY, LocalTime.now(), new ArrayList<>());
+        LessonDto testLessonDto = new LessonDto(0L, null, DayOfWeek.MONDAY, LocalTime.now());
         Lesson testLesson = lessonMapper.mapToLesson(testLessonDto);
         when(lessonRepository.findById(testLessonDto.id())).thenReturn(Optional.of(testLesson));
         lessonService.updateLesson(testLessonDto);
@@ -94,7 +94,7 @@ class LessonServiceImplTest {
 
     @Test
     void testUpdateLesson_LessonDoesNotExist() {
-        LessonDto testLessonDto = new LessonDto(0L, null, DayOfWeek.MONDAY, LocalTime.now(), new ArrayList<>());
+        LessonDto testLessonDto = new LessonDto(0L, null, DayOfWeek.MONDAY, LocalTime.now());
         when(lessonRepository.findById(testLessonDto.id())).thenReturn(Optional.empty());
         assertThrows(IllegalStateException.class, () -> lessonService.updateLesson(testLessonDto));
     }

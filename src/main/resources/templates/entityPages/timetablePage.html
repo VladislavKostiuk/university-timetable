@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org">
+      xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
   <meta charset="UTF-8">
   <title>Title</title>
@@ -15,6 +15,7 @@
   <header th:replace="~{fragments/header.html :: header}"></header>
     <div class="title_container">
         <h2 class="title">Timetables</h2>
+        <a sec:authorize="hasAuthority('ADMIN')" class="title_button" href="/timetables/timetable-creation">Create timetable</a>
         <a class="title_button" href="/">To main menu</a>
     </div>
     <div class="table_container">
@@ -25,6 +26,7 @@
               <th>Timetable type</th>
               <th>Qualifying name</th>
               <th>Lessons</th>
+              <th calss="option_header"></th>
             </tr>
             </thead>
             <tbody>
@@ -34,9 +36,17 @@
               <td th:text="${timetable.qualifyingName()}"></td>
               <td>
                 <p th:each="lesson : ${timetable.lessonDtoList()}">
-                  <span th:text="${lesson.subjectDto().courseDto().name()} + ' ' + ${lesson.day()} + ' ' + ${lesson.appointmentTime()}"></span>
+                  <span th:text="${lesson.day()} + ' ' + ${lesson.appointmentTime()} + ' ' + ${lesson.subjectDto().courseDto().name()}"></span>
                 </p>
               </td>
+                <td class="update_button_container">
+                    <form sec:authorize="hasAuthority('ADMIN')" class="role_form" th:method="GET" th:action="@{/timetables/timetable-update/{timetableId}(timetableId = ${timetable.id()})}">
+                        <input class="update_button_submit" type="submit" value="Update">
+                    </form>
+                    <form sec:authorize="hasAuthority('ADMIN')" class="role_form" th:method="POST" th:action="@{/timetables/timetable-deletion/{timetableId}(timetableId = ${timetable.id()})}">
+                        <input class="delete_button_submit" type="submit" value="Delete">
+                    </form>
+                </td>
             </tr>
             </tbody>
           </table>

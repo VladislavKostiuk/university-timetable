@@ -83,7 +83,6 @@ public class SubjectController {
         CourseDto course = courseService.getCourseById(courseId);
         TeacherDto teacher = teacherService.getTeacherById(teacherId);
         GroupDto group = groupService.getGroupById(groupId);
-        SubjectDto oldSubject = subjectService.getSubjectById(subjectId);
 
         SubjectDto updatedSubject = new SubjectDto(subjectId, course, teacher, group);
 

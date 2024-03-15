@@ -1,9 +1,13 @@
 package com.foxminded.service.impl;
 
 import com.foxminded.constants.ErrorMessages;
+import com.foxminded.dto.LessonDto;
 import com.foxminded.dto.TimetableDto;
+import com.foxminded.entity.Lesson;
+import com.foxminded.mapper.LessonMapper;
 import com.foxminded.mapper.TimetableMapper;
 import com.foxminded.entity.Timetable;
+import com.foxminded.repository.LessonRepository;
 import com.foxminded.repository.TimetableRepository;
 import com.foxminded.service.TimetableService;
 import jakarta.transaction.Transactional;
@@ -37,6 +41,15 @@ public class TimetableServiceImpl implements TimetableService {
         Timetable timetable = timetableRepository.findById(id).orElseThrow(() ->
                 new IllegalArgumentException(String.format(
                         ErrorMessages.ENTITY_WAS_NOT_FOUND_BY_ID, entityName, id
+                )));
+        return timetableMapper.mapToTimetableDto(timetable);
+    }
+
+    @Override
+    public TimetableDto getTimetableByQualifyingName(String qualifyingName) {
+        Timetable timetable = timetableRepository.findByQualifyingName(qualifyingName).orElseThrow(() ->
+                new IllegalArgumentException(String.format(
+                        ErrorMessages.ENTITY_WAS_NOT_FOUND_BY_NAME, entityName, qualifyingName
                 )));
         return timetableMapper.mapToTimetableDto(timetable);
     }

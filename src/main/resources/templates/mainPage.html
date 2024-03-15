@@ -9,9 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
     <link rel="stylesheet" th:href="@{/css/reset.css}">
     <link rel="stylesheet" th:href="@{/css/headerStyles.css}"> 
-    <link rel="stylesheet" th:href="@{/css/mainStyles.css}"> 
-<!--     <link rel="stylesheet" href="../static/css/reset.css">
-    <link rel="stylesheet" href="../static/css/mainStyles.css"> -->
+    <link rel="stylesheet" th:href="@{/css/mainStyles.css}">
 </head>
 <body>
     <header th:replace="~{fragments/header.html :: header}"></header>
@@ -21,16 +19,10 @@
             <input class="title_button" type="submit" value="Init db with basic data">
         </form>
     </div>
-    <div class="menu_container">
-        <ul>
-            <li><a class="menu_item" href="/courses">Course page</a></li>
-            <li><a class="menu_item" href="/groups">Group page</a></li>
-            <li><a class="menu_item" href="/lessons">Lesson page</a></li>
-            <li><a class="menu_item" href="/students">Student page</a></li>
-            <li><a class="menu_item" href="/subjects">Subject page</a></li>
-            <li><a class="menu_item" href="/teachers">Teacher page</a></li>
-            <li><a class="menu_item" href="/timetables">Timetable page</a></li>
-        </ul>
+    <div class="info">
+        <p>
+            To be able to see your timetable you need to be <a href="/login">logged</a>
+        </p>
     </div>
 </body>
 </html>

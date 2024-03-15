@@ -36,6 +36,10 @@ body {
     padding: 0 15px;
 }
 
+.timetable_container {
+    max-width: 400px;
+}
+
 form {
     display: flex;
     flex-direction: column;
@@ -49,9 +53,16 @@ form {
     margin-bottom: 25px;
 }
 
-.form label {
+.form label, .label_text {
     margin-bottom: 15px;
     font-size: 24px;
+}
+
+.label_text {
+    margin-top: 12px;
+    margin-bottom: 25px;
+    font-size: 20px;
+    text-decoration: underline;
 }
 
 .form_input {
@@ -97,19 +108,89 @@ form {
     margin-right: 15px;
 }
 
-.submit_button {
+input[type=time] {
+  border: none;
+  color: #2a2c2d;
+  font-size: 14px;
+  font-family: Montserrat;
+  width: 120px;
+  margin-top: 10px;
+  margin-bottom: 35px;
+}
+
+input[type=time]::-webkit-datetime-edit-fields-wrapper {
+  display: flex;
+}
+
+input[type=time]::-webkit-datetime-edit-text {
+  padding: 19px 4px;
+}
+
+input[type=time]::-webkit-datetime-edit-hour-field {
+  background-color: #f2f4f5;
+  color: #2a2c2d;
+  border-radius: 15%;
+  padding: 19px 13px;
+}
+
+input[type=time]::-webkit-datetime-edit-minute-field {
+  background-color: #f2f4f5;
+  color: #2a2c2d;
+  border-radius: 15%;
+  padding: 19px 13px;
+}
+
+input[type=time]::-webkit-datetime-edit-ampm-field {
+  background-color: #7155d3;
+  border-radius: 15%;
+  color: #fff;
+  padding: 19px 13px;
+}
+
+input[type=time]::-webkit-clear-button {
+  display: none;
+}
+
+input[type=time]::-webkit-inner-spin-button {
+  display: none;
+}
+
+.current_lessons_container {
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.current_lessons_form {
+    flex-direction: row;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.submit_button, .small_button {
     cursor: pointer;
     text-decoration: none;
     background-color: #405cf5;
     border-radius: 6px;
     border-width: 0;
     color: #fff;
-    font-size: 100%;
-    padding: 15px 50px;
-    margin-bottom: 35px;
     transition: all .2s;
 }
 
-.submit_button:hover {
+.submit_button {
+    font-size: 100%;
+    padding: 15px 50px;
+    margin-bottom: 35px;
+}
+
+.small_button {
+    padding: 7px 15px;
+}
+
+.add_button {
+    margin-top: -10px;
+    margin-bottom: 20px;
+}
+
+.submit_button:hover, .small_button:hover {
     background-color: #3F70F5;
 }

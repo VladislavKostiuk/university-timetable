@@ -32,26 +32,8 @@ body {
     background-color: #3F70F5;
 }
 
-.menu_container {
+.info {
     text-align: center;
-}
-
-.menu_container ul {
-    list-style-type: none;
-}
-
-.menu_container ul li {
-    margin-bottom: 30px;
-}
-
-
-.menu_item {
-    font-size: 25px;
-    text-align: center;
-    text-decoration: none;
-    color: #000;
-}
-
-.menu_item:hover {
-    text-decoration: underline;
+    font-size: 20px;
+    margin-top: 15px;
 }

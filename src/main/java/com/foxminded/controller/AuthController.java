@@ -3,9 +3,12 @@ package com.foxminded.controller;
 import com.foxminded.dto.GroupDto;
 import com.foxminded.dto.StudentDto;
 import com.foxminded.dto.TeacherDto;
+import com.foxminded.dto.TimetableDto;
 import com.foxminded.enums.Role;
+import com.foxminded.enums.TimetableType;
 import com.foxminded.service.StudentService;
 import com.foxminded.service.TeacherService;
+import com.foxminded.service.TimetableService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -24,6 +27,7 @@ public class AuthController {
     private final StudentService studentService;
     private final TeacherService teacherService;
     private final PasswordEncoder passwordEncoder;
+    private final TimetableService timetableService;
 
     @GetMapping("/login")
     public String showLoginPage() {
@@ -52,6 +56,10 @@ public class AuthController {
         } else if (userType.equals("teacher")) {
             TeacherDto teacher = createTeacher(username, password);
             teacherService.addTeacher(teacher);
+
+            TimetableDto timetable = new TimetableDto(0L, TimetableType.TEACHER_TIMETABLE,
+                    username, new ArrayList<>());
+            timetableService.addTimetable(timetable);
         }
 
         return "redirect:/";

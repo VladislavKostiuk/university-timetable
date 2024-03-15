@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org">
+      xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
@@ -15,6 +15,7 @@
     <header th:replace="~{fragments/header.html :: header}"></header>
     <div class="title_container">
         <h2 class="title">Lessons</h2>
+        <a sec:authorize="hasAuthority('ADMIN')" class="title_button" href="/lessons/lesson-creation">Create lesson</a>
         <a class="title_button" href="/">To main menu</a>
     </div>
     <div class="table_container">
@@ -27,6 +28,7 @@
                 <th>Teacher</th>
                 <th>Day of Week</th>
                 <th>Appointment time</th>
+                <th calss="option_header"></th>
             </tr>
             </thead>
             <tbody>
@@ -37,6 +39,14 @@
                 <td th:if="${lesson.subjectDto() != null}" th:text="${lesson.subjectDto().teacherDto().name()}"></td>
                 <td th:text="${lesson.day()}"></td>
                 <td th:text="${lesson.appointmentTime()}"></td>
+                <td class="update_button_container">
+                    <form sec:authorize="hasAuthority('ADMIN')" class="role_form" th:method="GET" th:action="@{/lessons/lesson-update/{lessonId}(lessonId = ${lesson.id()})}">
+                        <input class="update_button_submit" type="submit" value="Update">
+                    </form>
+                    <form sec:authorize="hasAuthority('ADMIN')" class="role_form" th:method="POST" th:action="@{/lessons/lesson-deletion/{lessonId}(lessonId = ${lesson.id()})}">
+                        <input class="delete_button_submit" type="submit" value="Delete">
+                    </form>
+                </td>
             </tr>
             </tbody>
         </table>
