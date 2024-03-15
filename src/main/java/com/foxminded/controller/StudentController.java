@@ -3,14 +3,10 @@ package com.foxminded.controller;
 import com.foxminded.dto.CourseDto;
 import com.foxminded.dto.GroupDto;
 import com.foxminded.dto.StudentDto;
-import com.foxminded.dto.SubjectDto;
-import com.foxminded.dto.TeacherDto;
-import com.foxminded.entity.Course;
 import com.foxminded.service.CourseService;
+import com.foxminded.service.CustomUserDetailsService;
 import com.foxminded.service.GroupService;
 import com.foxminded.service.StudentService;
-import com.foxminded.service.TeacherService;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -24,7 +20,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
 @Controller
 @RequiredArgsConstructor
@@ -33,7 +28,7 @@ public class StudentController {
     private final StudentService studentService;
     private final GroupService groupService;
     private final CourseService courseService;
-    private final TeacherService teacherService;
+    private final CustomUserDetailsService userDetailsService;
     private final PasswordEncoder passwordEncoder;
 
     @GetMapping
@@ -89,7 +84,7 @@ public class StudentController {
                                 @RequestParam(value = "selectedCourses", required = false) String selectedCourses) {
         StudentDto oldStudent = studentService.getStudentById(studentId);
 
-        if (!isNameAvailable(name, oldStudent.name())) {
+        if (!userDetailsService.isNameAvailable(name, oldStudent.name())) {
             return "redirect:/students/student-update/" + studentId +"?error=true";
         }
 
@@ -101,17 +96,6 @@ public class StudentController {
 
         studentService.updateStudent(updatedStudent);
         return "redirect:/students";
-    }
-
-    private boolean isNameAvailable(String newName, String previousName) {
-        if (newName.equals(previousName)) {
-            return true;
-        }
-
-        Optional<StudentDto> existingStudent = studentService.getStudentByName(newName);
-        Optional<TeacherDto> existingTeacher = teacherService.getTeacherByName(newName);
-
-        return !(existingStudent.isPresent() || existingTeacher.isPresent());
     }
 }
 

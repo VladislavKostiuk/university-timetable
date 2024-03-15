@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org">
+      xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
@@ -24,6 +24,7 @@
                 <th>Id</th>
                 <th>Name</th>
                 <th>Courses</th>
+                <th calss="option_header"></th>
             </tr>
             </thead>
             <tbody>
@@ -34,6 +35,14 @@
                     <p th:each="course : ${teacher.courseDtoList()}">
                         <span th:text="${course.name()}"></span>
                     </p>
+                </td>
+                <td class="update_button_container">
+                    <form sec:authorize="hasAuthority('ADMIN')" class="role_form" th:method="GET" th:action="@{/teachers/teacher-update/{teacherId}(teacherId = ${teacher.id()})}">
+                        <input class="update_button_submit" type="submit" value="Update">
+                    </form>
+                    <form sec:authorize="hasAuthority('ADMIN')" class="role_form" th:method="POST" th:action="@{/teachers/teacher-deletion/{teacherId}(teacherId = ${teacher.id()})}">
+                        <input class="delete_button_submit" type="submit" value="Delete">
+                    </form>
                 </td>
             </tr>
             </tbody>

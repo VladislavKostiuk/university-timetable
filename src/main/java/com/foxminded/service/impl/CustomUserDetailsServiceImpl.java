@@ -1,19 +1,23 @@
 package com.foxminded.service.impl;
 
 import com.foxminded.constants.ErrorMessages;
+import com.foxminded.entity.Student;
+import com.foxminded.entity.Teacher;
 import com.foxminded.repository.StudentRepository;
 import com.foxminded.repository.TeacherRepository;
+import com.foxminded.service.CustomUserDetailsService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class UserDetailsServiceImpl implements UserDetailsService {
+public class CustomUserDetailsServiceImpl implements CustomUserDetailsService {
     private final StudentRepository studentRepository;
     private final TeacherRepository teacherRepository;
 
@@ -27,5 +31,17 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         }
 
         return student != null ? student : teacher;
+    }
+
+    @Override
+    public boolean isNameAvailable(String newName, String previousName) {
+        if (newName.equals(previousName)) {
+            return true;
+        }
+
+        Optional<Student> existingStudent = studentRepository.findByName(newName);
+        Optional<Teacher> existingTeacher = teacherRepository.findByName(newName);
+
+        return !(existingStudent.isPresent() || existingTeacher.isPresent());
     }
 }

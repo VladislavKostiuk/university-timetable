@@ -58,7 +58,7 @@ public class SubjectController {
         TeacherDto teacher = teacherService.getTeacherById(teacherId);
         GroupDto group = groupService.getGroupById(groupId);
 
-        SubjectDto newSubject = new SubjectDto(0L, course, teacher, group, new ArrayList<>());
+        SubjectDto newSubject = new SubjectDto(0L, course, teacher, group);
 
         if (checkIfSubjectExists(newSubject)) {
             return "redirect:/subjects/subject-creation?error=true";
@@ -85,7 +85,7 @@ public class SubjectController {
         GroupDto group = groupService.getGroupById(groupId);
         SubjectDto oldSubject = subjectService.getSubjectById(subjectId);
 
-        SubjectDto updatedSubject = new SubjectDto(subjectId, course, teacher, group, oldSubject.lessonDtoList());
+        SubjectDto updatedSubject = new SubjectDto(subjectId, course, teacher, group);
 
         if (checkIfSubjectExists(updatedSubject)) {
             return "redirect:/subjects/subject-update/" + subjectId + "?error=true";

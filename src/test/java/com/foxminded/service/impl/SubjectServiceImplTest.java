@@ -43,7 +43,7 @@ class SubjectServiceImplTest {
 
     @Test
     void testAddSubject_Success() {
-        SubjectDto testSubjectDto = new SubjectDto(0L, null, null, null, new ArrayList<>());
+        SubjectDto testSubjectDto = new SubjectDto(0L, null, null, null);
         when(subjectRepository.findById(testSubjectDto.id())).thenReturn(Optional.empty());
         subjectService.addSubject(testSubjectDto);
         verify(subjectRepository).save(any());
@@ -51,7 +51,7 @@ class SubjectServiceImplTest {
 
     @Test
     void testAddSubject_SubjectAlreadyExists() {
-        SubjectDto testSubjectDto = new SubjectDto(0L, null, null, null, new ArrayList<>());
+        SubjectDto testSubjectDto = new SubjectDto(0L, null, null, null);
         Subject testSubject = subjectMapper.mapToSubject(testSubjectDto);
         when(subjectRepository.findById(testSubjectDto.id())).thenReturn(Optional.of(testSubject));
         assertThrows(IllegalStateException.class, () -> subjectService.addSubject(testSubjectDto));
@@ -78,7 +78,7 @@ class SubjectServiceImplTest {
 
     @Test
     void testUpdateSubject_Success() {
-        SubjectDto testSubjectDto = new SubjectDto(0L, null, null, null, new ArrayList<>());
+        SubjectDto testSubjectDto = new SubjectDto(0L, null, null, null);
         Subject testSubject = subjectMapper.mapToSubject(testSubjectDto);
         when(subjectRepository.findById(testSubjectDto.id())).thenReturn(Optional.of(testSubject));
         subjectService.updateSubject(testSubjectDto);
@@ -87,14 +87,14 @@ class SubjectServiceImplTest {
 
     @Test
     void testUpdateSubject_SubjectDoesNotExist() {
-        SubjectDto testSubjectDto = new SubjectDto(0L, null, null, null, new ArrayList<>());
+        SubjectDto testSubjectDto = new SubjectDto(0L, null, null, null);
         when(subjectRepository.findById(testSubjectDto.id())).thenReturn(Optional.empty());
         assertThrows(IllegalStateException.class, () -> subjectService.updateSubject(testSubjectDto));
     }
 
     @Test
     void testGetAllSubjects() {
-        SubjectDto testSubjectDto = new SubjectDto(0L, null, null, null, new ArrayList<>());
+        SubjectDto testSubjectDto = new SubjectDto(0L, null, null, null);
         Subject testSubject = subjectMapper.mapToSubject(testSubjectDto);
         when(subjectRepository.findAll()).thenReturn(List.of(testSubject));
         List<SubjectDto> expectedAllSubjects = List.of(testSubjectDto);
