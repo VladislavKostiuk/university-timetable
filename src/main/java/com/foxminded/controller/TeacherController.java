@@ -2,9 +2,11 @@ package com.foxminded.controller;
 
 import com.foxminded.dto.CourseDto;
 import com.foxminded.dto.TeacherDto;
+import com.foxminded.dto.TimetableDto;
 import com.foxminded.service.CourseService;
 import com.foxminded.service.CustomUserDetailsService;
 import com.foxminded.service.TeacherService;
+import com.foxminded.service.TimetableService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -27,6 +29,7 @@ public class TeacherController {
     private final CourseService courseService;
     private final CustomUserDetailsService userDetailsService;
     private final PasswordEncoder passwordEncoder;
+    private final TimetableService timetableService;
 
     @GetMapping
     public String showAll(Model model) {
@@ -69,6 +72,13 @@ public class TeacherController {
         TeacherDto updatedTeacher = new TeacherDto(teacherId, name, encodedPass, oldTeacher.roles(),courseDtoList);
 
         teacherService.updateTeacher(updatedTeacher);
+
+        if (!oldTeacher.name().equals(name)) {
+            TimetableDto oldTimetable = timetableService.getTimetableByQualifyingName(oldTeacher.name());
+            TimetableDto updatedTimetable = new TimetableDto(oldTimetable.id(), oldTimetable.timetableType(),
+                    name, oldTimetable.lessonDtoList());
+            timetableService.updateTimetable(updatedTimetable);
+        }
         return "redirect:/teachers";
     }
 }

@@ -1,10 +1,13 @@
 package com.foxminded.controller;
 
 import com.foxminded.dto.TeacherDto;
+import com.foxminded.dto.TimetableDto;
 import com.foxminded.enums.Role;
+import com.foxminded.enums.TimetableType;
 import com.foxminded.service.CourseService;
 import com.foxminded.service.CustomUserDetailsService;
 import com.foxminded.service.TeacherService;
+import com.foxminded.service.TimetableService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -45,6 +48,8 @@ class TeacherControllerTest {
     private PasswordEncoder passwordEncoder;
     @MockBean
     private CustomUserDetailsService userDetailsService;
+    @MockBean
+    private TimetableService timetableService;
 
     private TeacherDto testTeacherDto;
 
@@ -90,8 +95,12 @@ class TeacherControllerTest {
 
     @Test
     void testUpdateTeacher_Success() throws Exception {
+        TimetableDto testTimetableDto = new TimetableDto(1L, TimetableType.TEACHER_TIMETABLE,
+                testTeacherDto.name(), new ArrayList<>());
+
         given(teacherService.getTeacherById(1L)).willReturn(testTeacherDto);
         given(userDetailsService.isNameAvailable("some name", "test teacher")).willReturn(true);
+        given(timetableService.getTimetableByQualifyingName(testTeacherDto.name())).willReturn(testTimetableDto);
         mockMvc.perform(post("/teachers/teacher-update")
                         .param("teacherId", "1")
                         .param("name", "some name")

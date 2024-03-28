@@ -2,6 +2,8 @@ package com.foxminded.controller;
 
 import com.foxminded.dto.CourseDto;
 import com.foxminded.dto.GroupDto;
+import com.foxminded.dto.TimetableDto;
+import com.foxminded.enums.TimetableType;
 import com.foxminded.service.GroupService;
 import com.foxminded.service.TimetableService;
 import org.junit.jupiter.api.BeforeEach;
@@ -107,8 +109,12 @@ class GroupControllerTest {
 
     @Test
     void testUpdateGroup_Success() throws Exception {
+        TimetableDto testTimetableDto = new TimetableDto(1L, TimetableType.STUDENT_TIMETABLE,
+                testGroupDto.name(), new ArrayList<>());
+
         given(groupService.getAllGroups()).willReturn(List.of(testGroupDto));
         given(groupService.getGroupById(1L)).willReturn(testGroupDto);
+        given(timetableService.getTimetableByQualifyingName(testGroupDto.name())).willReturn(testTimetableDto);
         mockMvc.perform(post("/groups/group-update")
                         .param("groupId", "1")
                         .param("name", "name"))

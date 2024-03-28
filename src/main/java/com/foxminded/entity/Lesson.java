@@ -39,12 +39,13 @@ public class Lesson {
     @Column(name = "appointment_time")
     private LocalTime appointmentTime;
 
-    @ManyToMany
-    @JoinTable(
-            name = "lesson_timetables",
-            joinColumns = @JoinColumn(name = "lesson_id"),
-            inverseJoinColumns = @JoinColumn(name = "timetable_id")
-    )
+//    @ManyToMany
+//    @JoinTable(
+//            name = "lesson_timetables",
+//            joinColumns = @JoinColumn(name = "lesson_id"),
+//            inverseJoinColumns = @JoinColumn(name = "timetable_id")
+//    )
+    @ManyToMany(mappedBy = "lessons")
     private List<Timetable> timetables;
 
     public Lesson() {

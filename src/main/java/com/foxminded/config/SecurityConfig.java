@@ -15,15 +15,14 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
         http.authorizeHttpRequests(requests -> requests
-                        .requestMatchers("/adminPanel/**", "/updateSubject/*",
-                                "/createSubject", "/deleteSubject/*", "/updateCourse/*",
-                                "/createCourse", "/deleteCourse/*").hasAuthority("ADMIN")
+                        .requestMatchers("/adminPanel/**").hasAuthority("ADMIN")
+                        .requestMatchers("/user-timetable").hasAnyAuthority("STUDENT", "TEACHER", "ADMIN")
                         .requestMatchers("/**").permitAll()
                         .anyRequest().authenticated()
         )
                 .formLogin(form -> form
                         .loginPage("/login")
-                        .defaultSuccessUrl("/", true)
+                        .defaultSuccessUrl("/user-timetable", true)
                         .failureUrl("/login?error=true")
                         .permitAll()
                 )

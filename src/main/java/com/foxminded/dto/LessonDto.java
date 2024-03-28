@@ -8,6 +8,5 @@ public record LessonDto(
         Long id,
         SubjectDto subjectDto,
         DayOfWeek day,
-        LocalTime appointmentTime,
-        List<TimetableDto> timetableDtoList
+        LocalTime appointmentTime
 ) {}

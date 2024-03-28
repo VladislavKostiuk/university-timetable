@@ -43,6 +43,15 @@ public class LessonServiceImpl implements LessonService {
 
     @Override
     public void deleteLessonById(Long id) {
+        Lesson lesson = lessonRepository.findById(id).orElseThrow(() ->
+                new IllegalArgumentException(String.format(
+                        ErrorMessages.ENTITY_WAS_NOT_FOUND_BY_ID, entityName, id
+                )));
+
+        for (var timetable : lesson.getTimetables()) {
+            timetable.getLessons().remove(lesson);
+        }
+
         lessonRepository.deleteById(id);
     }
 

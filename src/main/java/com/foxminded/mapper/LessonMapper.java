@@ -12,10 +12,8 @@ import org.mapstruct.Mapping;
 public interface LessonMapper {
 
     @Mapping(source = "lesson.subject", target = "subjectDto")
-    @Mapping(source = "lesson.timetables", target = "timetableDtoList")
     LessonDto mapToLessonDto(Lesson lesson);
 
     @Mapping(source = "lessonDto.subjectDto", target = "subject")
-    @Mapping(source = "lessonDto.timetableDtoList", target = "timetables")
     Lesson mapToLesson(LessonDto lessonDto);
 }

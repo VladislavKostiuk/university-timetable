@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Create lesson</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/reset.css}">
+    <link rel="stylesheet" th:href="@{/css/headerStyles.css}">
+    <link rel="stylesheet" th:href="@{/css/createStyles.css}">
+</head>
+<body>
+<header th:replace="~{fragments/header.html :: header}"></header>
+<div class="title_container">
+    <h2 class="title">Create lesson</h2>
+    <a class="title_button" href="/">To main menu</a>
+</div>
+<div class="form_container">
+    <div th:if="${param.error}">
+        <p class="error_text">Lesson with these options already exists</p>
+    </div>
+    <form class="form" th:action="@{/lessons/lesson-creation}" th:method='POST'>
+        <label>Subject</label>
+        <select class="form_select" name="subject">
+            <option th:each="subject : ${allSubjects}" th:value="${subject.id()}" th:text="${subject.courseDto().name() + ' ' +
+            subject.teacherDto().name() + ' ' + subject.groupDto().name()}"></option>
+        </select>
+        <label>Day of week</label>
+        <select class="form_select" name="dayOfWeek">
+            <option th:each="dayOfWeek : ${allDaysOfWeek}" th:value="${dayOfWeek}" th:text="${dayOfWeek}"></option>
+        </select>
+        <label>Time</label>
+        <input type="time" name="time">
+        <input class="submit_button" name="submit" type="submit" value="Create" />
+    </form>
+</div>
+</body>
+</html>

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="UTF-8">
+  <title>Timetable</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
+  <link rel="stylesheet" th:href="@{/css/reset.css}">
+  <link rel="stylesheet" th:href="@{/css/headerStyles.css}">
+  <link rel="stylesheet" th:href="@{/css/userTimetableStyles.css}">
+</head>
+<body>
+<header th:replace="~{fragments/header.html :: header}"></header>
+<div class="title_container">
+  <h2 th:if="${qualifyingName != null}" class="title" th:text="'Timetable for ' + ${qualifyingName}"></h2>
+  <h2 th:if="${qualifyingName == null}" class="title" th:text="'Timetable'"></h2>
+  <p th:if="${qualifyingName == null}" class="without_group_info">You are not currently a member of any group</p>
+</div>
+<div th:if="${timetableRows != null}" class="table_container">
+  <table class="content-table">
+    <thead>
+    <tr>
+      <th>Time</th>
+      <th>Monday</th>
+      <th>Tuesday</th>
+      <th>Wednesday</th>
+      <th>Thursday</th>
+      <th>Friday</th>
+      <th>Saturday</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="timetableRow : ${timetableRows}">
+      <td th:text="${timetableRow.time()}"></td>
+      <td>
+        <p th:if="${timetableRow.mondayLesson() != null}" th:text="${timetableRow.mondayLesson().subjectDto().courseDto().name()}"></p>
+      </td>
+      <td>
+        <p th:if="${timetableRow.tuesdayLesson() != null}" th:text="${timetableRow.tuesdayLesson().subjectDto().courseDto().name()}"></p>
+      </td>
+      <td>
+        <p th:if="${timetableRow.wednesdayLesson() != null}" th:text="${timetableRow.wednesdayLesson().subjectDto().courseDto().name()}"></p>
+      </td>
+      <td>
+        <p th:if="${timetableRow.thursdayLesson() != null}" th:text="${timetableRow.thursdayLesson().subjectDto().courseDto().name()}"></p>
+      </td>
+      <td>
+        <p th:if="${timetableRow.fridayLesson() != null}" th:text="${timetableRow.fridayLesson().subjectDto().courseDto().name()}"></p>
+      </td>
+      <td>
+        <p th:if="${timetableRow.sundayLesson()} != null" th:text="${timetableRow.sundayLesson().subjectDto().courseDto().name()}"></p>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+</body>
+</html>

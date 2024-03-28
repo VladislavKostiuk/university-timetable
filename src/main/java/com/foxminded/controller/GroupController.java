@@ -2,6 +2,8 @@ package com.foxminded.controller;
 
 import com.foxminded.dto.CourseDto;
 import com.foxminded.dto.GroupDto;
+import com.foxminded.dto.TimetableDto;
+import com.foxminded.enums.TimetableType;
 import com.foxminded.service.GroupService;
 import com.foxminded.service.TimetableService;
 import lombok.AllArgsConstructor;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -51,12 +54,16 @@ public class GroupController {
         }
         groupService.addGroup(newGroup);
 
+        TimetableDto timetable = new TimetableDto(0L, TimetableType.STUDENT_TIMETABLE,
+                newGroup.name(), new ArrayList<>());
+        timetableService.addTimetable(timetable);
         return "redirect:/groups";
     }
 
     @PostMapping("/group-update")
     public String updateGroup(@RequestParam("groupId") Long groupId,
                                @RequestParam("name") String name) {
+        GroupDto oldGroup = groupService.getGroupById(groupId);
         GroupDto updatedGroup = new GroupDto(groupId, name);
 
         if (checkIfGroupExists(updatedGroup)) {
@@ -64,6 +71,13 @@ public class GroupController {
         }
 
         groupService.updateGroup(updatedGroup);
+
+        if (!oldGroup.name().equals(name)) {
+            TimetableDto oldTimetable = timetableService.getTimetableByQualifyingName(oldGroup.name());
+            TimetableDto updatedTimetable = new TimetableDto(oldTimetable.id(), oldTimetable.timetableType(),
+                    name, oldTimetable.lessonDtoList());
+            timetableService.updateTimetable(updatedTimetable);
+        }
         return "redirect:/groups";
     }
 
