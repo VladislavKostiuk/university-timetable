@@ -1,6 +1,8 @@
 package com.foxminded.controller;
 
+import com.foxminded.service.CourseService;
 import com.foxminded.service.DbInitService;
+import com.foxminded.service.StudentService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -24,9 +26,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class MainControllerTest {
     @Autowired
     private MockMvc mockMvc;
-
     @MockBean
-    private DbInitService dbInitService;
+    private StudentService studentService;
+    @MockBean
+    private CourseService courseService;
 
     @Test
     void testShowMenu() throws Exception {
@@ -36,11 +39,10 @@ class MainControllerTest {
     }
 
     @Test
-    void testInitDb() throws Exception {
-        mockMvc.perform(post("/init"))
-                .andExpect(status().is3xxRedirection())
-                .andExpect(view().name("redirect:/"));
-        verify(dbInitService, times(1)).init();
+    void testShowLoginPage_Success() throws Exception {
+        mockMvc.perform(get("/login"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("authPages/loginPage"));
     }
 }
 

@@ -2,6 +2,22 @@ body {
     font-family: 'Montserrat', sans-serif;
 }
 
+.entity_options {
+    margin-top: 36px;
+    text-align: center;
+}
+
+.entity_options a{
+    font-size: 22px;
+    color: black;
+    text-decoration: none;
+    margin-right: 25px;
+}
+
+.entity_options a:hover{
+    text-decoration: underline;
+}
+
 .title_container, .menu_container {
     display: flex;
     flex-direction: column;
@@ -28,6 +44,7 @@ body {
 }
 
 .search_input {
+    margin-bottom: 44px;
     border-width: 0px;
     border-bottom: 1px solid #cccccc;
     width: 100%;
@@ -45,23 +62,23 @@ body {
 .title_button {
     cursor: pointer;
     text-decoration: none;
-    background-color: #405cf5;
+    background-color: #0C0D0D;
     border-radius: 6px;
     border-width: 0;
     color: #fff;
     font-size: 100%;
-    padding: 15px 50px;
+    padding: 15px 0px;
+    width: 200px;
     margin-bottom: 35px;
     transition: all .2s;
+    text-align: center;
 }
 
-.header_button:hover {
-    background-color: #3F70F5;
-}
 
 .table_container {
     padding: 0px 45px;
-    margin: 30px 0;
+    margin-bottom: 30px;
+    margin-top: -20px;
 }
 
 .content-table {
@@ -75,7 +92,7 @@ body {
 }
 
 .content-table thead tr {
-    background-color: #028CEB;
+    background-color: #0C0D0D;
     color: #ffffff;
     text-align: left;
     font-weight: bold;
@@ -95,7 +112,7 @@ body {
 }
 
 .content-table tbody tr:last-of-type {
-    border-bottom: 2px solid #028CEB;
+    border-bottom: 2px solid #0C0D0D;
 }
 
 .update_button_container {
@@ -111,7 +128,7 @@ body {
 .update_button_submit, .delete_button_submit {
     cursor: pointer;
     text-decoration: none;
-    background-color: #028CEB;
+    background-color: #0C0D0D;
     border-radius: 6px;
     border-width: 0;
     color: #fff;

@@ -2,7 +2,6 @@ package com.foxminded.controller;
 
 import com.foxminded.dto.GroupDto;
 import com.foxminded.dto.LessonDto;
-import com.foxminded.dto.SubjectDto;
 import com.foxminded.dto.TeacherDto;
 import com.foxminded.dto.TimetableDto;
 import com.foxminded.enums.TimetableType;
@@ -10,7 +9,6 @@ import com.foxminded.service.GroupService;
 import com.foxminded.service.LessonService;
 import com.foxminded.service.TeacherService;
 import com.foxminded.service.TimetableService;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,13 +19,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Stream;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/timetables")
+@RequestMapping("/admin-panel/timetables")
 public class TimetableController {
     private final TimetableService timetableService;
     private final LessonService lessonService;
@@ -35,9 +33,17 @@ public class TimetableController {
     private final GroupService groupService;
 
     @GetMapping
-    public String showAll(Model model) {
+    public String showAll(Model model, @RequestParam(value = "qualifying-name", required = false) String qualifyingName) {
         List<TimetableDto> allTimetables = timetableService.getAllTimetables();
+        allTimetables = allTimetables.stream().sorted(Comparator.comparing(TimetableDto::id)).toList();
         allTimetables.forEach(timetable -> sortLessonsByDayTime(timetable.lessonDtoList()));
+
+        if (qualifyingName != null) {
+            allTimetables = allTimetables.stream()
+                    .filter(timetable -> timetable.qualifyingName().startsWith(qualifyingName))
+                    .toList();
+        }
+
         model.addAttribute("allTimetables", allTimetables);
         return "entityPages/timetablePage";
     }
@@ -57,11 +63,11 @@ public class TimetableController {
 
         if (timetable.timetableType() == TimetableType.STUDENT_TIMETABLE) {
             availableLessons = availableLessons.stream()
-                    .filter(lesson -> lesson.subjectDto().groupDto().name().equals(timetable.qualifyingName()))
+                    .filter(lesson -> lesson.groupDto().name().equals(timetable.qualifyingName()))
                     .toList();
         } else {
             availableLessons = availableLessons.stream()
-                    .filter(lesson -> lesson.subjectDto().teacherDto().name().equals(timetable.qualifyingName()))
+                    .filter(lesson -> lesson.teacherDto().name().equals(timetable.qualifyingName()))
                     .toList();
         }
 
@@ -70,17 +76,22 @@ public class TimetableController {
         return "updatePages/updateTimetablePage";
     }
 
+    @PostMapping("/search")
+    public String search(@RequestParam("qualifyingName") String qualifyingName) {
+        return "redirect:/admin-panel/timetables?qualifying-name=" + qualifyingName;
+    }
+
     @PostMapping("timetable-creation")
     public String createTimetable(@RequestParam("qualifyingName") String qualifyingName) {
         List<String> existingQualNames = timetableService.getAllTimetables().stream().map(TimetableDto::qualifyingName).toList();
         if (existingQualNames.contains(qualifyingName)) {
-            return "redirect:/timetables/timetable-creation?error=true";
+            return "redirect:/admin-panel/timetables/timetable-creation?error=true";
         }
 
         TimetableDto newTimetable = new TimetableDto(0L, getTimetableTypeByQualName(qualifyingName),
                 qualifyingName, new ArrayList<>());
         timetableService.addTimetable(newTimetable);
-        return "redirect:/timetables";
+        return "redirect:/admin-panel/timetables";
     }
 
     @PostMapping("{timetableId}/lesson-addition")
@@ -90,12 +101,12 @@ public class TimetableController {
         LessonDto selectedLesson = lessonService.getLessonById(availableLessonId);
 
         if (timetable.lessonDtoList().contains(selectedLesson)) {
-            return "redirect:/timetables/timetable-update/" + timetableId + "?error=true";
+            return "redirect:/admin-panel/timetables/timetable-update/" + timetableId + "?error=true";
         }
 
         timetable.lessonDtoList().add(selectedLesson);
         timetableService.updateTimetable(timetable);
-        return "redirect:/timetables/timetable-update/" + timetableId;
+        return "redirect:/admin-panel/timetables/timetable-update/" + timetableId;
     }
 
     @PostMapping("{timetableId}/lesson-deletion/{lessonId}")
@@ -106,13 +117,13 @@ public class TimetableController {
 
         timetable.lessonDtoList().remove(selectedLesson);
         timetableService.updateTimetable(timetable);
-        return "redirect:/timetables/timetable-update/" + timetableId;
+        return "redirect:/admin-panel/timetables/timetable-update/" + timetableId;
     }
 
     @PostMapping("timetable-deletion/{timetableId}")
     public String deleteTimetable(@PathVariable("timetableId") Long timetableId) {
         timetableService.deleteTimetableById(timetableId);
-        return "redirect:/timetables";
+        return "redirect:/admin-panel/timetables";
     }
 
     private void sortLessonsByDayTime(List<LessonDto> lessons) {

@@ -15,14 +15,27 @@
     <header th:replace="~{fragments/header.html :: header}"></header>
     <div class="title_container">
         <h2 class="title">Main Page</h2>
-        <form th:method="POST" th:action="@{/init}">
-            <input class="title_button" type="submit" value="Init db with basic data">
-        </form>
     </div>
     <div class="info">
         <p>
             To be able to see your timetable you need to be <a href="/login">logged</a>
         </p>
     </div>
+    <div class="courses">
+        <h2 class="title">About courses</h2>
+        <div class="wrapper">
+          <i id="left" class="fa-solid fa-angle-left"></i>
+          <ul class="carousel">
+              <li class="card" th:each="course : ${allCourses}">
+                  <h2 th:text="${course.name()}"></h2>
+                  <span th:text="${course.description()}"></span>
+              </li>
+          </ul>
+          <i id="right" class="fa-solid fa-angle-right"></i>
+        </div>
+    </div>
+
+    <script src="https://kit.fontawesome.com/ddabb179d7.js" crossorigin="anonymous"></script>
+    <script th:src="@{/js/slider.js}"></script>
 </body>
 </html>

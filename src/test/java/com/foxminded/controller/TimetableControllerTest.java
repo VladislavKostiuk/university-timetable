@@ -61,7 +61,7 @@ class TimetableControllerTest {
         List<TimetableDto> expectedTimetables = new ArrayList<>(List.of(testTimetableDto));
         given(timetableService.getAllTimetables()).willReturn(expectedTimetables);
 
-        mockMvc.perform(get("/timetables"))
+        mockMvc.perform(get("/admin-panel/timetables"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("entityPages/timetablePage"))
                 .andExpect(model().attribute("allTimetables", expectedTimetables));
@@ -70,7 +70,7 @@ class TimetableControllerTest {
     @Test
     void testShowCreatePage_Success() throws Exception {
 
-        mockMvc.perform(get("/timetables/timetable-creation"))
+        mockMvc.perform(get("/admin-panel/timetables/timetable-creation"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("createPages/createTimetablePage"))
                 .andExpect(model().attributeExists("allQualifyingNames"));
@@ -79,7 +79,7 @@ class TimetableControllerTest {
     @Test
     void testShowUpdatePage_Success() throws Exception {
         given(timetableService.getTimetableById(1L)).willReturn(testTimetableDto);
-        mockMvc.perform(get("/timetables/timetable-update/1"))
+        mockMvc.perform(get("/admin-panel/timetables/timetable-update/1"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("updatePages/updateTimetablePage"))
                 .andExpect(model().attributeExists("timetable", "availableLessons"))
@@ -87,39 +87,47 @@ class TimetableControllerTest {
     }
 
     @Test
+    void testSearch_Success() throws Exception {
+        mockMvc.perform(post("/admin-panel/timetables/search")
+                        .param("qualifyingName", "some qualifyingName"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(view().name("redirect:/admin-panel/timetables?qualifying-name=some qualifyingName"));
+    }
+
+    @Test
     void testCreateTimetables_Success() throws Exception {
-        mockMvc.perform(post("/timetables/timetable-creation")
+        mockMvc.perform(post("/admin-panel/timetables/timetable-creation")
                         .param("qualifyingName", "some name"))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(view().name("redirect:/timetables"));
+                .andExpect(view().name("redirect:/admin-panel/timetables"));
         verify(timetableService, times(1)).addTimetable(any(TimetableDto.class));
     }
 
     @Test
     void testCreateTimetables_TimetableWithThisQualifyingNameAlreadyExists() throws Exception {
         given(timetableService.getAllTimetables()).willReturn(List.of(testTimetableDto));
-        mockMvc.perform(post("/timetables/timetable-creation")
+        mockMvc.perform(post("/admin-panel/timetables/timetable-creation")
                         .param("qualifyingName", "test group"))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(view().name("redirect:/timetables/timetable-creation?error=true"));
+                .andExpect(view().name("redirect:/admin-panel/timetables/timetable-creation?error=true"));
         verify(timetableService, times(0)).addTimetable(any(TimetableDto.class));
     }
 
     @Test
     void testDeleteTimetable_Success() throws Exception {
-        mockMvc.perform(post("/timetables/timetable-deletion/1"))
+        mockMvc.perform(post("/admin-panel/timetables/timetable-deletion/1"))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(view().name("redirect:/timetables"));
+                .andExpect(view().name("redirect:/admin-panel/timetables"));
         verify(timetableService, times(1)).deleteTimetableById(1L);
     }
 
     @Test
     void testAddLessonToTimetable_Success() throws Exception {
         given(timetableService.getTimetableById(1L)).willReturn(testTimetableDto);
-        mockMvc.perform(post("/timetables/1/lesson-addition")
+        mockMvc.perform(post("/admin-panel/timetables/1/lesson-addition")
                         .param("availableLessonId", "1"))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(view().name("redirect:/timetables/timetable-update/1"));
+                .andExpect(view().name("redirect:/admin-panel/timetables/timetable-update/1"));
         verify(timetableService, times(1)).updateTimetable(any(TimetableDto.class));
     }
 

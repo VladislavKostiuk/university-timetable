@@ -56,7 +56,7 @@ class GroupControllerTest {
         List<GroupDto> expectedGroups = new ArrayList<>(List.of(testGroupDto));
         given(groupService.getAllGroups()).willReturn(expectedGroups);
 
-        mockMvc.perform(get("/groups"))
+        mockMvc.perform(get("/admin-panel/groups"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("entityPages/groupPage"))
                 .andExpect(model().attribute("allGroups", expectedGroups));
@@ -65,7 +65,7 @@ class GroupControllerTest {
     @Test
     void testShowCreatePage_Success() throws Exception {
 
-        mockMvc.perform(get("/groups/group-creation"))
+        mockMvc.perform(get("/admin-panel/groups/group-creation"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("createPages/createGroupPage"));
     }
@@ -73,37 +73,45 @@ class GroupControllerTest {
     @Test
     void testShowUpdatePage_Success() throws Exception {
         given(groupService.getGroupById(1L)).willReturn(testGroupDto);
-        mockMvc.perform(get("/groups/group-update/1"))
+        mockMvc.perform(get("/admin-panel/groups/group-update/1"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("updatePages/updateGroupPage"))
                 .andExpect(model().attribute("group", testGroupDto));
     }
 
     @Test
+    void testSearch_Success() throws Exception {
+        mockMvc.perform(post("/admin-panel/groups/search")
+                        .param("groupName", "some group"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(view().name("redirect:/admin-panel/groups?group-name=some group"));
+    }
+
+    @Test
     void testCreateGroup_Success() throws Exception {
         given(groupService.getAllGroups()).willReturn(List.of(testGroupDto));
-        mockMvc.perform(post("/groups/group-creation")
+        mockMvc.perform(post("/admin-panel/groups/group-creation")
                         .param("name", "name"))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(view().name("redirect:/groups"));
+                .andExpect(view().name("redirect:/admin-panel/groups"));
         verify(groupService, times(1)).addGroup(any(GroupDto.class));
     }
 
     @Test
     void testCreateGroup_CourseWithTheseParamsAlreadyExists() throws Exception {
         given(groupService.getAllGroups()).willReturn(List.of(testGroupDto));
-        mockMvc.perform(post("/groups/group-creation")
+        mockMvc.perform(post("/admin-panel/groups/group-creation")
                         .param("name", "test group"))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(view().name("redirect:/groups/group-creation?error=true"));
+                .andExpect(view().name("redirect:/admin-panel/groups/group-creation?error=true"));
         verify(groupService, times(0)).addGroup(any(GroupDto.class));
     }
 
     @Test
     void testDeleteGroup_Success() throws Exception {
-        mockMvc.perform(post("/groups/group-deletion/1"))
+        mockMvc.perform(post("/admin-panel/groups/group-deletion/1"))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(view().name("redirect:/groups"));
+                .andExpect(view().name("redirect:/admin-panel/groups"));
         verify(groupService, times(1)).deleteGroupById(1L);
     }
 
@@ -115,11 +123,11 @@ class GroupControllerTest {
         given(groupService.getAllGroups()).willReturn(List.of(testGroupDto));
         given(groupService.getGroupById(1L)).willReturn(testGroupDto);
         given(timetableService.getTimetableByQualifyingName(testGroupDto.name())).willReturn(testTimetableDto);
-        mockMvc.perform(post("/groups/group-update")
+        mockMvc.perform(post("/admin-panel/groups/group-update")
                         .param("groupId", "1")
                         .param("name", "name"))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(view().name("redirect:/groups"));
+                .andExpect(view().name("redirect:/admin-panel/groups"));
         verify(groupService, times(1)).updateGroup(any(GroupDto.class));
     }
 
@@ -127,11 +135,11 @@ class GroupControllerTest {
     void testUpdateCourse_CourseWithTheseParamsAlreadyExists() throws Exception {
         given(groupService.getAllGroups()).willReturn(List.of(testGroupDto));
         given(groupService.getGroupById(1L)).willReturn(testGroupDto);
-        mockMvc.perform(post("/groups/group-update")
+        mockMvc.perform(post("/admin-panel/groups/group-update")
                         .param("groupId", "1")
                         .param("name", "test group"))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(view().name("redirect:/groups/group-update/1?error=true"));
+                .andExpect(view().name("redirect:/admin-panel/groups/group-update/1?error=true"));
         verify(groupService, times(0)).updateGroup(any(GroupDto.class));
     }
 }

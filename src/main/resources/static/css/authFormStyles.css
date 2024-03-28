@@ -54,7 +54,7 @@ body {
 .submit_button {
     cursor: pointer;
     text-decoration: none;
-    background-color: #405cf5;
+    background-color: #0C0D0D;
     border-radius: 6px;
     border-width: 0;
     color: #fff;
@@ -64,49 +64,3 @@ body {
     transition: all .2s;
 }
 
-.submit_button:hover {
-    background-color: #3F70F5;
-}
-
-
-/*------------*/
-
-
-.switch {
-    min-width: 250px;
-    height: 50px;
-    text-align: center;
-    background: #028CEB;
-    transition: all 0.2s ease;
-    border-radius: 25px;
-/*    margin-top: 13px;*/
-    margin-bottom: 35px;
-  }
-
-  input[type=radio] {
-    display: none;
-  }
-
-  .switch label {
-    cursor: pointer;
-    color: rgba(0,0,0,0.5);
-    width: 60px;
-    line-height: 50px;
-    transition: all 0.2s ease;
-  }
-
-  label[for=student_radio] {
-    margin-right: 30px;
-  }
-
-  #teacher_radio:checked ~ .switch {
-    background: #0579CA;
-  }
-
-  #student_radio:checked ~ .switch label[for=student_radio] {
-    color: #fff;
-  }
-
-  #teacher_radio:checked ~ .switch label[for=teacher_radio] {
-    color: #fff;
-  }

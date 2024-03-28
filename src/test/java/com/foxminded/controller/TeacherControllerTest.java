@@ -4,6 +4,7 @@ import com.foxminded.dto.TeacherDto;
 import com.foxminded.dto.TimetableDto;
 import com.foxminded.enums.Role;
 import com.foxminded.enums.TimetableType;
+import com.foxminded.helper.SelectedOptionsConverter;
 import com.foxminded.service.CourseService;
 import com.foxminded.service.CustomUserDetailsService;
 import com.foxminded.service.TeacherService;
@@ -50,6 +51,8 @@ class TeacherControllerTest {
     private CustomUserDetailsService userDetailsService;
     @MockBean
     private TimetableService timetableService;
+    @MockBean
+    SelectedOptionsConverter optionsConverter;
 
     private TeacherDto testTeacherDto;
 
@@ -69,7 +72,7 @@ class TeacherControllerTest {
         List<TeacherDto> expectedTeachers = new ArrayList<>(List.of(testTeacherDto));
         given(teacherService.getAllTeachers()).willReturn(expectedTeachers);
 
-        mockMvc.perform(get("/teachers"))
+        mockMvc.perform(get("/admin-panel/teachers"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("entityPages/teacherPage"))
                 .andExpect(model().attribute("allTeachers", expectedTeachers));
@@ -78,7 +81,7 @@ class TeacherControllerTest {
     @Test
     void testShowUpdatePage_Success() throws Exception {
         given(teacherService.getTeacherById(1L)).willReturn(testTeacherDto);
-        mockMvc.perform(get("/teachers/teacher-update/1"))
+        mockMvc.perform(get("/admin-panel/teachers/teacher-update/1"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("updatePages/updateTeacherPage"))
                 .andExpect(model().attributeExists("teacher", "allCourses", "teacherCourses"))
@@ -86,10 +89,18 @@ class TeacherControllerTest {
     }
 
     @Test
-    void testDeleteTeacher_Success() throws Exception {
-        mockMvc.perform(post("/teachers/teacher-deletion/1"))
+    void testSearch_Success() throws Exception {
+        mockMvc.perform(post("/admin-panel/teachers/search")
+                        .param("teacherName", "some teacher"))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(view().name("redirect:/teachers"));
+                .andExpect(view().name("redirect:/admin-panel/teachers?teacher-name=some teacher"));
+    }
+
+    @Test
+    void testDeleteTeacher_Success() throws Exception {
+        mockMvc.perform(post("/admin-panel/teachers/teacher-deletion/1"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(view().name("redirect:/admin-panel/teachers"));
         verify(teacherService, times(1)).deleteTeacherById(1L);
     }
 
@@ -99,29 +110,29 @@ class TeacherControllerTest {
                 testTeacherDto.name(), new ArrayList<>());
 
         given(teacherService.getTeacherById(1L)).willReturn(testTeacherDto);
-        given(userDetailsService.isNameAvailable("some name", "test teacher")).willReturn(true);
+        given(userDetailsService.isNameAvailable("some name")).willReturn(true);
         given(timetableService.getTimetableByQualifyingName(testTeacherDto.name())).willReturn(testTimetableDto);
-        mockMvc.perform(post("/teachers/teacher-update")
+        mockMvc.perform(post("/admin-panel/teachers/teacher-update")
                         .param("teacherId", "1")
                         .param("name", "some name")
                         .param("password", "some pass")
                         .param("selectedCourses", "MATH,FINANCE"))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(view().name("redirect:/teachers"));
+                .andExpect(view().name("redirect:/admin-panel/teachers"));
         verify(teacherService, times(1)).updateTeacher(any(TeacherDto.class));
     }
 
     @Test
     void testUpdateTeacher_ThisNameIsAlreadyTaken() throws Exception {
         given(teacherService.getTeacherById(1L)).willReturn(testTeacherDto);
-        given(userDetailsService.isNameAvailable("some name", "test teacher")).willReturn(false);
-        mockMvc.perform(post("/teachers/teacher-update")
+        given(userDetailsService.isNameAvailable("some name")).willReturn(false);
+        mockMvc.perform(post("/admin-panel/teachers/teacher-update")
                         .param("teacherId", "1")
                         .param("name", "some name")
                         .param("password", "some pass")
                         .param("selectedCourses", "MATH,FINANCE"))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(view().name("redirect:/teachers/teacher-update/1?error=true"));
+                .andExpect(view().name("redirect:/admin-panel/teachers/teacher-update/1?error=true"));
         verify(teacherService, times(0)).updateTeacher(any(TeacherDto.class));
     }
 }

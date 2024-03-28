@@ -6,23 +6,13 @@
         <nav class="nav_bar">
             <a href="/" class="logo">University CMS</a>
             <ul>
-                <li><a class="nav_bar_item" href="/courses">Courses</a></li>
-                <li><a class="nav_bar_item" href="/groups">Groups</a></li>
-                <li><a class="nav_bar_item" href="/lessons">Lessons</a></li>
-                <li><a class="nav_bar_item" href="/students">Students</a></li>
-                <li><a class="nav_bar_item" href="/subjects">Subjects</a></li>
-                <li><a class="nav_bar_item" href="/teachers">Teachers</a></li>
-                <li><a class="nav_bar_item" href="/timetables">Timetables</a></li>
-                <li><a class="nav_bar_item" href="/user-timetable">User Timetable</a></li>
+                <li><a class="nav_bar_item" href="/timetable">Timetable</a></li>
             </ul>
             <div sec:authorize="!isAuthenticated()" class="login_block">
-                <a th:href="@{/register}" class="auth_info_button">Registration</a>
                 <a th:href="@{/login}" class="auth_info_button">Login</a>
             </div>
-            <div sec:authorize="hasAuthority('ADMIN')" class="admin_block">
-                <a class="auth_info_button" th:href="@{/adminPanel/students}">Admin panel</a>
-            </div>
             <div sec:authorize="isAuthenticated()" class="logout_block">
+                <a sec:authorize="hasAuthority('ADMIN')" class="auth_info_button" th:href="@{/admin-panel/students}">Admin panel</a>
                 <form th:action="@{/logout}" th:method="POST">
                     <input class="auth_info_button" type="submit" value="Logout">
                 </form>

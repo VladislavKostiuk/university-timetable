@@ -2,6 +2,7 @@ package com.foxminded.controller;
 
 import com.foxminded.dto.StudentDto;
 import com.foxminded.enums.Role;
+import com.foxminded.helper.SelectedOptionsConverter;
 import com.foxminded.service.CourseService;
 import com.foxminded.service.CustomUserDetailsService;
 import com.foxminded.service.GroupService;
@@ -51,6 +52,8 @@ class StudentControllerTest {
     private PasswordEncoder passwordEncoder;
     @MockBean
     private CustomUserDetailsService userDetailsService;
+    @MockBean
+    private SelectedOptionsConverter optionsConverter;
     private StudentDto testStudentDto;
 
     @BeforeEach
@@ -70,7 +73,7 @@ class StudentControllerTest {
         List<StudentDto> expectedStudents = new ArrayList<>(List.of(testStudentDto));
         given(studentService.getAllStudents()).willReturn(expectedStudents);
 
-        mockMvc.perform(get("/students"))
+        mockMvc.perform(get("/admin-panel/students"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("entityPages/studentPage"))
                 .andExpect(model().attribute("allStudents", expectedStudents));
@@ -79,7 +82,7 @@ class StudentControllerTest {
     @Test
     void testShowUpdatePage_Success() throws Exception {
         given(studentService.getStudentById(1L)).willReturn(testStudentDto);
-        mockMvc.perform(get("/students/student-update/1"))
+        mockMvc.perform(get("/admin-panel/students/student-update/1"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("updatePages/updateStudentPage"))
                 .andExpect(model().attributeExists("student", "allGroups", "allCourses", "studentCourses"))
@@ -87,48 +90,49 @@ class StudentControllerTest {
     }
 
     @Test
-    void testSearchByGroup_Success() throws Exception {
-        mockMvc.perform(post("/students/search-by-group")
-                        .param("searchText", "some text"))
+    void testSearch_Success() throws Exception {
+        mockMvc.perform(post("/admin-panel/students/search")
+                        .param("studentName", "some name")
+                        .param("groupName", "some group"))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(view().name("redirect:/students?searchText=some text"));
+                .andExpect(view().name("redirect:/admin-panel/students?student-name=some name&group-name=some group"));
     }
 
     @Test
     void testDeleteStudent_Success() throws Exception {
-        mockMvc.perform(post("/students/student-deletion/1"))
+        mockMvc.perform(post("/admin-panel/students/student-deletion/1"))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(view().name("redirect:/students"));
+                .andExpect(view().name("redirect:/admin-panel/students"));
         verify(studentService, times(1)).deleteStudentById(1L);
     }
 
     @Test
     void testUpdateStudent_Success() throws Exception {
         given(studentService.getStudentById(1L)).willReturn(testStudentDto);
-        given(userDetailsService.isNameAvailable("some name", "test student")).willReturn(true);
-        mockMvc.perform(post("/students/student-update")
+        given(userDetailsService.isNameAvailable("some name")).willReturn(true);
+        mockMvc.perform(post("/admin-panel/students/student-update")
                         .param("studentId", "1")
                         .param("name", "some name")
                         .param("password", "some pass")
                         .param("group", "1")
                         .param("selectedCourses", "MATH,FINANCE"))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(view().name("redirect:/students"));
+                .andExpect(view().name("redirect:/admin-panel/students"));
         verify(studentService, times(1)).updateStudent(any(StudentDto.class));
     }
 
     @Test
     void testUpdateStudent_ThisNameIsAlreadyTaken() throws Exception {
         given(studentService.getStudentById(1L)).willReturn(testStudentDto);
-        given(userDetailsService.isNameAvailable("some name", "test student")).willReturn(false);
-        mockMvc.perform(post("/students/student-update")
+        given(userDetailsService.isNameAvailable("some name")).willReturn(false);
+        mockMvc.perform(post("/admin-panel/students/student-update")
                         .param("studentId", "1")
                         .param("name", "some already existing name")
                         .param("password", "some pass")
                         .param("group", "1")
                         .param("selectedCourses", "MATH,FINANCE"))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(view().name("redirect:/students/student-update/1?error=true"));
+                .andExpect(view().name("redirect:/admin-panel/students/student-update/1?error=true"));
         verify(studentService, times(0)).updateStudent(any(StudentDto.class));
     }
 }

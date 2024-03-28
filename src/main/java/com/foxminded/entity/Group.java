@@ -26,7 +26,7 @@ public class Group {
     private String name;
 
     @OneToMany(mappedBy = "group", cascade = CascadeType.REMOVE)
-    private List<Subject> subjects;
+    private List<Lesson> lessons;
 
     @OneToMany(mappedBy = "group")
     private List<Student> students;

@@ -24,20 +24,18 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = {
-        SubjectMapperImpl.class
+        LessonMapperImpl.class
 })
 class TimetableServiceImplTest {
 
     private TimetableService timetableService;
     @Mock
     private TimetableRepository timetableRepository;
-    @Autowired
-    private SubjectMapper subjectMapper;
     private TimetableMapper timetableMapper;
 
     @BeforeEach
     void init() {
-        timetableMapper = new TimetableMapperImpl(new LessonMapperImpl(subjectMapper));
+        timetableMapper = new TimetableMapperImpl(new LessonMapperImpl());
         timetableService = new TimetableServiceImpl(timetableRepository, timetableMapper);
     }
 

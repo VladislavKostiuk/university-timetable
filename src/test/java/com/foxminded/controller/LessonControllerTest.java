@@ -3,11 +3,12 @@ package com.foxminded.controller;
 import com.foxminded.dto.CourseDto;
 import com.foxminded.dto.GroupDto;
 import com.foxminded.dto.LessonDto;
-import com.foxminded.dto.SubjectDto;
 import com.foxminded.dto.TeacherDto;
 import com.foxminded.enums.Role;
+import com.foxminded.service.CourseService;
+import com.foxminded.service.GroupService;
 import com.foxminded.service.LessonService;
-import com.foxminded.service.SubjectService;
+import com.foxminded.service.TeacherService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -44,21 +45,28 @@ class LessonControllerTest {
     @MockBean
     private LessonService lessonService;
     @MockBean
-    private SubjectService subjectService;
+    private  CourseService courseService;
+    @MockBean
+    private  TeacherService teacherService;
+    @MockBean
+    private  GroupService groupService;
 
     private LessonDto testLessonDto;
-    private SubjectDto testSubjectDto;
+    private CourseDto testCourseDto;
+    private TeacherDto testTeacherDto;
+    private GroupDto testGroupDto;
 
     @BeforeEach
     void setup() {
-        CourseDto course = new CourseDto(0L, "medicine", "desc");
-        TeacherDto teacher = new TeacherDto(0L, "test teacher", "some pass",
+        testCourseDto = new CourseDto(0L, "medicine", "desc");
+        testTeacherDto = new TeacherDto(0L, "test teacher", "some pass",
                 Set.of(Role.TEACHER), new ArrayList<>());
-        GroupDto group = new GroupDto(0L, "test group");
-        testSubjectDto = new SubjectDto(1L, course, teacher, group);
+        testGroupDto = new GroupDto(0L, "test group");
         testLessonDto = new LessonDto(
                 1L,
-                testSubjectDto,
+                testCourseDto,
+                testTeacherDto,
+                testGroupDto,
                 DayOfWeek.MONDAY,
                 LocalTime.of(10, 25)
         );
@@ -69,7 +77,7 @@ class LessonControllerTest {
         List<LessonDto> expectedLessons = new ArrayList<>(List.of(testLessonDto));
         given(lessonService.getAllLessons()).willReturn(expectedLessons);
 
-        mockMvc.perform(get("/lessons"))
+        mockMvc.perform(get("/admin-panel/lessons"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("entityPages/lessonPage"))
                 .andExpect(model().attribute("allLessons", expectedLessons));
@@ -78,80 +86,93 @@ class LessonControllerTest {
     @Test
     void testShowCreatePage_Success() throws Exception {
 
-        mockMvc.perform(get("/lessons/lesson-creation"))
+        mockMvc.perform(get("/admin-panel/lessons/lesson-creation"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("createPages/createLessonPage"))
-                .andExpect(model().attributeExists("allSubjects", "allDaysOfWeek"));
+                .andExpect(model().attributeExists("allCourses","allGroups", "allTeachers", "allDaysOfWeek"));
     }
 
     @Test
     void testShowUpdatePage_Success() throws Exception {
         given(lessonService.getLessonById(1L)).willReturn(testLessonDto);
-        mockMvc.perform(get("/lessons/lesson-update/1"))
+        mockMvc.perform(get("/admin-panel/lessons/lesson-update/1"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("updatePages/updateLessonPage"))
-                .andExpect(model().attributeExists("allSubjects", "allDaysOfWeek", "lesson"))
+                .andExpect(model().attributeExists("allCourses","allGroups", "allTeachers", "allDaysOfWeek"))
                 .andExpect(model().attribute("lesson", testLessonDto));
     }
 
     @Test
     void testCreateLesson_Success() throws Exception {
-        mockMvc.perform(post("/lessons/lesson-creation")
-                        .param("subject", "1")
+        mockMvc.perform(post("/admin-panel/lessons/lesson-creation")
+                        .param("course", "1")
+                        .param("teacher", "1")
+                        .param("group", "1")
                         .param("dayOfWeek", "MONDAY")
                         .param("time", "10:25"))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(view().name("redirect:/lessons"));
+                .andExpect(view().name("redirect:/admin-panel/lessons"));
         verify(lessonService, times(1)).addLesson(any(LessonDto.class));
     }
 
     @Test
     void testCreateLesson_LessonWithTheseParamsAlreadyExists() throws Exception {
-        given(subjectService.getSubjectById(1L)).willReturn(testSubjectDto);
         given(lessonService.getAllLessons()).willReturn(List.of(testLessonDto));
+        given(courseService.getCourseById(1L)).willReturn(testCourseDto);
+        given(teacherService.getTeacherById(1L)).willReturn(testTeacherDto);
+        given(groupService.getGroupById(1L)).willReturn(testGroupDto);
 
-        mockMvc.perform(post("/lessons/lesson-creation")
-                        .param("subject", "1")
+        mockMvc.perform(post("/admin-panel/lessons/lesson-creation")
+                        .param("course", "1")
+                        .param("teacher", "1")
+                        .param("group", "1")
                         .param("dayOfWeek", "MONDAY")
                         .param("time", "10:25"))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(view().name("redirect:/lessons/lesson-creation?error=true"));
+                .andExpect(view().name("redirect:/admin-panel/lessons/lesson-creation?error=true"));
         verify(lessonService, times(0)).addLesson(any(LessonDto.class));
     }
 
     @Test
     void testDeleteLesson_Success() throws Exception {
-        mockMvc.perform(post("/lessons/lesson-deletion/1"))
+        mockMvc.perform(post("/admin-panel/lessons/lesson-deletion/1"))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(view().name("redirect:/lessons"));
+                .andExpect(view().name("redirect:/admin-panel/lessons"));
         verify(lessonService, times(1)).deleteLessonById(1L);
     }
 
     @Test
     void testUpdateLesson_Success() throws Exception {
         given(lessonService.getLessonById(1L)).willReturn(testLessonDto);
-        mockMvc.perform(post("/lessons/lesson-update")
+
+        mockMvc.perform(post("/admin-panel/lessons/lesson-update")
                         .param("lessonId", "1")
-                        .param("subject", "1")
+                        .param("course", "1")
+                        .param("teacher", "1")
+                        .param("group", "1")
                         .param("dayOfWeek", "MONDAY")
                         .param("time", "10:25"))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(view().name("redirect:/lessons"));
+                .andExpect(view().name("redirect:/admin-panel/lessons"));
         verify(lessonService, times(1)).updateLesson(any(LessonDto.class));
     }
 
     @Test
     void testUpdateLesson_LessonWithTheseParamsAlreadyExists() throws Exception {
-        given(subjectService.getSubjectById(1L)).willReturn(testSubjectDto);
         given(lessonService.getAllLessons()).willReturn(List.of(testLessonDto));
+        given(courseService.getCourseById(1L)).willReturn(testCourseDto);
+        given(teacherService.getTeacherById(1L)).willReturn(testTeacherDto);
+        given(groupService.getGroupById(1L)).willReturn(testGroupDto);
 
-        mockMvc.perform(post("/lessons/lesson-update")
+        mockMvc.perform(post("/admin-panel/lessons/lesson-update")
                         .param("lessonId", "1")
-                        .param("subject", "1")
+                        .param("course", "1")
+                        .param("teacher", "1")
+                        .param("group", "1")
                         .param("dayOfWeek", "MONDAY")
                         .param("time", "10:25"))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(view().name("redirect:/lessons/lesson-update/1?error=true"));
+                .andExpect(view().name("redirect:/admin-panel/lessons/lesson-update/1?error=true"));
         verify(lessonService, times(0)).updateLesson(any(LessonDto.class));
     }
 }

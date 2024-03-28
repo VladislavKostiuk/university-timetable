@@ -6,7 +6,9 @@ import java.util.List;
 
 public record LessonDto(
         Long id,
-        SubjectDto subjectDto,
+        CourseDto courseDto,
+        TeacherDto teacherDto,
+        GroupDto groupDto,
         DayOfWeek day,
         LocalTime appointmentTime
 ) {}

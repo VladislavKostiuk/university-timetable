@@ -15,13 +15,13 @@
     <header th:replace="~{fragments/header.html :: header}"></header>
     <div class="title_container">
         <h2 class="title">Update student</h2>
-        <a class="title_button" href="/">To main menu</a>
+        <a class="title_button" href="/admin-panel/students">To admin panel</a>
     </div>
     <div class="form_container">
         <div th:if="${param.error}">
             <p class="error_text">This name is already taken</p>
         </div>
-        <form class="form" th:action="@{/students/student-update}" th:method='POST'>
+        <form class="form" th:action="@{/admin-panel/students/student-update}" th:method='POST'>
             <input type="hidden" th:value="${student.id()}" name="studentId">
             <label>Name</label>
             <input required class="form_input" type="text" th:value="${student.name()}" name="name">
@@ -32,6 +32,14 @@
                 <option th:selected="${student.groupDto() == null}" value="0" th:text="'Without group'"></option>
                 <option th:each="group : ${allGroups}" th:selected="${student.groupDto() != null && student.groupDto().name().equals(group.name())}" th:value="${group.id()}" th:text="${group.name()}"></option>
             </select>
+            <label>Roles</label>
+            <div class="checkbox_container">
+                <div class="checkbox_container_item" th:each="role : ${allRoles}">
+                    <input name="selectedRoles" type="checkbox" th:checked="${#lists.contains(student.roles(), role)}" th:value="${role}">
+                    <span th:text="${role}"></span>
+                    <br/>
+                </div>
+            </div>
             <label>Courses</label>
             <div class="checkbox_container">
                 <div class="checkbox_container_item" th:each="course : ${allCourses}">

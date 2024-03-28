@@ -1,6 +1,7 @@
 package com.foxminded.controller;
 
 import com.foxminded.dto.CourseDto;
+import com.foxminded.dto.StudentDto;
 import com.foxminded.service.CourseService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -10,17 +11,27 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import java.util.Comparator;
 import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/courses")
+@RequestMapping("/admin-panel/courses")
 public class CourseController {
     private final CourseService courseService;
 
     @GetMapping
-    public String showAll(Model model) {
+    public String showAll(Model model, @RequestParam(value = "course-name", required = false) String courseName) {
         List<CourseDto> allCourses = courseService.getAllCourses();
+        allCourses = allCourses.stream().sorted(Comparator.comparing(CourseDto::id)).toList();
+
+        if (courseName != null) {
+            allCourses = allCourses.stream()
+                    .filter(course -> course.name().startsWith(courseName))
+                    .toList();
+        }
+
         model.addAttribute("allCourses", allCourses);
         return "entityPages/coursePage";
     }
@@ -37,17 +48,22 @@ public class CourseController {
         return "updatePages/updateCoursePage";
     }
 
+    @PostMapping("/search")
+    public String search(@RequestParam("courseName") String courseName) {
+        return "redirect:/admin-panel/courses?course-name=" + courseName;
+    }
+
     @PostMapping("/course-creation")
     public String createCourse(@RequestParam("name") String name,
                                 @RequestParam("description") String description) {
         CourseDto newCourse = new CourseDto(0L, name, description);
 
         if (checkIfCourseExists(newCourse)) {
-            return "redirect:/courses/course-creation?error=true";
+            return "redirect:/admin-panel/courses/course-creation?error=true";
         }
         courseService.addCourse(newCourse);
 
-        return "redirect:/courses";
+        return "redirect:/admin-panel/courses";
     }
 
     @PostMapping("/course-update")
@@ -57,17 +73,17 @@ public class CourseController {
         CourseDto updatedCourse = new CourseDto(courseId, name, description);
 
         if (checkIfCourseExists(updatedCourse)) {
-            return "redirect:/courses/course-update/" + courseId + "?error=true";
+            return "redirect:/admin-panel/courses/course-update/" + courseId + "?error=true";
         }
 
         courseService.updateCourse(updatedCourse);
-        return "redirect:/courses";
+        return "redirect:/admin-panel/courses";
     }
 
     @PostMapping("/course-deletion/{courseId}")
     public String deleteCourse(@PathVariable("courseId") Long courseId) {
         courseService.deleteCourseById(courseId);
-        return "redirect:/courses";
+        return "redirect:/admin-panel/courses";
     }
 
     private boolean checkIfCourseExists(CourseDto newCourse) {

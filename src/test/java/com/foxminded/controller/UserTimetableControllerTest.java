@@ -44,7 +44,7 @@ class UserTimetableControllerTest {
                 new HashSet<>(), null, new ArrayList<>());
 
         given(studentService.getStudentByName("user")).willReturn(Optional.of(student));
-        mockMvc.perform(get("/user-timetable"))
+        mockMvc.perform(get("/timetable"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("userTimetablePage"));
     }

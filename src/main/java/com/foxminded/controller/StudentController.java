@@ -3,6 +3,8 @@ package com.foxminded.controller;
 import com.foxminded.dto.CourseDto;
 import com.foxminded.dto.GroupDto;
 import com.foxminded.dto.StudentDto;
+import com.foxminded.enums.Role;
+import com.foxminded.helper.SelectedOptionsConverter;
 import com.foxminded.service.CourseService;
 import com.foxminded.service.CustomUserDetailsService;
 import com.foxminded.service.GroupService;
@@ -19,33 +21,39 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/students")
+@RequestMapping("/admin-panel/students")
 public class StudentController {
     private final StudentService studentService;
     private final GroupService groupService;
     private final CourseService courseService;
     private final CustomUserDetailsService userDetailsService;
     private final PasswordEncoder passwordEncoder;
+    private final SelectedOptionsConverter optionsConverter;
 
     @GetMapping
-    public String showAll(Model model, @RequestParam(value = "searchText", required = false) String searchText) {
+    public String showAll(Model model, @RequestParam(value = "student-name", required = false) String studentName,
+                          @RequestParam(value = "group-name", required = false) String groupName) {
         List<StudentDto> allStudents = studentService.getAllStudents();
+        allStudents = allStudents.stream().sorted(Comparator.comparing(StudentDto::id)).toList();
 
-        if (searchText != null) {
-            if (searchText.equals("")) {
-                allStudents = allStudents.stream()
-                        .filter(student -> student.groupDto() == null)
-                        .toList();
-            } else {
+        if (studentName != null) {
+            allStudents = allStudents.stream()
+                    .filter(student -> student.name().startsWith(studentName))
+                    .toList();
+        }
+
+        if (groupName != null) {
                 allStudents = allStudents.stream()
                         .filter(student -> student.groupDto() != null)
-                        .filter(student -> student.groupDto().name().startsWith(searchText))
+                        .filter(student -> student.groupDto().name().startsWith(groupName))
                         .toList();
-            }
         }
 
         model.addAttribute("allStudents", allStudents);
@@ -55,47 +63,85 @@ public class StudentController {
     @GetMapping("/student-update/{studentId}")
     public String showUpdatePage(@PathVariable("studentId") Long studentId, Model model) {
         StudentDto student = studentService.getStudentById(studentId);
-        List<GroupDto> allGroups = groupService.getAllGroups();
-        List<CourseDto> allCourses = courseService.getAllCourses();
         List<String> studentCourses = student.courseDtoList().stream().map(CourseDto::name).toList();
+        initModel(model);
         model.addAttribute("student", student);
-        model.addAttribute("allGroups", allGroups);
-        model.addAttribute("allCourses", allCourses);
         model.addAttribute("studentCourses", studentCourses);
         return "updatePages/updateStudentPage";
     }
 
-    @PostMapping("/search-by-group")
-    public String searchByGroup(@RequestParam("searchText") String searchText) {
-        return "redirect:/students?searchText=" + searchText;
+    @GetMapping("/student-creation")
+    public String showCreatePage(Model model) {
+        initModel(model);
+        model.addAttribute("studentRole", Role.STUDENT);
+        return "createPages/createStudentPage";
+    }
+
+    @PostMapping("/search")
+    public String search(@RequestParam("studentName") String studentName, @RequestParam("groupName") String groupName) {
+        return "redirect:/admin-panel/students?student-name=" + studentName + "&group-name=" + groupName;
     }
 
     @PostMapping("/student-deletion/{studentId}")
-    public String deleteSubject(@PathVariable("studentId") Long studentId) {
+    public String deleteStudent(@PathVariable("studentId") Long studentId) {
         studentService.deleteStudentById(studentId);
-        return "redirect:/students";
+        return "redirect:/admin-panel/students";
+    }
+
+    @PostMapping("/student-creation")
+    public String createStudent(@RequestParam("name") String name,
+                                @RequestParam("password") String password,
+                                @RequestParam("group") Long groupId,
+                                @RequestParam(value = "selectedCourses", required = false) String selectedCourses,
+                                @RequestParam(value = "selectedRoles", required = false) String selectedRoles) {
+
+        if (!userDetailsService.isNameAvailable(name)) {
+            return "redirect:/admin-panel/students/student-creation?error=true";
+        }
+
+        String encodedPass =  passwordEncoder.encode(password);
+        StudentDto newStudent = generateStudent(0L, name, encodedPass, groupId, selectedCourses, selectedRoles);
+
+        studentService.addStudent(newStudent);
+        return "redirect:/admin-panel/students";
     }
 
     @PostMapping("/student-update")
-    public String updateSubject(@RequestParam("studentId") Long studentId,
+    public String updateStudent(@RequestParam("studentId") Long studentId,
                                 @RequestParam("name") String name,
                                 @RequestParam("password") String password,
                                 @RequestParam("group") Long groupId,
-                                @RequestParam(value = "selectedCourses", required = false) String selectedCourses) {
+                                @RequestParam(value = "selectedCourses", required = false) String selectedCourses,
+                                @RequestParam(value = "selectedRoles", required = false) String selectedRoles) {
         StudentDto oldStudent = studentService.getStudentById(studentId);
 
-        if (!userDetailsService.isNameAvailable(name, oldStudent.name())) {
-            return "redirect:/students/student-update/" + studentId +"?error=true";
+        if (!name.equals(oldStudent.name()) && !userDetailsService.isNameAvailable(name)) {
+            return "redirect:/admin-panel/students/student-update/" + studentId +"?error=true";
         }
 
         String encodedPass = password.equals("") ? oldStudent.password() : passwordEncoder.encode(password);
-        GroupDto group = groupId != 0 ? groupService.getGroupById(groupId) : null;
-        List<String> selectedCoursesList = selectedCourses != null ? Arrays.asList(selectedCourses.split(",")) : new ArrayList<>();
-        List<CourseDto> courseDtoList = selectedCoursesList.stream().map(courseService::getCourseByName).toList();
-        StudentDto updatedStudent = new StudentDto(studentId, name, encodedPass, oldStudent.roles(), group, courseDtoList);
+        StudentDto updatedStudent = generateStudent(studentId, name, encodedPass, groupId, selectedCourses, selectedRoles);
 
         studentService.updateStudent(updatedStudent);
-        return "redirect:/students";
+        return "redirect:/admin-panel/students";
+    }
+
+    private void initModel(Model model) {
+        List<GroupDto> allGroups = groupService.getAllGroups();
+        List<CourseDto> allCourses = courseService.getAllCourses();
+        List<Role> allRoles = Arrays.asList(Role.values());
+        model.addAttribute("allGroups", allGroups);
+        model.addAttribute("allCourses", allCourses);
+        model.addAttribute("allRoles", allRoles);
+    }
+
+    private StudentDto generateStudent(Long studentId, String name, String encodedPassword,
+                                       Long groupId, String selectedCourses, String selectedRoles) {
+
+        GroupDto group = groupId != 0 ? groupService.getGroupById(groupId) : null;
+        List<CourseDto> courseDtoList = optionsConverter.selectedCoursesToList(selectedCourses);
+        Set<Role> roleSet = optionsConverter.selectedRolesToSet(selectedRoles);
+        return new StudentDto(studentId, name, encodedPassword, roleSet, group, courseDtoList);
     }
 }
 

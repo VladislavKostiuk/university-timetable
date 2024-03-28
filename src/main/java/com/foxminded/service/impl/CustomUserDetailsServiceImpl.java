@@ -34,11 +34,7 @@ public class CustomUserDetailsServiceImpl implements CustomUserDetailsService {
     }
 
     @Override
-    public boolean isNameAvailable(String newName, String previousName) {
-        if (newName.equals(previousName)) {
-            return true;
-        }
-
+    public boolean isNameAvailable(String newName) {
         Optional<Student> existingStudent = studentRepository.findByName(newName);
         Optional<Teacher> existingTeacher = teacherRepository.findByName(newName);
 

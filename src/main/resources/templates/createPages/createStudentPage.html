@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Create lesson</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
+  <link rel="stylesheet" th:href="@{/css/reset.css}">
+  <link rel="stylesheet" th:href="@{/css/headerStyles.css}">
+  <link rel="stylesheet" th:href="@{/css/createStyles.css}">
+</head>
+<body>
+<header th:replace="~{fragments/header.html :: header}"></header>
+<div class="title_container">
+  <h2 class="title">Create student</h2>
+  <a class="title_button" href="/admin-panel/students">To admin panel</a>
+</div>
+<div class="form_container">
+  <div th:if="${param.error}">
+    <p class="error_text">This username already taken</p>
+  </div>
+  <form class="form" th:action="@{/admin-panel/students/student-creation}" th:method='POST'>
+    <label>Name</label>
+    <input required class="form_input" type="text" name="name">
+    <label>Password</label>
+    <input required class="form_input" type="password" name="password">
+    <label>Group</label>
+    <select class="form_select" name="group">
+      <option value="0" th:text="'Without group'"></option>
+      <option th:each="group : ${allGroups}" th:value="${group.id()}" th:text="${group.name()}"></option>
+    </select>
+    <label>Roles</label>
+    <div class="checkbox_container">
+      <div class="checkbox_container_item" th:each="role : ${allRoles}">
+        <input name="selectedRoles" type="checkbox" th:checked="${#lists.contains(studentRole, role)}" th:value="${role}">
+        <span th:text="${role}"></span>
+        <br/>
+      </div>
+    </div>
+    <label>Courses</label>
+    <div class="checkbox_container">
+      <div class="checkbox_container_item" th:each="course : ${allCourses}">
+        <input type="checkbox" name="selectedCourses" th:value="${course.name()}">
+        <span th:text="${course.name()}"></span>
+      </div>
+    </div>
+    <input class="submit_button" name="submit" type="submit" value="Create" />
+  </form>
+</div>
+</body>
+</html>
