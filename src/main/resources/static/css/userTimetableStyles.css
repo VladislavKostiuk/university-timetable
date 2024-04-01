@@ -56,8 +56,22 @@ table {
     background-color: #F2F2F2;
 }
  tbody td {
+     border: 2px solid rgba(0,0,0,0.3);
      position: relative;
 }
+
+ tbody td:first-child {
+     border-left: none;
+ }
+
+tbody td:last-child {
+    border-right: none;
+}
+
+tbody tr:last-child td {
+    border-bottom: none;
+}
+
  tbody td:hover:before {
      content: "";
      position: absolute;

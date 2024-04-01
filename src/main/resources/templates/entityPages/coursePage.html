@@ -25,10 +25,12 @@
         <h2 class="title">Courses</h2>
         <a sec:authorize="hasAuthority('ADMIN')" class="title_button" href="/admin-panel/courses/course-creation">Create course</a>
         <div class="search_section">
+            <h4 class="search_title">Search section</h4>
             <form th:action="@{/admin-panel/courses/search}" th:method="POST">
                 <input name="courseName" class="search_input" type="text" placeholder="Enter course name">
                 <input class="search_submit" type="submit">
             </form>
+            <a class="search_reset" href="/admin-panel/courses">Reset</a>
         </div>
     </div>
     <div class="table_container">

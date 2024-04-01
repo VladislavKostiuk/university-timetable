@@ -25,10 +25,12 @@
         <h2 class="title">Groups</h2>
         <a sec:authorize="hasAuthority('ADMIN')" class="title_button" href="/admin-panel/groups/group-creation">Create group</a>
         <div class="search_section">
+            <h4 class="search_title">Search section</h4>
             <form th:action="@{/admin-panel/groups/search}" th:method="POST">
                 <input name="groupName" class="search_input" type="text" placeholder="Enter group name">
                 <input class="search_submit" type="submit">
             </form>
+            <a class="search_reset" href="/admin-panel/groups">Reset</a>
         </div>
     </div>
     <div class="table_container">

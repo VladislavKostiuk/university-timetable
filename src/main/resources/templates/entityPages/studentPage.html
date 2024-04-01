@@ -25,11 +25,13 @@
         <h2 class="title">Students</h2>
         <a sec:authorize="hasAuthority('ADMIN')" class="title_button" href="/admin-panel/students/student-creation">Create student</a>
         <div class="search_section">
+            <h4 class="search_title">Search section</h4>
         <form th:action="@{/admin-panel/students/search}" th:method="POST">
             <input name="studentName" class="search_input" type="text" placeholder="Enter student name">
             <input name="groupName" class="search_input" type="text" placeholder="Enter group name">
             <input class="search_submit" type="submit">
         </form>
+            <a class="search_reset" href="/admin-panel/students">Reset</a>
         </div>
     </div>
     <div class="table_container">
