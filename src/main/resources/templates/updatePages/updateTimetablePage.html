@@ -15,25 +15,25 @@
 <header th:replace="~{fragments/header.html :: header}"></header>
 <div class="title_container">
     <h2 class="title">Update timetable</h2>
-    <a class="title_button" href="/">To main menu</a>
+    <a class="title_button" href="/admin-panel/timetables">To admin panel</a>
 </div>
 <div class="form_container timetable_container">
     <div th:if="${param.error}">
         <p class="error_text">Timetable already contains this lesson</p>
     </div>
-    <form class="form" th:action="@{/timetables/{timetableId}/lesson-addition(timetableId = ${timetable.id()})}" th:method='POST'>
+    <form class="form" th:action="@{/admin-panel/timetables/{timetableId}/lesson-addition(timetableId = ${timetable.id()})}" th:method='POST'>
         <label>Group or teacher name</label>
         <p class="label_text" th:text="${timetable.qualifyingName()}"></p>
         <label>Lessons</label>
         <select class="form_select" name="availableLessonId">
                   <option th:each="availableLesson : ${availableLessons}" th:value="${availableLesson.id()}" th:text="${availableLesson.day()} + ' ' +
-                  ${availableLesson.appointmentTime()} + ' ' + ${availableLesson.subjectDto().courseDto().name()}"></option>
+                  ${availableLesson.appointmentTime()} + ' ' + ${availableLesson.courseDto().name()}"></option>
         </select>
         <button type="submit" class="small_button add_button">Add</button>
     </form>
     <div id="current_lessons" class="current_lessons_container">
-        <form class="current_lessons_form" th:each="lesson : ${timetable.lessonDtoList()}" th:action="@{/timetables/{timetableId}/lesson-deletion/{lessonId}(timetableId = ${timetable.id()}, lessonId = ${lesson.id()})}" th:method='POST'>
-            <span class="current_lessons_text" th:text="${lesson.day()} + ' ' + ${lesson.appointmentTime()} + ' ' + ${lesson.subjectDto().courseDto().name()}"></span>
+        <form class="current_lessons_form" th:each="lesson : ${timetable.lessonDtoList()}" th:action="@{/admin-panel/timetables/{timetableId}/lesson-deletion/{lessonId}(timetableId = ${timetable.id()}, lessonId = ${lesson.id()})}" th:method='POST'>
+            <span class="current_lessons_text" th:text="${lesson.day()} + ' ' + ${lesson.appointmentTime()} + ' ' + ${lesson.courseDto().name()}"></span>
             <button type="submit" class="small_button delete_button">Delete</button>
         </form>
     </div>

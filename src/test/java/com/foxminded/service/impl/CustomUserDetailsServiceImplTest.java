@@ -56,14 +56,12 @@ class CustomUserDetailsServiceImplTest {
 
     @Test
     void testIsNameAvailable_Success() {
-        assertTrue(userDetailsService.isNameAvailable("previous name", "previous name"));
-
         when(studentRepository.findByName("some non-existing name")).thenReturn(Optional.empty());
         when(teacherRepository.findByName("some non-existing name")).thenReturn(Optional.empty());
-        assertTrue(userDetailsService.isNameAvailable("some non-existing name", "previous name"));
+        assertTrue(userDetailsService.isNameAvailable("some non-existing name"));
 
         when(studentRepository.findByName("some existing name")).thenReturn(Optional.of(student));
         when(teacherRepository.findByName("some existing name")).thenReturn(Optional.empty());
-        assertFalse(userDetailsService.isNameAvailable("some existing name", "previous name"));
+        assertFalse(userDetailsService.isNameAvailable("some existing name"));
     }
 }

@@ -4,8 +4,6 @@ import com.foxminded.dto.LessonDto;
 import com.foxminded.mapper.LessonMapper;
 import com.foxminded.entity.Lesson;
 import com.foxminded.mapper.LessonMapperImpl;
-import com.foxminded.mapper.SubjectMapper;
-import com.foxminded.mapper.SubjectMapperImpl;
 import com.foxminded.repository.LessonRepository;
 import com.foxminded.service.LessonService;
 import org.junit.jupiter.api.BeforeEach;
@@ -18,7 +16,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.time.DayOfWeek;
 import java.time.LocalTime;
-import java.util.ArrayList;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -30,7 +27,7 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = {
-        SubjectMapperImpl.class
+        LessonMapperImpl.class
 })
 class LessonServiceImplTest {
 
@@ -38,18 +35,17 @@ class LessonServiceImplTest {
     @Mock
     private LessonRepository lessonRepository;
     @Autowired
-    private SubjectMapper subjectMapper;
     private LessonMapper lessonMapper;
 
     @BeforeEach
     void init() {
-        lessonMapper = new LessonMapperImpl(subjectMapper);
         lessonService = new LessonServiceImpl(lessonRepository, lessonMapper);
     }
 
     @Test
     void testAddLesson_Success() {
-        LessonDto testLessonDto = new LessonDto(0L, null, DayOfWeek.MONDAY, LocalTime.now());
+        LessonDto testLessonDto = new LessonDto(0L, null,
+                null, null, DayOfWeek.MONDAY, LocalTime.now());
         when(lessonRepository.findById(testLessonDto.id())).thenReturn(Optional.empty());
         lessonService.addLesson(testLessonDto);
         verify(lessonRepository).save(any());
@@ -57,7 +53,8 @@ class LessonServiceImplTest {
 
     @Test
     void testAddLesson_LessonAlreadyExists() {
-        LessonDto testLessonDto = new LessonDto(0L, null, DayOfWeek.MONDAY, LocalTime.now());
+        LessonDto testLessonDto = new LessonDto(0L, null,
+                null, null, DayOfWeek.MONDAY, LocalTime.now());
         Lesson testLesson = lessonMapper.mapToLesson(testLessonDto);
         when(lessonRepository.findById(testLessonDto.id())).thenReturn(Optional.of(testLesson));
         assertThrows(IllegalStateException.class, () -> lessonService.addLesson(testLessonDto));
@@ -85,7 +82,8 @@ class LessonServiceImplTest {
 
     @Test
     void testUpdateLesson_Success() {
-        LessonDto testLessonDto = new LessonDto(0L, null, DayOfWeek.MONDAY, LocalTime.now());
+        LessonDto testLessonDto = new LessonDto(0L, null,
+                null, null, DayOfWeek.MONDAY, LocalTime.now());
         Lesson testLesson = lessonMapper.mapToLesson(testLessonDto);
         when(lessonRepository.findById(testLessonDto.id())).thenReturn(Optional.of(testLesson));
         lessonService.updateLesson(testLessonDto);
@@ -94,7 +92,8 @@ class LessonServiceImplTest {
 
     @Test
     void testUpdateLesson_LessonDoesNotExist() {
-        LessonDto testLessonDto = new LessonDto(0L, null, DayOfWeek.MONDAY, LocalTime.now());
+        LessonDto testLessonDto = new LessonDto(0L, null,
+                null, null, DayOfWeek.MONDAY, LocalTime.now());
         when(lessonRepository.findById(testLessonDto.id())).thenReturn(Optional.empty());
         assertThrows(IllegalStateException.class, () -> lessonService.updateLesson(testLessonDto));
     }

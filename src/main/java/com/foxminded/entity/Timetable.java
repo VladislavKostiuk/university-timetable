@@ -36,7 +36,6 @@ public class Timetable {
     @Column(name = "qualifying_name")
     private String qualifyingName;
 
-//    @ManyToMany(mappedBy = "timetables")
 @ManyToMany
 @JoinTable(
         name = "timetable_lesson",

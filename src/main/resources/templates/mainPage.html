@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org">
+      xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <title>Main Page</title>
@@ -15,14 +15,47 @@
     <header th:replace="~{fragments/header.html :: header}"></header>
     <div class="title_container">
         <h2 class="title">Main Page</h2>
-        <form th:method="POST" th:action="@{/init}">
-            <input class="title_button" type="submit" value="Init db with basic data">
-        </form>
     </div>
     <div class="info">
-        <p>
-            To be able to see your timetable you need to be <a href="/login">logged</a>
+        <p class="info_text">
+            Uni-Table is a website designed for schools and universities to manage timetables easily.
+            It provides students and teachers with a clear view of their schedules.
+            Uni-Table simplifies timetable management for educational institutions, ensuring smooth operations for everyone involved.
         </p>
     </div>
+    <div class="courses">
+        <h2 class="subtitle">About courses</h2>
+        <div class="courses_wrapper wrapper">
+          <i class="fa-solid fa-angle-left left"></i>
+          <ul class="courses_carousel carousel">
+              <li class="card" th:each="course : ${allCourses}">
+                  <h2 th:text="${course.name()}"></h2>
+                  <span th:text="${course.description()}"></span>
+              </li>
+          </ul>
+          <i class="fa-solid fa-angle-right right"></i>
+        </div>
+    </div>
+
+    <div class="teachers">
+        <h2 class="subtitle">About teachers</h2>
+        <div class="teachers_wrapper wrapper">
+            <i class="fa-solid fa-angle-left left"></i>
+            <ul class="teachers_carousel carousel">
+                <li class="card" th:each="teacher : ${allTeachers}">
+                    <h2 th:text="${teacher.name()}"></h2>
+                    <ul class="teachers_course_list">
+                        <li th:each="course : ${teacher.courseDtoList()}" th:text="${course.name()}"></li>
+                    </ul>
+                </li>
+            </ul>
+            <i class="fa-solid fa-angle-right right"></i>
+        </div>
+    </div>
+
+
+    <script src="https://kit.fontawesome.com/ddabb179d7.js" crossorigin="anonymous"></script>
+    <script th:src="@{/js/courseCarousel.js}"></script>
+    <script th:src="@{/js/teacherCarousel.js}"></script>
 </body>
 </html>

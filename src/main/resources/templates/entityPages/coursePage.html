@@ -13,10 +13,25 @@
 </head>
 <body>
     <header th:replace="~{fragments/header.html :: header}"></header>
+    <div class="entity_options">
+        <a class="nav_bar_item" href="/admin-panel/students">Students</a>
+        <a class="nav_bar_item" href="/admin-panel/teachers">Teachers</a>
+        <a class="nav_bar_item" href="/admin-panel/groups">Groups</a>
+        <a class="nav_bar_item" href="/admin-panel/courses">Courses</a>
+        <a class="nav_bar_item" href="/admin-panel/lessons">Lessons</a>
+        <a class="nav_bar_item" href="/admin-panel/timetables">Timetables</a>
+    </div>
     <div class="title_container">
         <h2 class="title">Courses</h2>
-        <a sec:authorize="hasAuthority('ADMIN')" class="title_button" href="/courses/course-creation">Create course</a>
-        <a class="title_button" href="/">To main menu</a>
+        <a sec:authorize="hasAuthority('ADMIN')" class="title_button" href="/admin-panel/courses/course-creation">Create course</a>
+        <div class="search_section">
+            <h4 class="search_title">Search section</h4>
+            <form th:action="@{/admin-panel/courses/search}" th:method="POST">
+                <input name="courseName" class="search_input" type="text" placeholder="Enter course name">
+                <input class="search_submit" type="submit">
+            </form>
+            <a class="search_reset" href="/admin-panel/courses">Reset</a>
+        </div>
     </div>
     <div class="table_container">
         <table class="content-table">
@@ -34,10 +49,10 @@
                 <td th:text="${course.name()}"></td>
                 <td th:text="${course.description()}"></td>
                 <td class="update_button_container">
-                    <form sec:authorize="hasAuthority('ADMIN')" class="role_form" th:method="GET" th:action="@{/courses/course-update/{courseId}(courseId = ${course.id()})}">
+                    <form sec:authorize="hasAuthority('ADMIN')" class="role_form" th:method="GET" th:action="@{/admin-panel/courses/course-update/{courseId}(courseId = ${course.id()})}">
                     <input class="update_button_submit" type="submit" value="Update">
                 </form>
-                <form sec:authorize="hasAuthority('ADMIN')" class="role_form" th:method="POST" th:action="@{/courses/course-deletion/{courseId}(courseId = ${course.id()})}">
+                <form sec:authorize="hasAuthority('ADMIN')" class="role_form" th:method="POST" th:action="@{/admin-panel/courses/course-deletion/{courseId}(courseId = ${course.id()})}">
                     <input class="delete_button_submit" type="submit" value="Delete">
                 </form>
                 </td>

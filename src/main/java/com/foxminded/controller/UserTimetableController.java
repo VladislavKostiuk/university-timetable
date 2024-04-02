@@ -30,7 +30,7 @@ public class UserTimetableController {
     private final TeacherService teacherService;
     private final StudentService studentService;
 
-    @GetMapping("/user-timetable")
+    @GetMapping("/timetable")
     public String showUserTimetable(Model model) {
         String qualifyingName = defineQualifyingName();
         List<TimetableRowDto> timetableRows = null;

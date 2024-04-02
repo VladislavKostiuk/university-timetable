@@ -15,25 +15,34 @@
 <header th:replace="~{fragments/header.html :: header}"></header>
 <div class="title_container">
     <h2 class="title">Update lesson</h2>
-    <a class="title_button" href="/">To main menu</a>
+    <a class="title_button" href="/admin-panel/lessons">To admin panel</a>
 </div>
 <div class="form_container">
     <div th:if="${param.error}">
         <p class="error_text">Lesson with these options already exists</p>
     </div>
-    <form class="form" th:action="@{/lessons/lesson-update}" th:method='POST'>
+    <form class="form" th:action="@{/admin-panel/lessons/lesson-update}" th:method='POST'>
         <input type="hidden" th:value="${lesson.id()}" name="lessonId">
-        <label>Subject</label>
-        <select class="form_select" name="subject">
-            <option th:selected="${lesson.subjectDto().id().equals(subject.id())}" th:each="subject : ${allSubjects}" th:value="${subject.id()}" th:text="${subject.courseDto().name() + '   ' +
-            subject.teacherDto().name() + '   ' + subject.groupDto().name()}"></option>
+        <label>Course</label>
+        <select class="form_select" name="course">
+            <option th:each="course : ${allCourses}" th:selected="${lesson.courseDto().name().equals(course.name())}" th:value="${course.id()}" th:text="${course.name()}"></option>
+        </select>
+        <label>Teacher</label>
+        <select class="form_select" name="teacher">
+            <option th:each="teacher : ${allTeachers}" th:selected="${lesson.teacherDto().name().equals(teacher.name())}" th:value="${teacher.id()}" th:text="${teacher.name()}"></option>
+        </select>
+        <label>Group</label>
+        <select class="form_select" name="group">
+            <option th:each="group : ${allGroups}" th:selected="${lesson.groupDto().name().equals(group.name())}" th:value="${group.id()}" th:text="${group.name()}"></option>
         </select>
         <label>Day of week</label>
         <select class="form_select" name="dayOfWeek">
             <option th:selected="${lesson.day().equals(dayOfWeek)}" th:each="dayOfWeek : ${allDaysOfWeek}" th:value="${dayOfWeek}" th:text="${dayOfWeek}"></option>
         </select>
         <label>Time</label>
-        <input th:value="${lesson.appointmentTime()}" type="time" name="time">
+        <select class="form_select" name="time">
+            <option th:selected="${timeOption.equals(lesson.appointmentTime().toString())}" th:each="timeOption : ${timeOptions}" th:value="${timeOption}" th:text="${timeOption}"></option>
+        </select>
         <input class="submit_button" name="submit" type="submit" value="Update" />
     </form>
 </div>

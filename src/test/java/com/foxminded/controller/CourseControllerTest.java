@@ -1,7 +1,6 @@
 package com.foxminded.controller;
 
 import com.foxminded.dto.CourseDto;
-import com.foxminded.dto.SubjectDto;
 import com.foxminded.service.CourseService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -51,7 +50,7 @@ class CourseControllerTest {
         List<CourseDto> expectedCourses = new ArrayList<>(List.of(testCourseDto));
         given(courseService.getAllCourses()).willReturn(expectedCourses);
 
-        mockMvc.perform(get("/courses"))
+        mockMvc.perform(get("/admin-panel/courses"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("entityPages/coursePage"))
                 .andExpect(model().attribute("allCourses", expectedCourses));
@@ -60,7 +59,7 @@ class CourseControllerTest {
     @Test
     void testShowCreatePage_Success() throws Exception {
 
-        mockMvc.perform(get("/courses/course-creation"))
+        mockMvc.perform(get("/admin-panel/courses/course-creation"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("createPages/createCoursePage"));
     }
@@ -68,39 +67,47 @@ class CourseControllerTest {
     @Test
     void testShowUpdatePage_Success() throws Exception {
         given(courseService.getCourseById(1L)).willReturn(testCourseDto);
-        mockMvc.perform(get("/courses/course-update/1"))
+        mockMvc.perform(get("/admin-panel/courses/course-update/1"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("updatePages/updateCoursePage"))
                 .andExpect(model().attribute("course", testCourseDto));
     }
 
     @Test
+    void testSearch_Success() throws Exception {
+        mockMvc.perform(post("/admin-panel/courses/search")
+                        .param("courseName", "some course"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(view().name("redirect:/admin-panel/courses?course-name=some course"));
+    }
+
+    @Test
     void testCreateCourse_Success() throws Exception {
         given(courseService.getAllCourses()).willReturn(List.of(testCourseDto));
-        mockMvc.perform(post("/courses/course-creation")
+        mockMvc.perform(post("/admin-panel/courses/course-creation")
                         .param("name", "name")
                         .param("description", "description"))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(view().name("redirect:/courses"));
+                .andExpect(view().name("redirect:/admin-panel/courses"));
         verify(courseService, times(1)).addCourse(any(CourseDto.class));
     }
 
     @Test
     void testCreateCourse_CourseWithTheseParamsAlreadyExists() throws Exception {
         given(courseService.getAllCourses()).willReturn(List.of(testCourseDto));
-        mockMvc.perform(post("/courses/course-creation")
+        mockMvc.perform(post("/admin-panel/courses/course-creation")
                         .param("name", "medicine")
                         .param("description", "desc"))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(view().name("redirect:/courses/course-creation?error=true"));
+                .andExpect(view().name("redirect:/admin-panel/courses/course-creation?error=true"));
         verify(courseService, times(0)).addCourse(any(CourseDto.class));
     }
 
     @Test
     void testDeleteCourse_Success() throws Exception {
-        mockMvc.perform(post("/courses/course-deletion/1"))
+        mockMvc.perform(post("/admin-panel/courses/course-deletion/1"))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(view().name("redirect:/courses"));
+                .andExpect(view().name("redirect:/admin-panel/courses"));
         verify(courseService, times(1)).deleteCourseById(1L);
     }
 
@@ -108,12 +115,12 @@ class CourseControllerTest {
     void testUpdateCourse_Success() throws Exception {
         given(courseService.getAllCourses()).willReturn(List.of(testCourseDto));
         given(courseService.getCourseById(1L)).willReturn(testCourseDto);
-        mockMvc.perform(post("/courses/course-update")
+        mockMvc.perform(post("/admin-panel/courses/course-update")
                         .param("courseId", "1")
                         .param("name", "name")
                         .param("description", "description"))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(view().name("redirect:/courses"));
+                .andExpect(view().name("redirect:/admin-panel/courses"));
         verify(courseService, times(1)).updateCourse(any(CourseDto.class));
     }
 
@@ -121,12 +128,12 @@ class CourseControllerTest {
     void testUpdateCourse_CourseWithTheseParamsAlreadyExists() throws Exception {
         given(courseService.getAllCourses()).willReturn(List.of(testCourseDto));
         given(courseService.getCourseById(1L)).willReturn(testCourseDto);
-        mockMvc.perform(post("/courses/course-update")
+        mockMvc.perform(post("/admin-panel/courses/course-update")
                         .param("courseId", "1")
                         .param("name", "medicine")
                         .param("description", "desc"))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(view().name("redirect:/courses/course-update/1?error=true"));
+                .andExpect(view().name("redirect:/admin-panel/courses/course-update/1?error=true"));
         verify(courseService, times(0)).updateCourse(any(CourseDto.class));
     }
 

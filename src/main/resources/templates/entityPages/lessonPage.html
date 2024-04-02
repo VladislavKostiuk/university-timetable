@@ -13,10 +13,27 @@
 </head>
 <body>
     <header th:replace="~{fragments/header.html :: header}"></header>
+    <div class="entity_options">
+        <a class="nav_bar_item" href="/admin-panel/students">Students</a>
+        <a class="nav_bar_item" href="/admin-panel/teachers">Teachers</a>
+        <a class="nav_bar_item" href="/admin-panel/groups">Groups</a>
+        <a class="nav_bar_item" href="/admin-panel/courses">Courses</a>
+        <a class="nav_bar_item" href="/admin-panel/lessons">Lessons</a>
+        <a class="nav_bar_item" href="/admin-panel/timetables">Timetables</a>
+    </div>
     <div class="title_container">
         <h2 class="title">Lessons</h2>
-        <a sec:authorize="hasAuthority('ADMIN')" class="title_button" href="/lessons/lesson-creation">Create lesson</a>
-        <a class="title_button" href="/">To main menu</a>
+        <a sec:authorize="hasAuthority('ADMIN')" class="title_button" href="/admin-panel/lessons/lesson-creation">Create lesson</a>
+        <div class="search_section">
+            <h4 class="search_title">Search section</h4>
+            <form th:action="@{/admin-panel/lessons/search}" th:method="POST">
+                <input name="courseName" class="search_input" type="text" placeholder="Enter course name">
+                <input name="groupName" class="search_input" type="text" placeholder="Enter group name">
+                <input name="teacherName" class="search_input" type="text" placeholder="Enter teacher name">
+                <input class="search_submit" type="submit">
+            </form>
+            <a class="search_reset" href="/admin-panel/lessons">Reset</a>
+        </div>
     </div>
     <div class="table_container">
         <table class="content-table">
@@ -34,16 +51,16 @@
             <tbody>
             <tr th:each="lesson : ${allLessons}">
                 <td th:text="${lesson.id()}"></td>
-                <td th:if="${lesson.subjectDto() != null}" th:text="${lesson.subjectDto().courseDto().name()}"></td>
-                <td th:if="${lesson.subjectDto() != null}" th:text="${lesson.subjectDto().groupDto().name()}"></td>
-                <td th:if="${lesson.subjectDto() != null}" th:text="${lesson.subjectDto().teacherDto().name()}"></td>
+                <td th:text="${lesson.courseDto().name()}"></td>
+                <td th:text="${lesson.groupDto().name()}"></td>
+                <td th:text="${lesson.teacherDto().name()}"></td>
                 <td th:text="${lesson.day()}"></td>
                 <td th:text="${lesson.appointmentTime()}"></td>
                 <td class="update_button_container">
-                    <form sec:authorize="hasAuthority('ADMIN')" class="role_form" th:method="GET" th:action="@{/lessons/lesson-update/{lessonId}(lessonId = ${lesson.id()})}">
+                    <form sec:authorize="hasAuthority('ADMIN')" class="role_form" th:method="GET" th:action="@{/admin-panel/lessons/lesson-update/{lessonId}(lessonId = ${lesson.id()})}">
                         <input class="update_button_submit" type="submit" value="Update">
                     </form>
-                    <form sec:authorize="hasAuthority('ADMIN')" class="role_form" th:method="POST" th:action="@{/lessons/lesson-deletion/{lessonId}(lessonId = ${lesson.id()})}">
+                    <form sec:authorize="hasAuthority('ADMIN')" class="role_form" th:method="POST" th:action="@{/admin-panel/lessons/lesson-deletion/{lessonId}(lessonId = ${lesson.id()})}">
                         <input class="delete_button_submit" type="submit" value="Delete">
                     </form>
                 </td>

@@ -60,7 +60,7 @@ public class Teacher implements UserDetails {
     private List<Course> courses;
 
     @OneToMany(mappedBy = "teacher", cascade = CascadeType.REMOVE)
-    private List<Subject> subjects;
+    private List<Lesson> lessons;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

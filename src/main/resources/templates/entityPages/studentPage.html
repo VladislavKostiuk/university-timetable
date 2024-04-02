@@ -13,15 +13,26 @@
 </head>
 <body>
     <header th:replace="~{fragments/header.html :: header}"></header>
+    <div class="entity_options">
+        <a class="nav_bar_item" href="/admin-panel/students">Students</a>
+        <a class="nav_bar_item" href="/admin-panel/teachers">Teachers</a>
+        <a class="nav_bar_item" href="/admin-panel/groups">Groups</a>
+        <a class="nav_bar_item" href="/admin-panel/courses">Courses</a>
+        <a class="nav_bar_item" href="/admin-panel/lessons">Lessons</a>
+        <a class="nav_bar_item" href="/admin-panel/timetables">Timetables</a>
+    </div>
     <div class="title_container">
         <h2 class="title">Students</h2>
+        <a sec:authorize="hasAuthority('ADMIN')" class="title_button" href="/admin-panel/students/student-creation">Create student</a>
         <div class="search_section">
-        <form th:action="@{/students/search-by-group}" th:method="POST">
-            <input name="searchText" class="search_input" type="text" placeholder="Enter group name">
+            <h4 class="search_title">Search section</h4>
+        <form th:action="@{/admin-panel/students/search}" th:method="POST">
+            <input name="studentName" class="search_input" type="text" placeholder="Enter student name">
+            <input name="groupName" class="search_input" type="text" placeholder="Enter group name">
             <input class="search_submit" type="submit">
         </form>
-    </div>
-        <a class="title_button" href="/">To main menu</a>
+            <a class="search_reset" href="/admin-panel/students">Reset</a>
+        </div>
     </div>
     <div class="table_container">
         <table class="content-table">
@@ -49,10 +60,10 @@
                     </p>
                 </td>
                 <td class="update_button_container">
-                    <form sec:authorize="hasAuthority('ADMIN')" class="role_form" th:method="GET" th:action="@{/students/student-update/{studentId}(studentId = ${student.id()})}">
+                    <form sec:authorize="hasAuthority('ADMIN')" class="role_form" th:method="GET" th:action="@{/admin-panel/students/student-update/{studentId}(studentId = ${student.id()})}">
                         <input class="update_button_submit" type="submit" value="Update">
                     </form>
-                    <form sec:authorize="hasAuthority('ADMIN')" class="role_form" th:method="POST" th:action="@{/students/student-deletion/{studentId}(studentId = ${student.id()})}">
+                    <form sec:authorize="hasAuthority('ADMIN')" class="role_form" th:method="POST" th:action="@{/admin-panel/students/student-deletion/{studentId}(studentId = ${student.id()})}">
                         <input class="delete_button_submit" type="submit" value="Delete">
                     </form>
                 </td>

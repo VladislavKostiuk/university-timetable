@@ -31,7 +31,7 @@ public class Course {
     private String description;
 
     @OneToMany(mappedBy = "course", cascade = CascadeType.REMOVE)
-    private List<Subject> subjects;
+    private List<Lesson> lessons;
 
     @ManyToMany(mappedBy = "courses")
     private List<Student> students;

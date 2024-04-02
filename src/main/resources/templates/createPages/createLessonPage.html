@@ -15,24 +15,33 @@
 <header th:replace="~{fragments/header.html :: header}"></header>
 <div class="title_container">
     <h2 class="title">Create lesson</h2>
-    <a class="title_button" href="/">To main menu</a>
+    <a class="title_button" href="/admin-panel/lessons">To admin panel</a>
 </div>
 <div class="form_container">
     <div th:if="${param.error}">
         <p class="error_text">Lesson with these options already exists</p>
     </div>
-    <form class="form" th:action="@{/lessons/lesson-creation}" th:method='POST'>
-        <label>Subject</label>
-        <select class="form_select" name="subject">
-            <option th:each="subject : ${allSubjects}" th:value="${subject.id()}" th:text="${subject.courseDto().name() + ' ' +
-            subject.teacherDto().name() + ' ' + subject.groupDto().name()}"></option>
+    <form class="form" th:action="@{/admin-panel/lessons/lesson-creation}" th:method='POST'>
+        <label>Course</label>
+        <select class="form_select" name="course">
+            <option th:each="course : ${allCourses}" th:value="${course.id()}" th:text="${course.name()}"></option>
+        </select>
+        <label>Teacher</label>
+        <select class="form_select" name="teacher">
+            <option th:each="teacher : ${allTeachers}" th:value="${teacher.id()}" th:text="${teacher.name()}"></option>
+        </select>
+        <label>Group</label>
+        <select class="form_select" name="group">
+            <option th:each="group : ${allGroups}" th:value="${group.id()}" th:text="${group.name()}"></option>
         </select>
         <label>Day of week</label>
         <select class="form_select" name="dayOfWeek">
             <option th:each="dayOfWeek : ${allDaysOfWeek}" th:value="${dayOfWeek}" th:text="${dayOfWeek}"></option>
         </select>
         <label>Time</label>
-        <input type="time" name="time">
+        <select class="form_select" name="time">
+            <option th:each="timeOption : ${timeOptions}" th:value="${timeOption}" th:text="${timeOption}"></option>
+        </select>
         <input class="submit_button" name="submit" type="submit" value="Create" />
     </form>
 </div>

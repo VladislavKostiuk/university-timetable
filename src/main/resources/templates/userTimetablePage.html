@@ -22,35 +22,83 @@
   <table class="content-table">
     <thead>
     <tr>
-      <th>Time</th>
-      <th>Monday</th>
-      <th>Tuesday</th>
-      <th>Wednesday</th>
-      <th>Thursday</th>
-      <th>Friday</th>
-      <th>Saturday</th>
+      <th></th>
+      <th class="timetable_header">Monday</th>
+      <th class="timetable_header">Tuesday</th>
+      <th class="timetable_header">Wednesday</th>
+      <th class="timetable_header">Thursday</th>
+      <th class="timetable_header">Friday</th>
+      <th class="timetable_header">Saturday</th>
     </tr>
     </thead>
     <tbody>
-    <tr th:each="timetableRow : ${timetableRows}">
+    <tr class="timetable_row" th:each="timetableRow : ${timetableRows}">
       <td th:text="${timetableRow.time()}"></td>
-      <td>
-        <p th:if="${timetableRow.mondayLesson() != null}" th:text="${timetableRow.mondayLesson().subjectDto().courseDto().name()}"></p>
+      <td class="timetable_item">
+        <p th:if="${timetableRow.mondayLesson() != null}">
+          <b>
+            <span th:text="${timetableRow.mondayLesson().courseDto().name()}"></span>
+          <br/>
+          <span th:text="${timetableRow.mondayLesson().teacherDto().name()}"></span>
+          <br/>
+          <span th:text="${timetableRow.mondayLesson().groupDto().name()}"></span>
+          </b>
+        </p>
       </td>
-      <td>
-        <p th:if="${timetableRow.tuesdayLesson() != null}" th:text="${timetableRow.tuesdayLesson().subjectDto().courseDto().name()}"></p>
+      <td class="timetable_item">
+        <p th:if="${timetableRow.tuesdayLesson() != null}">
+          <b>
+            <span th:text="${timetableRow.tuesdayLesson().courseDto().name()}"></span>
+          <br/>
+          <span th:text="${timetableRow.tuesdayLesson().teacherDto().name()}"></span>
+          <br/>
+          <span th:text="${timetableRow.tuesdayLesson().groupDto().name()}"></span>
+          </b>
+        </p>
       </td>
-      <td>
-        <p th:if="${timetableRow.wednesdayLesson() != null}" th:text="${timetableRow.wednesdayLesson().subjectDto().courseDto().name()}"></p>
+      <td class="timetable_item">
+        <p th:if="${timetableRow.wednesdayLesson() != null}">
+          <b>
+            <span th:text="${timetableRow.wednesdayLesson().courseDto().name()}"></span>
+          <br/>
+          <span th:text="${timetableRow.wednesdayLesson().teacherDto().name()}"></span>
+          <br/>
+          <span th:text="${timetableRow.wednesdayLesson().groupDto().name()}"></span>
+          </b>
+        </p>
       </td>
-      <td>
-        <p th:if="${timetableRow.thursdayLesson() != null}" th:text="${timetableRow.thursdayLesson().subjectDto().courseDto().name()}"></p>
+      <td class="timetable_item">
+        <p th:if="${timetableRow.thursdayLesson() != null}">
+          <b>
+          <span th:text="${timetableRow.thursdayLesson().courseDto().name()}"></span>
+          <br/>
+          <span th:text="${timetableRow.thursdayLesson().teacherDto().name()}"></span>
+          <br/>
+          <span th:text="${timetableRow.thursdayLesson().groupDto().name()}"></span>
+          </b>
+        </p>
       </td>
-      <td>
-        <p th:if="${timetableRow.fridayLesson() != null}" th:text="${timetableRow.fridayLesson().subjectDto().courseDto().name()}"></p>
+      <td class="timetable_item">
+        <p th:if="${timetableRow.fridayLesson() != null}">
+          <b>
+            <span th:text="${timetableRow.fridayLesson().courseDto().name()}"></span>
+          <br/>
+          <span th:text="${timetableRow.fridayLesson().teacherDto().name()}"></span>
+          <br/>
+          <span th:text="${timetableRow.fridayLesson().groupDto().name()}"></span>
+          </b>
+        </p>
       </td>
-      <td>
-        <p th:if="${timetableRow.sundayLesson()} != null" th:text="${timetableRow.sundayLesson().subjectDto().courseDto().name()}"></p>
+      <td class="timetable_item">
+        <p th:if="${timetableRow.sundayLesson()} != null">
+          <b>
+            <span th:text="${timetableRow.sundayLesson().courseDto().name()}"></span>
+          <br/>
+          <span th:text="${timetableRow.sundayLesson().teacherDto().name()}"></span>
+          <br/>
+          <span th:text="${timetableRow.sundayLesson().groupDto().name()}"></span>
+          </b>
+        </p>
       </td>
     </tr>
     </tbody>

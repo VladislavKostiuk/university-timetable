@@ -48,10 +48,6 @@ public class LessonServiceImpl implements LessonService {
                         ErrorMessages.ENTITY_WAS_NOT_FOUND_BY_ID, entityName, id
                 )));
 
-        for (var timetable : lesson.getTimetables()) {
-            timetable.getLessons().remove(lesson);
-        }
-
         lessonRepository.deleteById(id);
     }
 

@@ -13,10 +13,25 @@
 </head>
 <body>
     <header th:replace="~{fragments/header.html :: header}"></header>
+    <div class="entity_options">
+        <a class="nav_bar_item" href="/admin-panel/students">Students</a>
+        <a class="nav_bar_item" href="/admin-panel/teachers">Teachers</a>
+        <a class="nav_bar_item" href="/admin-panel/groups">Groups</a>
+        <a class="nav_bar_item" href="/admin-panel/courses">Courses</a>
+        <a class="nav_bar_item" href="/admin-panel/lessons">Lessons</a>
+        <a class="nav_bar_item" href="/admin-panel/timetables">Timetables</a>
+    </div>
     <div class="title_container">
         <h2 class="title">Groups</h2>
-        <a sec:authorize="hasAuthority('ADMIN')" class="title_button" href="/groups/group-creation">Create group</a>
-        <a class="title_button" href="/">To main menu</a>
+        <a sec:authorize="hasAuthority('ADMIN')" class="title_button" href="/admin-panel/groups/group-creation">Create group</a>
+        <div class="search_section">
+            <h4 class="search_title">Search section</h4>
+            <form th:action="@{/admin-panel/groups/search}" th:method="POST">
+                <input name="groupName" class="search_input" type="text" placeholder="Enter group name">
+                <input class="search_submit" type="submit">
+            </form>
+            <a class="search_reset" href="/admin-panel/groups">Reset</a>
+        </div>
     </div>
     <div class="table_container">
         <table class="content-table">
@@ -32,10 +47,10 @@
                 <td th:text="${group.id()}"></td>
                 <td th:text="${group.name()}"></td>
                 <td class="update_button_container">
-                    <form sec:authorize="hasAuthority('ADMIN')" class="role_form" th:method="GET" th:action="@{/groups/group-update/{groupId}(groupId = ${group.id()})}">
+                    <form sec:authorize="hasAuthority('ADMIN')" class="role_form" th:method="GET" th:action="@{/admin-panel/groups/group-update/{groupId}(groupId = ${group.id()})}">
                     <input class="update_button_submit" type="submit" value="Update">
                 </form>
-                <form sec:authorize="hasAuthority('ADMIN')" class="role_form" th:method="POST" th:action="@{/groups/group-deletion/{groupId}(groupId = ${group.id()})}">
+                <form sec:authorize="hasAuthority('ADMIN')" class="role_form" th:method="POST" th:action="@{/admin-panel/groups/group-deletion/{groupId}(groupId = ${group.id()})}">
                     <input class="delete_button_submit" type="submit" value="Delete">
                 </form>
                 </td>

@@ -13,10 +13,25 @@
 </head>
 <body>
   <header th:replace="~{fragments/header.html :: header}"></header>
+  <div class="entity_options">
+      <a class="nav_bar_item" href="/admin-panel/students">Students</a>
+      <a class="nav_bar_item" href="/admin-panel/teachers">Teachers</a>
+      <a class="nav_bar_item" href="/admin-panel/groups">Groups</a>
+      <a class="nav_bar_item" href="/admin-panel/courses">Courses</a>
+      <a class="nav_bar_item" href="/admin-panel/lessons">Lessons</a>
+      <a class="nav_bar_item" href="/admin-panel/timetables">Timetables</a>
+    </div>
     <div class="title_container">
         <h2 class="title">Timetables</h2>
-        <a sec:authorize="hasAuthority('ADMIN')" class="title_button" href="/timetables/timetable-creation">Create timetable</a>
-        <a class="title_button" href="/">To main menu</a>
+        <a sec:authorize="hasAuthority('ADMIN')" class="title_button" href="/admin-panel/timetables/timetable-creation">Create timetable</a>
+        <div class="search_section">
+            <h4 class="search_title">Search section</h4>
+            <form th:action="@{/admin-panel/timetables/search}" th:method="POST">
+                <input name="qualifyingName" class="search_input" type="text" placeholder="Enter qualifying name">
+                <input class="search_submit" type="submit">
+            </form>
+            <a class="search_reset" href="/admin-panel/timetables">Reset</a>
+        </div>
     </div>
     <div class="table_container">
         <table class="content-table">
@@ -36,14 +51,14 @@
               <td th:text="${timetable.qualifyingName()}"></td>
               <td>
                 <p th:each="lesson : ${timetable.lessonDtoList()}">
-                  <span th:text="${lesson.day()} + ' ' + ${lesson.appointmentTime()} + ' ' + ${lesson.subjectDto().courseDto().name()}"></span>
+                  <span th:text="${lesson.day()} + ' ' + ${lesson.appointmentTime()} + ' ' + ${lesson.courseDto().name()}"></span>
                 </p>
               </td>
                 <td class="update_button_container">
-                    <form sec:authorize="hasAuthority('ADMIN')" class="role_form" th:method="GET" th:action="@{/timetables/timetable-update/{timetableId}(timetableId = ${timetable.id()})}">
+                    <form sec:authorize="hasAuthority('ADMIN')" class="role_form" th:method="GET" th:action="@{/admin-panel/timetables/timetable-update/{timetableId}(timetableId = ${timetable.id()})}">
                         <input class="update_button_submit" type="submit" value="Update">
                     </form>
-                    <form sec:authorize="hasAuthority('ADMIN')" class="role_form" th:method="POST" th:action="@{/timetables/timetable-deletion/{timetableId}(timetableId = ${timetable.id()})}">
+                    <form sec:authorize="hasAuthority('ADMIN')" class="role_form" th:method="POST" th:action="@{/admin-panel/timetables/timetable-deletion/{timetableId}(timetableId = ${timetable.id()})}">
                         <input class="delete_button_submit" type="submit" value="Delete">
                     </form>
                 </td>

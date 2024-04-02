@@ -73,17 +73,6 @@ public class BasicDataGenerator {
         return teachers;
     }
 
-    public List<Subject> generateBasicSubjects(int amount) {
-        List<Subject> subjects = new ArrayList<>();
-        for (int i = 0; i < amount; i++) {
-            Subject subject = new Subject();
-            subject.setId(i + 1L);
-            subjects.add(subject);
-        }
-
-        return subjects;
-    }
-
     public List<Lesson> generateBasicLessons(int amount) {
         List<Lesson> lessons = new ArrayList<>();
         for (int i = 0; i < amount; i++) {
@@ -126,8 +115,8 @@ public class BasicDataGenerator {
     }
 
     private void initCourseNames() {
-        String[] courseNamesArr = new String[] {"MATH", "BIOLOGY", "FINANCE", "ART",
-                "ARCHITECTURE", "ENGINEERING", "SCIENCE", "MANAGEMENT", "ECONOMICS", "MEDICINE"};
+        String[] courseNamesArr = new String[] {"Math", "Biology", "Finance", "Art",
+                "Architecture", "Engineering", "Science", "Management", "Economics", "Medicine"};
         courseNames.addAll(Arrays.asList(courseNamesArr));
     }
 

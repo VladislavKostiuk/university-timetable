@@ -15,13 +15,13 @@
     <header th:replace="~{fragments/header.html :: header}"></header>
     <div class="title_container">
         <h2 class="title">Create course</h2>
-        <a class="title_button" href="/">To main menu</a>
+        <a class="title_button" href="/admin-panel/courses">To admin panel</a>
     </div>
     <div class="form_container">
         <div th:if="${param.error}">
             <p class="error_text">Course with these options already exists</p>
         </div>
-        <form class="form" th:action="@{/courses/course-creation}" th:method='POST'>
+        <form class="form" th:action="@{/admin-panel/courses/course-creation}" th:method='POST'>
             <label>Name</label>
             <input required class="form_input" type='text' name='name'>
             <label>Description</label>
