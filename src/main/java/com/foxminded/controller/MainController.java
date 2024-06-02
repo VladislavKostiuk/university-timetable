@@ -27,8 +27,10 @@ public class MainController {
     public String showMenu(Model model) {
         List<CourseDto> allCourses = courseService.getAllCourses();
         List<TeacherDto> allTeachers = teacherService.getAllTeachers();
+        TeacherDto teacher = teacherService.getTeacherById(1L);
         model.addAttribute("allCourses", allCourses);
         model.addAttribute("allTeachers", allTeachers);
+        model.addAttribute("teacher", teacher);
         return "mainPage";
     }
 

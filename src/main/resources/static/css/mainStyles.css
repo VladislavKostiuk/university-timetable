@@ -45,6 +45,14 @@ body {
     margin: 0 auto;
 }
 
+.info_text {
+    margin-bottom: 10px;
+}
+
+.info_credentials {
+    font-style: italic;
+}
+
 .courses, .teachers {
     display: flex;
     flex-direction: column;
