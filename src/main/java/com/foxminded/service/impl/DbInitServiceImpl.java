@@ -65,29 +65,29 @@ public class DbInitServiceImpl implements DbInitService {
     }
 
     private void initStudents(List<Student> allStudents, List<Group> allGroups, List<Course> allCourses) {
-        for (int i = 0; i < allStudents.size(); i++) {
+        for (Student student : allStudents) {
             Group group = getRandomGroup(allGroups);
             List<Course> courses = getRandomCourseList(allCourses);
             String password = passwordEncoder.encode(UUID.randomUUID().toString());
-            Student student = allStudents.get(i);
             student.setGroup(group);
             student.setCourses(courses);
             student.setPassword(password);
             student.setRoles(Set.of(Role.STUDENT));
-
-            if (i == 0) {
-                student.setPassword(passwordEncoder.encode("12345"));
-                student.setRoles(Set.of(Role.STUDENT, Role.ADMIN));
-            }
         }
     }
 
     private void initTeachers(List<Teacher> allTeachers, List<Course> allCourses) {
-        for (var teacher : allTeachers) {
+        for (int i = 0; i < allTeachers.size(); i++) {
             List<Course> courses = getRandomCourseList(allCourses);
+            Teacher teacher = allTeachers.get(i);
             teacher.setCourses(courses);
             teacher.setPassword(passwordEncoder.encode(UUID.randomUUID().toString()));
             teacher.setRoles(Set.of(Role.TEACHER));
+
+            if (i == 0) {
+                teacher.setPassword(passwordEncoder.encode("12345"));
+                teacher.setRoles(Set.of(Role.TEACHER, Role.ADMIN));
+            }
         }
     }
 

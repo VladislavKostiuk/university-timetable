@@ -22,6 +22,8 @@
             It provides students and teachers with a clear view of their schedules.
             Uni-Table simplifies timetable management for educational institutions, ensuring smooth operations for everyone involved.
         </p>
+        <p class="info_credentials" th:text="'To log in as an admin, use these credentials (Name: ' + ${teacher.name()} + ', Password: 12345)'"></p>
+        <p class="info_credentials" th:text="'This data is provided for demo only'"></p>
     </div>
     <div class="courses">
         <h2 class="subtitle">About courses</h2>
@@ -36,7 +38,6 @@
           <i class="fa-solid fa-angle-right right"></i>
         </div>
     </div>
-
     <div class="teachers">
         <h2 class="subtitle">About teachers</h2>
         <div class="teachers_wrapper wrapper">
